@@ -1,0 +1,211 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CudaCompile Include="kernel.cu" />
+    <CudaCompile Include="SDFRenderer.cu">
+      <Filter>game</Filter>
+    </CudaCompile>
+    <CudaCompile Include="Player.cu">
+      <Filter>game</Filter>
+    </CudaCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="framework">
+      <UniqueIdentifier>{bbd7146c-2916-401a-b3cd-db309f3e8a6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src">
+      <UniqueIdentifier>{b00c3558-fbd8-468f-880c-9e1be02e04f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\math">
+      <UniqueIdentifier>{49a9e41f-0f85-4cc2-93bb-1bfc363fb290}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\math\kdtree">
+      <UniqueIdentifier>{83681e88-ae5e-4d4f-8671-a706f7832e3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\math\kdtree\public">
+      <UniqueIdentifier>{1e69526e-fb09-474b-b7f9-f3d459fe1c8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\math\kdtree\private">
+      <UniqueIdentifier>{3e1723eb-1ffa-4d01-be9a-dfc45becde73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\window">
+      <UniqueIdentifier>{e76f8e3f-24a4-4d99-b9cd-30610413a1da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\math\distanceFields">
+      <UniqueIdentifier>{1c5eaaf4-b902-45b5-a2de-3f7a8dda4493}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\math\distanceFields\public">
+      <UniqueIdentifier>{d1303db6-3470-4e30-b65a-449a87ffcd97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\math\distanceFields\private">
+      <UniqueIdentifier>{b0a51d19-ed13-48c9-9611-e944e4258a63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\graphics">
+      <UniqueIdentifier>{b6eab42d-aba8-4fba-b048-17d376547e55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\graphics\public">
+      <UniqueIdentifier>{54d0bbee-0189-4591-970a-c203e8ced29f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\graphics\private">
+      <UniqueIdentifier>{2fbf20fa-87ce-49db-9824-7aa2c6be7875}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\graphics\opengl">
+      <UniqueIdentifier>{cd2f10d1-d241-4fba-ae55-9086bd2da688}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\window\public">
+      <UniqueIdentifier>{d6e457cf-df53-4168-86c4-7ff29816cdbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\window\private">
+      <UniqueIdentifier>{568977cb-4b11-4e2d-8af0-d38c435addfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game">
+      <UniqueIdentifier>{e6de395f-5c5b-412e-9c56-d6b1a154125a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\graphics\cuda">
+      <UniqueIdentifier>{5afecacd-319e-47c0-b161-7a89dddd169c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\util">
+      <UniqueIdentifier>{cb481ba2-b286-4e9b-9f31-6e0f6c27c6dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\cuda">
+      <UniqueIdentifier>{161221de-26fa-44ba-bea1-057fdb32e4c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\graphics\opengl\public">
+      <UniqueIdentifier>{fd354de2-f515-4e03-b62b-72602a8b622c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\graphics\opengl\private">
+      <UniqueIdentifier>{15d94688-0a27-415d-b0d1-b204497561a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\res">
+      <UniqueIdentifier>{0bd4b4cf-8e1d-472a-971d-116a506e1c41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\res\shaders">
+      <UniqueIdentifier>{7d7d7b21-bd5d-4bfd-aa89-f8f610526f7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\window\keyboardcallbacks">
+      <UniqueIdentifier>{2d450a5b-5fc2-48ce-853b-c98735a20d82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\window\keyboardcallbacks\private">
+      <UniqueIdentifier>{fbd1c69d-d41e-4ace-9b02-fbe3cadd4a6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\window\keyboardcallbacks\public">
+      <UniqueIdentifier>{bee692b7-9d68-4ec9-bd4d-79d425b57f63}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DistanceFunctions.h">
+      <Filter>framework\src\math\distanceFields\public</Filter>
+    </ClInclude>
+    <ClInclude Include="SDFPointCloudExtractor.h">
+      <Filter>framework\src\math\distanceFields\public</Filter>
+    </ClInclude>
+    <ClInclude Include="SignedDistanceField.h">
+      <Filter>framework\src\math\distanceFields\public</Filter>
+    </ClInclude>
+    <ClInclude Include="SignedDistanceFunction.h">
+      <Filter>framework\src\math\distanceFields\public</Filter>
+    </ClInclude>
+    <ClInclude Include="GLLibraries.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="TestScreen.cuh" />
+    <ClInclude Include="Screen.cuh">
+      <Filter>framework\src\window\public</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.cuh">
+      <Filter>framework\src\window\public</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.cuh">
+      <Filter>framework\src\window\public</Filter>
+    </ClInclude>
+    <ClInclude Include="KDTree.cuh">
+      <Filter>framework\src\math\kdtree\public</Filter>
+    </ClInclude>
+    <ClInclude Include="KDLeafNodeCollection.cuh">
+      <Filter>framework\src\math\kdtree\public</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.cuh">
+      <Filter>framework\src\graphics\public</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.cuh">
+      <Filter>framework\src\graphics\public</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D.cuh">
+      <Filter>framework\src\graphics\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="PBO.cuh">
+      <Filter>framework\src\graphics\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="CudaGLBufferMapping.cuh">
+      <Filter>framework\src\graphics\cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="CudaHelper.cuh">
+      <Filter>framework\src\cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="SDFRenderer.cuh">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="MathUtil.cuh">
+      <Filter>framework\src\math</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix4Device.cuh">
+      <Filter>framework\src\math</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderProgram.cuh">
+      <Filter>framework\src\graphics\opengl\public</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>framework\src\graphics\opengl\public</Filter>
+    </ClInclude>
+    <ClInclude Include="NumericBoolean.cuh">
+      <Filter>framework\src\math</Filter>
+    </ClInclude>
+    <ClInclude Include="GLMUtil.cuh">
+      <Filter>framework\src\math</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyboardCallback.cuh">
+      <Filter>framework\src\window\keyboardcallbacks\public</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyboardListener.cuh">
+      <Filter>framework\src\window\keyboardcallbacks\public</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.cuh">
+      <Filter>game</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="TestScreen.cu" />
+    <ClCompile Include="Game.cu">
+      <Filter>framework\src\window\private</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cu">
+      <Filter>framework\src\window\private</Filter>
+    </ClCompile>
+    <ClCompile Include="KDLeafNodeCollection.cu">
+      <Filter>framework\src\math\kdtree\private</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cu">
+      <Filter>framework\src\graphics\private</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderProgram.cu">
+      <Filter>framework\src\graphics\opengl\private</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>framework\src\graphics\opengl\private</Filter>
+    </ClCompile>
+    <ClCompile Include="SDFPointCloudExtractor.cu">
+      <Filter>framework\src\math\distanceFields\private</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyboardCallback.cu">
+      <Filter>framework\src\window\keyboardcallbacks\private</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="BasicShader.vert">
+      <Filter>framework\res\shaders</Filter>
+    </None>
+    <None Include="BasicShader.frag">
+      <Filter>framework\res\shaders</Filter>
+    </None>
+  </ItemGroup>
+</Project>
