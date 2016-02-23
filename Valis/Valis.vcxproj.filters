@@ -11,6 +11,12 @@
     <CudaCompile Include="SDFExtractor.cu">
       <Filter>game</Filter>
     </CudaCompile>
+    <CudaCompile Include="Descriptor.cu">
+      <Filter>framework\src\graphics\opengl\private</Filter>
+    </CudaCompile>
+    <CudaCompile Include="VAO.cu">
+      <Filter>framework\src\graphics\opengl\private</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="framework">
@@ -124,12 +130,6 @@
     <ClInclude Include="Camera.cuh">
       <Filter>framework\src\graphics\public</Filter>
     </ClInclude>
-    <ClInclude Include="Texture2D.cuh">
-      <Filter>framework\src\graphics\opengl</Filter>
-    </ClInclude>
-    <ClInclude Include="PBO.cuh">
-      <Filter>framework\src\graphics\opengl</Filter>
-    </ClInclude>
     <ClInclude Include="CudaGLBufferMapping.cuh">
       <Filter>framework\src\graphics\cuda</Filter>
     </ClInclude>
@@ -185,6 +185,21 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="Descriptor.cuh">
+      <Filter>framework\src\graphics\opengl\public</Filter>
+    </ClInclude>
+    <ClInclude Include="VBO.cuh">
+      <Filter>framework\src\graphics\opengl\public</Filter>
+    </ClInclude>
+    <ClInclude Include="IBO.cuh">
+      <Filter>framework\src\graphics\opengl\public</Filter>
+    </ClInclude>
+    <ClInclude Include="VAO.cuh">
+      <Filter>framework\src\graphics\opengl\public</Filter>
+    </ClInclude>
+    <ClInclude Include="PBO.cuh">
+      <Filter>framework\src\graphics\opengl\public</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D.cuh">
       <Filter>framework\src\graphics\opengl\public</Filter>
     </ClInclude>
   </ItemGroup>

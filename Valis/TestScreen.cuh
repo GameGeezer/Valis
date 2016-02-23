@@ -19,6 +19,7 @@ class ShaderProgram;
 class Camera;
 class Player;
 class SignedDistanceFunction;
+class SDFExtractor;
 
 class TestScreen : public Screen
 {
@@ -53,6 +54,7 @@ private:
 	ShaderProgram* shader;
 	Player* player;
 	SignedDistanceFunction* sphereSdf;
+	SDFExtractor* extractor;
 };
 
 #endif

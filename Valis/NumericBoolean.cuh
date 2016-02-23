@@ -14,6 +14,12 @@ NumericBoolean numericLessThan_float(float left, float right)
 }
 
 __host__ __device__ inline
+NumericBoolean numericGreaterThan_float(float left, float right)
+{
+	return ((NumericBoolean)(left > right));
+}
+
+__host__ __device__ inline
 NumericBoolean numericIsInRange_int32_t(int32_t value, int32_t lower, int32_t upper)
 {
 	return ((NumericBoolean)((value <= upper) && value >= lower));

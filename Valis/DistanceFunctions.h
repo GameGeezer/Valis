@@ -7,7 +7,7 @@
 #include <glm\gtx\extented_min_max.hpp>
 
 #include "GLMUtil.cuh"
-
+/*
 __host__ __device__ float
 sdSphere(glm::vec3& position, float radius)
 {
@@ -50,5 +50,6 @@ sdCone(glm::vec3 position, glm::vec2 c)
 
 	return glm::dot(c, glm::vec2(q, position.z));
 }
+*/
 
 #endif

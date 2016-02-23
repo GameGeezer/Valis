@@ -22,6 +22,8 @@
 #include "Player.cuh"
 #include "SignedDistanceFunction.cuh"
 #include "SDSphere.cuh"
+#include "Descriptor.cuh"
+#include "SDFExtractor.cuh"
 
 
 void
@@ -40,9 +42,10 @@ TestScreen::onCreate()
 	sphereSdf = new SignedDistanceFunction();
 	sphereSdf->addFunction(*(new SDSphere(1, glm::vec3(0, 0, 0))));
 
-
+	extractor = new SDFExtractor();
 	
 	player = new Player(*camera);
+
 }
 
 void
@@ -66,6 +69,8 @@ TestScreen::onResume()
 void
 TestScreen::onUpdate(int delta)
 {
+	extractor->extract();
+
 	glm::mat4 invViewProjection;
 	player->camera->constructInverseViewProjection(invViewProjection);
 	renderer->renderToMapping(*mapping, *windowGridSize, *windowBlockSize, invViewProjection);

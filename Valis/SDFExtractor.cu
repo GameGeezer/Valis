@@ -1,99 +1,98 @@
 #include "SDFExtractor.cuh"
 
-/*
 #include "Color.cuh"
-#include "CudaGLBufferMapping.cuh"
-#include "Camera.cuh"
-#include <glm/mat4x4.hpp>
-#include "DistanceFunctions.h"
 #include "NumericBoolean.cuh"
 #include "SDSphere.cuh"
 #include "RenderPoint.cuh"
+#include <thrust/device_ptr.h>
+#include <thrust/host_vector.h>
+#include <thrust/copy.h>
+#include <thrust/count.h>
+#include "cuda_runtime.h"
 
+//const float SQRT2 = 1.41421f;
 
 __global__ void
-extractPointCloudSphere(RenderPoint *d_output, glm::vec3 gridDimensions)
+extractPointCloudSphere(RenderPoint *d_output, int length, int gridDivisions)
 {
 	float x = blockIdx.x * blockDim.x + threadIdx.x;
 	float y = blockIdx.y * blockDim.y + threadIdx.y;
 	float z = blockIdx.z * blockDim.z + threadIdx.z;
 
-	int index = x + gridDimensions.x * y + gridDimensions.x * gridDimensions.y * z;
+	int index = x + gridDivisions * y + gridDivisions * gridDivisions * z;
 
-	if (x > gridDimensions.x || y  > gridDimensions.y || z  > gridDimensions.z)
+	if (index >= length)
 	{
 		return;
 	}
 
-	x /= gridDimensions.x;
-	y /= gridDimensions.y;
-	z /= gridDimensions.z;
+	if (x > gridDivisions || y  > gridDivisions || z  > gridDivisions)
+	{
+		return;
+	}
 
-	SDSphere sdSphere(1, glm::vec3(1, 1, 1));
+	float divisionsAsFloat = ((float) gridDivisions);
+
+	x /= divisionsAsFloat;
+	y /= divisionsAsFloat;
+	z /= divisionsAsFloat;
+
+	SDSphere sdSphere(0.5f, glm::vec3(0.5f, 0.5f, 0.5f));
 
 	float distance = sdSphere.distanceFromPoint(glm::vec3(x, y, z));
+	
+	float cellDimension = 1.0f / divisionsAsFloat;
 
-	d_output[index].setPosition(1, 1, 1);
+	NumericBoolean shouldGeneratePoint = numericLessThan_float(distance, cellDimension) * numericGreaterThan_float(distance, -cellDimension);
+
+	int color = Color(1, 0, 0, 0).device_toInt();
+
+	d_output[index].positionX = x * shouldGeneratePoint;
+	d_output[index].positionY = y * shouldGeneratePoint;
+	d_output[index].positionZ = z * shouldGeneratePoint;
+	d_output[index].color = color * shouldGeneratePoint;
 }
 
-__global__ void
-extractPointCloudSphere(int *d_output, int imageW, int imageH, glm::vec3 gridDimensions, glm::vec3 subsectionDimensions)
+__global__ void myKernel()
 {
-	float x = (blockIdx.x * blockDim.x + threadIdx.x) * subsectionDimensions.x;
-	float y = (blockIdx.y * blockDim.y + threadIdx.y) * subsectionDimensions.y;
-	float z = (blockIdx.z * blockDim.z + threadIdx.z) * subsectionDimensions.z;
-
-	if ((x + subsectionDimensions.x) > gridDimensions.x || (y + subsectionDimensions.y)  > gridDimensions.y || (z + subsectionDimensions.z)  > gridDimensions.z)
-	{
-		return;
-	}
-
-	x /= gridDimensions.x;
-	y /= gridDimensions.y;
-	z /= gridDimensions.z;
-
-	float dx = x / gridDimensions.x;
-	float dy = y / gridDimensions.y;
-	float dz = z / gridDimensions.z;
-
-	SDSphere sdSphere(1, glm::vec3(1, 1, 1));
-
-	for (int i = 0; i < subsectionDimensions.x; ++i)
-	{
-		for (int j = 0; j < subsectionDimensions.y; ++j)
-		{
-			for (int k = 0; k < subsectionDimensions.z; ++k)
-			{
-
-			}
-		}
-	}
-
-	float distance = sdSphere.distanceFromPoint(glm::vec3(x, y, z));
-
-	if ((x < imageW) && (y < imageH))
-	{
-		Color color(0.1f, 0.25f, 1, 1);
-		// In our sample tex is always valid, but for something like your own
-		// sparse texturing you would need to make sure to handle the zero case.
-
-		// write output color
-		int i = y * imageW + x;
-		d_output[i] = color.device_toInt();
-	}
+	printf("Hello, world from the device!\n");
 }
 
 
 
 SDFExtractor::SDFExtractor()
 {
-	extractedPoints = new thrust::device_vector< float >(400 * 400 * 400);
+	extractedPoints = new thrust::device_vector< RenderPoint >(100 * 100 * 100);
 }
+
+struct is_not_zero
+{
+	__host__ __device__
+	bool operator()(const RenderPoint& point)
+	{
+		return point.positionX != 0 && point.positionY != 0 && point.positionZ != 0;
+	}
+};
 
 void
 SDFExtractor::extract()
 {
-	
-}
+	RenderPoint* vecStart = thrust::raw_pointer_cast(extractedPoints->data());
+	int vecLength = extractedPoints->size();
+	dim3 blocks(16, 16, 16);
+	dim3 threads(8, 8, 8);
+	extractPointCloudSphere << <blocks, threads >> >(vecStart, vecLength, 100);
 
-*/
+
+	int index = 200 + 400 * 200;
+	//thrust::host_vector< RenderPoint > offGPU = *extractedPoints;
+	//RenderPoint r = offGPU[index];
+
+	int pointsCreated = thrust::count_if(extractedPoints->begin(), extractedPoints->end(), is_not_zero());
+	thrust::device_vector<RenderPoint>* compactedPoints = new thrust::device_vector< RenderPoint >(pointsCreated);
+	thrust::copy_if(extractedPoints->begin(), extractedPoints->end(), compactedPoints->begin(), is_not_zero());
+	thrust::host_vector< RenderPoint > offGPU = *compactedPoints;
+	RenderPoint r = offGPU[0];
+//	myKernel << <1, 10 >> >();
+	int x = 3;
+}

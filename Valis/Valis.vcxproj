@@ -94,6 +94,8 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
       <Optimization>Od</Optimization>
       <FastMath>false</FastMath>
       <GPUDebugInfo>true</GPUDebugInfo>
+      <InterleaveSourceInPTX>false</InterleaveSourceInPTX>
+      <CodeGeneration>compute_20,sm_20;%(CodeGeneration)</CodeGeneration>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -159,10 +161,12 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <CudaCompile Include="Descriptor.cu" />
     <CudaCompile Include="kernel.cu" />
     <CudaCompile Include="Player.cu" />
     <CudaCompile Include="SDFExtractor.cu" />
     <CudaCompile Include="SDFRenderer.cu" />
+    <CudaCompile Include="VAO.cu" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABB.cuh" />
@@ -177,6 +181,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Game.cuh" />
     <ClInclude Include="GLLibraries.h" />
     <ClInclude Include="GLMUtil.cuh" />
+    <ClInclude Include="IBO.cuh" />
     <ClInclude Include="KDLeafNodeCollection.cuh" />
     <ClInclude Include="KDTree.cuh" />
     <ClInclude Include="KeyboardCallback.cuh" />
@@ -197,6 +202,8 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClInclude Include="SignedDistanceFunction.cuh" />
     <ClInclude Include="TestScreen.cuh" />
     <ClInclude Include="Texture2D.cuh" />
+    <ClInclude Include="VAO.cuh" />
+    <ClInclude Include="VBO.cuh" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cu" />

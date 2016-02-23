@@ -27,7 +27,7 @@ d_render(int *d_output, int imageW, int imageH)
 	}
 }
 
-
+/*
 __global__ void
 d_RayRender(int *d_output, int imageW, int imageH, glm::mat4 inverseViewProjection)
 {
@@ -67,12 +67,13 @@ d_RayRender(int *d_output, int imageW, int imageH, glm::mat4 inverseViewProjecti
 	//d_output[i] = color2.device_toInt();
 	d_output[i] = color.device_toInt() * numericNegate_uint32_t(hitSphere) + color2.device_toInt() * hitSphere;
 }
+*/
 
 void
 SDFRenderer::renderToMapping(CudaGLBufferMapping& mapping, dim3 windowGridSize, dim3 windowBlockSize, glm::mat4& inverseViewProjection)
 {
 
 	mapping.map();
-	d_RayRender << <windowGridSize, windowBlockSize >> >(mapping.getDeviceOutput(), 640, 480, inverseViewProjection);
+	d_render << <windowGridSize, windowBlockSize >> >(mapping.getDeviceOutput(), 640, 480);
 	mapping.unmap();
 }
