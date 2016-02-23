@@ -92,6 +92,8 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <CudaCompile>
       <Optimization>Od</Optimization>
+      <FastMath>false</FastMath>
+      <GPUDebugInfo>true</GPUDebugInfo>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -159,15 +161,19 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
   <ItemGroup>
     <CudaCompile Include="kernel.cu" />
     <CudaCompile Include="Player.cu" />
+    <CudaCompile Include="SDFExtractor.cu" />
     <CudaCompile Include="SDFRenderer.cu" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AABB.cuh" />
     <ClInclude Include="Application.cuh" />
     <ClInclude Include="Camera.cuh" />
     <ClInclude Include="Color.cuh" />
     <ClInclude Include="CudaGLBufferMapping.cuh" />
     <ClInclude Include="CudaHelper.cuh" />
+    <ClInclude Include="Descriptor.cuh" />
     <ClInclude Include="DistanceFunctions.h" />
+    <ClInclude Include="DistancePrimitive.cuh" />
     <ClInclude Include="Game.cuh" />
     <ClInclude Include="GLLibraries.h" />
     <ClInclude Include="GLMUtil.cuh" />
@@ -177,16 +183,18 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClInclude Include="KeyboardListener.cuh" />
     <ClInclude Include="MathUtil.cuh" />
     <ClInclude Include="Matrix4Device.cuh" />
-    <ClInclude Include="Mesh.h" />
     <ClInclude Include="NumericBoolean.cuh" />
     <ClInclude Include="PBO.cuh" />
     <ClInclude Include="Player.cuh" />
+    <ClInclude Include="RenderPoint.cuh" />
     <ClInclude Include="Screen.cuh" />
+    <ClInclude Include="SDFExtractor.cuh" />
     <ClInclude Include="SDFPointCloudExtractor.h" />
     <ClInclude Include="SDFRenderer.cuh" />
+    <ClInclude Include="SDSphere.cuh" />
+    <ClInclude Include="SDTorus.cuh" />
     <ClInclude Include="ShaderProgram.cuh" />
-    <ClInclude Include="SignedDistanceField.h" />
-    <ClInclude Include="SignedDistanceFunction.h" />
+    <ClInclude Include="SignedDistanceFunction.cuh" />
     <ClInclude Include="TestScreen.cuh" />
     <ClInclude Include="Texture2D.cuh" />
   </ItemGroup>
@@ -196,7 +204,6 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClCompile Include="Game.cu" />
     <ClCompile Include="KDLeafNodeCollection.cu" />
     <ClCompile Include="KeyboardCallback.cu" />
-    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="SDFPointCloudExtractor.cu" />
     <ClCompile Include="ShaderProgram.cu" />
     <ClCompile Include="TestScreen.cu" />

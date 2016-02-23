@@ -1,4 +1,5 @@
 #include "Application.cuh"
+
 #include "Game.cuh"
 #include "GLLibraries.h"
 #include "KeyboardCallback.cuh"
@@ -69,15 +70,22 @@ Application::init()
 void
 Application::loop()
 {
+	lastFrameTime = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
+
 	while (!glfwWindowShouldClose(window))
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		game->update(0);
+		milliseconds currentFrame = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
+		milliseconds delta = currentFrame - lastFrameTime;
+		std::cout << delta.count() << endl;
+		game->update(delta.count());
 
 		glfwSwapBuffers(window);
 
 		glfwPollEvents();
+
+		lastFrameTime = currentFrame;
 	}
 
 	glfwDestroyWindow(window);

@@ -19,6 +19,12 @@ Player::onKeyRelease(int keyCode)
 void
 Player::onKeyPress(int keyCode)
 {
+
+}
+
+void
+Player::onKeyRepeat(int keyCode)
+{
 	if (keyCode == GLFW_KEY_D)
 		camera->translate(10, 0, 0);
 	if (keyCode == GLFW_KEY_A)
@@ -31,10 +37,4 @@ Player::onKeyPress(int keyCode)
 		camera->translate(0, 0, 10);
 	if (keyCode == GLFW_KEY_E)
 		camera->translate(0, 0, -10);
-}
-
-void
-Player::onKeyRepeat(int keyCode)
-{
-
 }

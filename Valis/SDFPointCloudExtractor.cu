@@ -17,7 +17,7 @@ extractCloud(int *d_output, int imageW, int imageH)
 }
 */
 
-SDFPointCloudExtractor::SDFPointCloudExtractor()
+SDFPointCloudExtractor::SDFPointCloudExtractor(glm::vec3 blockSize, glm::vec3 numberOfBlocks) : blockSize(blockSize), numberOfBlocks(numberOfBlocks)
 {
 
 }

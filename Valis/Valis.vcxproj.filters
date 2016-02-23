@@ -8,6 +8,9 @@
     <CudaCompile Include="Player.cu">
       <Filter>game</Filter>
     </CudaCompile>
+    <CudaCompile Include="SDFExtractor.cu">
+      <Filter>game</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="framework">
@@ -30,15 +33,6 @@
     </Filter>
     <Filter Include="framework\src\window">
       <UniqueIdentifier>{e76f8e3f-24a4-4d99-b9cd-30610413a1da}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="framework\src\math\distanceFields">
-      <UniqueIdentifier>{1c5eaaf4-b902-45b5-a2de-3f7a8dda4493}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="framework\src\math\distanceFields\public">
-      <UniqueIdentifier>{d1303db6-3470-4e30-b65a-449a87ffcd97}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="framework\src\math\distanceFields\private">
-      <UniqueIdentifier>{b0a51d19-ed13-48c9-9611-e944e4258a63}</UniqueIdentifier>
     </Filter>
     <Filter Include="framework\src\graphics">
       <UniqueIdentifier>{b6eab42d-aba8-4fba-b048-17d376547e55}</UniqueIdentifier>
@@ -64,9 +58,6 @@
     <Filter Include="framework\src\graphics\cuda">
       <UniqueIdentifier>{5afecacd-319e-47c0-b161-7a89dddd169c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="framework\src\util">
-      <UniqueIdentifier>{cb481ba2-b286-4e9b-9f31-6e0f6c27c6dd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="framework\src\cuda">
       <UniqueIdentifier>{161221de-26fa-44ba-bea1-057fdb32e4c4}</UniqueIdentifier>
     </Filter>
@@ -91,19 +82,22 @@
     <Filter Include="framework\src\window\keyboardcallbacks\public">
       <UniqueIdentifier>{bee692b7-9d68-4ec9-bd4d-79d425b57f63}</UniqueIdentifier>
     </Filter>
+    <Filter Include="framework\src\distanceFields">
+      <UniqueIdentifier>{1c5eaaf4-b902-45b5-a2de-3f7a8dda4493}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\distanceFields\public">
+      <UniqueIdentifier>{d1303db6-3470-4e30-b65a-449a87ffcd97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\distanceFields\private">
+      <UniqueIdentifier>{b0a51d19-ed13-48c9-9611-e944e4258a63}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DistanceFunctions.h">
-      <Filter>framework\src\math\distanceFields\public</Filter>
+      <Filter>framework\src\distanceFields\public</Filter>
     </ClInclude>
     <ClInclude Include="SDFPointCloudExtractor.h">
-      <Filter>framework\src\math\distanceFields\public</Filter>
-    </ClInclude>
-    <ClInclude Include="SignedDistanceField.h">
-      <Filter>framework\src\math\distanceFields\public</Filter>
-    </ClInclude>
-    <ClInclude Include="SignedDistanceFunction.h">
-      <Filter>framework\src\math\distanceFields\public</Filter>
+      <Filter>framework\src\distanceFields\public</Filter>
     </ClInclude>
     <ClInclude Include="GLLibraries.h">
       <Filter>framework</Filter>
@@ -154,9 +148,6 @@
     <ClInclude Include="ShaderProgram.cuh">
       <Filter>framework\src\graphics\opengl\public</Filter>
     </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>framework\src\graphics\opengl\public</Filter>
-    </ClInclude>
     <ClInclude Include="NumericBoolean.cuh">
       <Filter>framework\src\math</Filter>
     </ClInclude>
@@ -171,6 +162,30 @@
     </ClInclude>
     <ClInclude Include="Player.cuh">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="SDSphere.cuh">
+      <Filter>framework\src\distanceFields\public</Filter>
+    </ClInclude>
+    <ClInclude Include="DistancePrimitive.cuh">
+      <Filter>framework\src\distanceFields\public</Filter>
+    </ClInclude>
+    <ClInclude Include="SDTorus.cuh">
+      <Filter>framework\src\distanceFields\public</Filter>
+    </ClInclude>
+    <ClInclude Include="SignedDistanceFunction.cuh">
+      <Filter>framework\src\distanceFields\public</Filter>
+    </ClInclude>
+    <ClInclude Include="AABB.cuh">
+      <Filter>framework\src\math</Filter>
+    </ClInclude>
+    <ClInclude Include="SDFExtractor.cuh">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderPoint.cuh">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="Descriptor.cuh">
+      <Filter>framework\src\graphics\opengl\public</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -190,11 +205,8 @@
     <ClCompile Include="ShaderProgram.cu">
       <Filter>framework\src\graphics\opengl\private</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>framework\src\graphics\opengl\private</Filter>
-    </ClCompile>
     <ClCompile Include="SDFPointCloudExtractor.cu">
-      <Filter>framework\src\math\distanceFields\private</Filter>
+      <Filter>framework\src\distanceFields\private</Filter>
     </ClCompile>
     <ClCompile Include="KeyboardCallback.cu">
       <Filter>framework\src\window\keyboardcallbacks\private</Filter>

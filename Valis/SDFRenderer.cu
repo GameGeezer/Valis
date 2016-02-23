@@ -6,6 +6,7 @@
 #include <glm/mat4x4.hpp>
 #include "DistanceFunctions.h"
 #include "NumericBoolean.cuh"
+#include "SDSphere.cuh"
 
 
 __global__ void
@@ -25,6 +26,7 @@ d_render(int *d_output, int imageW, int imageH)
 		d_output[i] = color.device_toInt();
 	}
 }
+
 
 __global__ void
 d_RayRender(int *d_output, int imageW, int imageH, glm::mat4 inverseViewProjection)
@@ -69,6 +71,7 @@ d_RayRender(int *d_output, int imageW, int imageH, glm::mat4 inverseViewProjecti
 void
 SDFRenderer::renderToMapping(CudaGLBufferMapping& mapping, dim3 windowGridSize, dim3 windowBlockSize, glm::mat4& inverseViewProjection)
 {
+
 	mapping.map();
 	d_RayRender << <windowGridSize, windowBlockSize >> >(mapping.getDeviceOutput(), 640, 480, inverseViewProjection);
 	mapping.unmap();

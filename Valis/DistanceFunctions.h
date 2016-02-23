@@ -14,6 +14,7 @@ sdSphere(glm::vec3& position, float radius)
 	return GLMUtil::length(position) - radius;
 }
 
+//broke
 __host__ __device__ float
 sdBox(glm::vec3 position, glm::vec3 corner)
 {

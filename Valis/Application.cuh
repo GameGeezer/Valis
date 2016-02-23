@@ -2,14 +2,17 @@
 #define VALIS_APPLICATION_H
 
 #include <string>
+#include <chrono>
+#include <thread>
+#include <iostream>
 
 #include "KeyboardCallback.cuh"
 
 class Game;
 class GLFWwindow;
-class KeyboardListener;
 
 using namespace std;
+using namespace std::chrono;
 
 class Application
 {
@@ -27,6 +30,7 @@ private:
 	Game* game;
 	string windowTitle;
 	GLFWwindow* window;
+	milliseconds lastFrameTime;
 
 	void
 	init();

@@ -6,6 +6,8 @@
 #include <glm/mat4x4.hpp>
 #include <glm/ext.hpp>
 
+#include "SDFExtractor.cuh"
+
 #include <iostream>
 
 #include "cuda_runtime.h"
@@ -18,6 +20,8 @@
 #include "ShaderProgram.cuh"
 #include "Camera.cuh"
 #include "Player.cuh"
+#include "SignedDistanceFunction.cuh"
+#include "SDSphere.cuh"
 
 
 void
@@ -33,6 +37,11 @@ TestScreen::onCreate()
 	Camera* camera = new Camera(640, 680, 0.1f, 1000.0f, 45.0f);
 	camera->translate(0, 0, 1);
 
+	sphereSdf = new SignedDistanceFunction();
+	sphereSdf->addFunction(*(new SDSphere(1, glm::vec3(0, 0, 0))));
+
+
+	
 	player = new Player(*camera);
 }
 

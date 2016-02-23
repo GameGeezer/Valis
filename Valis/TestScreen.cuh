@@ -4,6 +4,12 @@
 #include "Screen.cuh"
 #include "GLLibraries.h"
 
+#include <thrust/device_vector.h>
+#include <thrust/host_vector.h>
+#include <thrust/sort.h>
+
+#include "SDFRenderer.cuh"
+
 class PBO;
 class Texture2D;
 class CudaGLBufferMapping;
@@ -12,28 +18,29 @@ class SDFRenderer;
 class ShaderProgram;
 class Camera;
 class Player;
+class SignedDistanceFunction;
 
 class TestScreen : public Screen
 {
-	void
+	__host__ void
 	onCreate() override;
 
-	void
+	__host__ void
 	onPause() override;
 
-	void
+	__host__ void
 	onLeave() override;
 
-	void
+	__host__ void
 	onResume() override;
 
-	void
+	__host__ void
 	onUpdate(int delta) override;
 
-	void
+	__host__ void
 	onResize(int width, int height) override;
 
-	void
+	__host__ void
 	onDestroy() override;
 private:
 	GLuint vertexbuffer;
@@ -45,6 +52,7 @@ private:
 	dim3 *windowGridSize;
 	ShaderProgram* shader;
 	Player* player;
+	SignedDistanceFunction* sphereSdf;
 };
 
 #endif
