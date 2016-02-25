@@ -1,8 +1,10 @@
-uniform mat4 gl_ProjectionMatrix;
+uniform mat4 projectionMatrix;
 
-attribute vec4 gl_Vertex;
+attribute vec4 in_Position;
 
 void main()
 {
-	gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * gl_Vertex;
+	//projectionMatrix * gl_ModelViewMatrix *
+	vec4 t =  projectionMatrix * in_Position;
+	gl_Position = t * vec4(10, 10, 10, 10);
 }

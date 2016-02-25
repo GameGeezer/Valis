@@ -1,22 +1,14 @@
-﻿Build started 2/23/2016 4:29:26 PM.
+﻿Build started 2/24/2016 8:51:53 PM.
      1>Project "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\Valis.vcxproj" on node 2 (Build target(s)).
      1>AddCudaCompileDeps:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\cl.exe /E /nologo /showIncludes /TP /D__CUDACC__ /DWIN32 /D_DEBUG /D_CONSOLE /D_MBCS /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /I. /FIcuda_runtime.h /c "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\SDFExtractor.cu" 
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\cl.exe /E /nologo /showIncludes /TP /D__CUDACC__ /DWIN32 /D_DEBUG /D_CONSOLE /D_MBCS /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /I. /FIcuda_runtime.h /c "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\Player.cu" 
        CudaBuild:
-         Compiling CUDA source file SDFExtractor.cu...
-         cmd.exe /C "C:\Users\wpger_000\AppData\Local\Temp\tmp0ee4205b82e847cd9f7b7d463bbd291c.cmd"
-         "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_20,code=\"sm_20,compute_20\" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"  -G   --keep-dir Debug -maxrregcount=0  --machine 32 --compile -cudart static  -g   -DWIN32 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MDd " -o Debug\SDFExtractor.cu.obj "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\SDFExtractor.cu"
+         Compiling CUDA source file Player.cu...
+         cmd.exe /C "C:\Users\wpger_000\AppData\Local\Temp\tmp923714835dac4b6897e16de0c686ecc1.cmd"
+         "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_20,code=\"sm_20,compute_20\" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"  -G   --keep-dir Debug -maxrregcount=0  --machine 32 --compile -cudart static  -g   -DWIN32 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MDd " -o Debug\Player.cu.obj "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\Player.cu"
          
-         C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_20,code=\"sm_20,compute_20\" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"  -G   --keep-dir Debug -maxrregcount=0  --machine 32 --compile -cudart static  -g   -DWIN32 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MDd " -o Debug\SDFExtractor.cu.obj "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\SDFExtractor.cu" 
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDSphere.cuh(28): warning : calling a __host__ function from a __host__ __device__ function is not allowed
-     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/SDFExtractor.cu(87): warning : variable "index" was declared but never referenced
-     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/SDFExtractor.cu(97): warning : variable "x" was declared but never referenced
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDSphere.cuh(28): warning : calling a __host__ function("AABB::AABB") from a __host__ __device__ function("SDSphere::calculateBoundingVolume") is not allowed
-     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/SDFExtractor.cu(87): warning : variable "index" was declared but never referenced
-     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/SDFExtractor.cu(97): warning : variable "x" was declared but never referenced
-         SDFExtractor.cu
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\RenderPoint.cuh(7): warning C4099: 'RenderPoint' : type name first seen using 'class' now seen using 'struct'
-                 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDFExtractor.cuh(6) : see declaration of 'RenderPoint'
+         C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_20,code=\"sm_20,compute_20\" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"  -G   --keep-dir Debug -maxrregcount=0  --machine 32 --compile -cudart static  -g   -DWIN32 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MDd " -o Debug\Player.cu.obj "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\Player.cu" 
+         Player.cu
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Debug\Valis.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\wpger_000\Downloads\glfw-3.1.2.bin.WIN32.zip\glfw-3.1.2.bin.WIN32\lib-vc2013" /LIBPATH:"C:\Programming\Libraries\glew-1.13.0\bin\Release\Win32" /LIBPATH:"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\lib\Win32" cudart.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib glew32.lib glfw3.lib glfw3dll.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Debug\Valis.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Debug\Valis.lib" /MACHINE:X86 Debug\Descriptor.cu.obj
          Debug\kernel.cu.obj
@@ -32,6 +24,8 @@
          Debug\SDFPointCloudExtractor.obj
          Debug\ShaderProgram.obj
          Debug\TestScreen.obj
+         LINK : C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Debug\Valis.exe not found or not built by the last incremental link; performing full link
+     1>LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
          Valis.vcxproj -> C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Debug\Valis.exe
        PostBuildEvent:
          echo copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart*.dll" "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Debug\"
@@ -45,4 +39,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:18.53
+Time Elapsed 00:00:06.53

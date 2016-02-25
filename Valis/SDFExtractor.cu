@@ -50,7 +50,7 @@ extractPointCloudSphere(RenderPoint *d_output, int length, int gridDivisions)
 	d_output[index].positionX = x * shouldGeneratePoint;
 	d_output[index].positionY = y * shouldGeneratePoint;
 	d_output[index].positionZ = z * shouldGeneratePoint;
-	d_output[index].color = color * shouldGeneratePoint;
+	//d_output[index].color = color * shouldGeneratePoint;
 }
 
 __global__ void myKernel()
@@ -74,7 +74,7 @@ struct is_not_zero
 	}
 };
 
-void
+thrust::device_vector< RenderPoint >*
 SDFExtractor::extract()
 {
 	RenderPoint* vecStart = thrust::raw_pointer_cast(extractedPoints->data());
@@ -91,8 +91,9 @@ SDFExtractor::extract()
 	int pointsCreated = thrust::count_if(extractedPoints->begin(), extractedPoints->end(), is_not_zero());
 	thrust::device_vector<RenderPoint>* compactedPoints = new thrust::device_vector< RenderPoint >(pointsCreated);
 	thrust::copy_if(extractedPoints->begin(), extractedPoints->end(), compactedPoints->begin(), is_not_zero());
-	thrust::host_vector< RenderPoint > offGPU = *compactedPoints;
-	RenderPoint r = offGPU[0];
+	//thrust::host_vector< RenderPoint > offGPU = *compactedPoints;
+	//RenderPoint r = offGPU[0];
 //	myKernel << <1, 10 >> >();
-	int x = 3;
+	//int x = 3;
+	return compactedPoints;
 }

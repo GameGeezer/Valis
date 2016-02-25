@@ -11,13 +11,13 @@ class VBO
 {
 public:
 
-	VBO(vector<float>* data)
+	VBO(void* data, size_t size)
 	{
 		glGenBuffers(1, &handle);
 
 		glBindBuffer(GL_ARRAY_BUFFER, handle);
 
-		glBufferData(GL_ARRAY_BUFFER, data->size() * sizeof(float), data, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, size * sizeof(float), data, GL_STATIC_DRAW);
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}

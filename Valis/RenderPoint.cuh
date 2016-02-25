@@ -7,7 +7,7 @@
 struct RenderPoint
 {
 	float positionX, positionY, positionZ;
-	int color;
+//	int color;
 };
 
 #endif

@@ -20,6 +20,8 @@ class Camera;
 class Player;
 class SignedDistanceFunction;
 class SDFExtractor;
+class VAO;
+class VBO;
 
 class TestScreen : public Screen
 {
@@ -55,6 +57,9 @@ private:
 	Player* player;
 	SignedDistanceFunction* sphereSdf;
 	SDFExtractor* extractor;
+	VAO* vao;
+	VBO* vbo;
+	int pointCount;
 };
 
 #endif

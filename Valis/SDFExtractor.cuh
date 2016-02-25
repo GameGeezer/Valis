@@ -11,7 +11,7 @@ public:
 
 	SDFExtractor();
 
-	void
+	thrust::device_vector< RenderPoint >*
 	extract();
 
 private:
