@@ -17,6 +17,12 @@
     <CudaCompile Include="VAO.cu">
       <Filter>framework\src\graphics\opengl\private</Filter>
     </CudaCompile>
+    <CudaCompile Include="MouseClickCallback.cu">
+      <Filter>framework\src\window\windowcallbacks\private</Filter>
+    </CudaCompile>
+    <CudaCompile Include="MouseMoveCallback.cu">
+      <Filter>framework\src\window\windowcallbacks\private</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="framework">
@@ -96,6 +102,15 @@
     </Filter>
     <Filter Include="framework\src\distanceFields\private">
       <UniqueIdentifier>{b0a51d19-ed13-48c9-9611-e944e4258a63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\window\windowcallbacks">
+      <UniqueIdentifier>{5c6b3c69-c07e-4232-afed-28afcf6333c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\window\windowcallbacks\public">
+      <UniqueIdentifier>{ea6579ae-cde3-404e-a921-a87407c2e381}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\window\windowcallbacks\private">
+      <UniqueIdentifier>{bb993822-1be4-41fd-831a-15f8c588adac}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -201,6 +216,18 @@
     </ClInclude>
     <ClInclude Include="Texture2D.cuh">
       <Filter>framework\src\graphics\opengl\public</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseClickListener.cuh">
+      <Filter>framework\src\window\windowcallbacks\public</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseClickCallback.cuh">
+      <Filter>framework\src\window\windowcallbacks\public</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseMoveCallback.cuh">
+      <Filter>framework\src\window\windowcallbacks\public</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseMoveListener.cuh">
+      <Filter>framework\src\window\windowcallbacks\public</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -3,6 +3,7 @@
 #include "Color.cuh"
 #include "NumericBoolean.cuh"
 #include "SDSphere.cuh"
+#include "SDTorus.cuh"
 #include "RenderPoint.cuh"
 #include <thrust/device_ptr.h>
 #include <thrust/host_vector.h>
@@ -37,13 +38,17 @@ extractPointCloudSphere(RenderPoint *d_output, int length, int gridDivisions)
 	y /= divisionsAsFloat;
 	z /= divisionsAsFloat;
 
-	SDSphere sdSphere(0.5f, glm::vec3(0.5f, 0.5f, 0.5f));
+	SDSphere sdSphere(0.3f, glm::vec3(0.5f, 0.5f, 0.5f));
+	SDTorus sdTorus(0.3f, 0.25f, glm::vec3(0.5f, 0.5f, 0.5f));
 
-	float distance = sdSphere.distanceFromPoint(glm::vec3(x, y, z));
+	float distance1 = sdSphere.distanceFromPoint(glm::vec3(x, y, z));
+	float distance2 = sdTorus.distanceFromPoint(glm::vec3(x, y, z));
+
+	float distance = fmaxf(distance1, -distance2);
 	
 	float cellDimension = 1.0f / divisionsAsFloat;
 
-	NumericBoolean shouldGeneratePoint = numericLessThan_float(distance, cellDimension) * numericGreaterThan_float(distance, -cellDimension);
+	NumericBoolean shouldGeneratePoint = numericLessThan_float(distance, cellDimension) * numericGreaterThan_float(distance, 0);
 
 	int color = Color(1, 0, 0, 0).device_toInt();
 
@@ -62,7 +67,7 @@ __global__ void myKernel()
 
 SDFExtractor::SDFExtractor()
 {
-	extractedPoints = new thrust::device_vector< RenderPoint >(100 * 100 * 100);
+	extractedPoints = new thrust::device_vector< RenderPoint >(200 * 200 * 200);
 }
 
 struct is_not_zero
@@ -79,9 +84,9 @@ SDFExtractor::extract()
 {
 	RenderPoint* vecStart = thrust::raw_pointer_cast(extractedPoints->data());
 	int vecLength = extractedPoints->size();
-	dim3 blocks(16, 16, 16);
+	dim3 blocks(32, 32, 32);
 	dim3 threads(8, 8, 8);
-	extractPointCloudSphere << <blocks, threads >> >(vecStart, vecLength, 100);
+	extractPointCloudSphere << <blocks, threads >> >(vecStart, vecLength, 200);
 
 
 	int index = 200 + 400 * 200;

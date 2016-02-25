@@ -7,6 +7,7 @@
 #include <iostream>
 
 #include "KeyboardCallback.cuh"
+#include "MouseClickCallback.cuh"
 
 class Game;
 class GLFWwindow;
@@ -18,6 +19,7 @@ class Application
 {
 public:
 	static KeyboardCallback* KEYBOARD;
+	static MouseClickCallback* MOUSE_CLICK;
 
 	Application(Game& game, string windowTitle, int windowWidth, int windowHeight);
 	~Application();

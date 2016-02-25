@@ -26,15 +26,29 @@ void
 Player::onKeyRepeat(int keyCode)
 {
 	if (keyCode == GLFW_KEY_D)
-		camera->translate(0.01f, 0, 0);
+		camera->moveRight(0.01f);
 	if (keyCode == GLFW_KEY_A)
-		camera->translate(-0.01f, 0, 0);
+		camera->moveLeft(0.01f);
 	if (keyCode == GLFW_KEY_W)
-		camera->translate(0, 0.01f, 0);
+		camera->moveForward(0.01f);
 	if (keyCode == GLFW_KEY_S)
-		camera->translate(0, -0.01f, 0);
+		camera->moveBackward(0.01f);
 	if (keyCode == GLFW_KEY_Q)
-		camera->translate(0, 0, 0.01f);
+		//camera->translate(0, 0, 0.01f);
+		camera->rotate(0.01f, glm::vec3(0, 1,0));
 	if (keyCode == GLFW_KEY_E)
-		camera->translate(0, 0, -0.01f);
+		//camera->translate(0, 0, -0.01f);
+		camera->rotate(-0.01f, glm::vec3(0, 1, 0));
+}
+
+void
+Player::onMouseRelease(MouseButton button, float posX, float posY)
+{
+
+}
+
+void
+Player::onMousePress(MouseButton button, float posX, float posY)
+{
+
 }

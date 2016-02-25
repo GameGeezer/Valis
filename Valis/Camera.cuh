@@ -12,7 +12,22 @@ public:
 	~Camera();
 	
 	__host__ void
+	moveForward(float amount);
+
+	__host__ void
+	moveBackward(float amount);
+
+	__host__ void
+	moveLeft(float amount);
+
+	__host__ void
+	moveRight(float amount);
+
+	__host__ void
 	translate(float x, float y, float z);
+
+	__host__ void
+	rotate(float ammount, glm::vec3 axis);
 
 	__host__ void
 	constructViewProjection(glm::mat4& target);
@@ -35,7 +50,7 @@ private:
 
 	float width, height, near, far, fieldOfView;
 	glm::mat4 projection, view;
-	glm::vec3 position;
+	glm::vec3 position, direction;
 };
 
 #endif

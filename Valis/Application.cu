@@ -2,9 +2,11 @@
 
 #include "Game.cuh"
 #include "GLLibraries.h"
-#include "KeyboardCallback.cuh"
+
 
 KeyboardCallback* Application::KEYBOARD = new KeyboardCallback();
+
+MouseClickCallback* Application::MOUSE_CLICK = new MouseClickCallback();
 
 static void error_callback(int error, const char* description)
 {
@@ -17,6 +19,15 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		glfwSetWindowShouldClose(window, GL_TRUE);
 
 	Application::KEYBOARD->invoke(key, scancode, action, mods);
+}
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+	//if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
+		//popup_menu();
+	double xpos, ypos;
+	glfwGetCursorPos(window, &xpos, &ypos);
+	Application::MOUSE_CLICK->invoke(button, action, mods, xpos, ypos);
 }
 
 Application::Application(Game& game, string windowTitle, int windowWidth, int windowHeight) : game(&game), windowTitle(windowTitle), windowWidth(windowWidth), windowHeight(windowHeight)

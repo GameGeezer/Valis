@@ -380,6 +380,7 @@ c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\device_launch_pa
 c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\vector_types.h
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\Player.cuh
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\KeyboardListener.cuh
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\MouseClickListener.cuh
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\GLLibraries.h
 C:\Programming\Libraries\glew-1.13.0\include\GL/glew.h
 C:\Program Files (x86)\Windows Kits\8.1\Include\um\GL/glu.h
@@ -505,3 +506,4 @@ C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\thr/xthreads.h
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\iostream
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\KeyboardCallback.cuh
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\vector
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\MouseClickCallback.cuh

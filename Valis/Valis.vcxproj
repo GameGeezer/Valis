@@ -163,6 +163,8 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
   <ItemGroup>
     <CudaCompile Include="Descriptor.cu" />
     <CudaCompile Include="kernel.cu" />
+    <CudaCompile Include="MouseClickCallback.cu" />
+    <CudaCompile Include="MouseMoveCallback.cu" />
     <CudaCompile Include="Player.cu" />
     <CudaCompile Include="SDFExtractor.cu" />
     <CudaCompile Include="SDFRenderer.cu" />
@@ -188,6 +190,10 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClInclude Include="KeyboardListener.cuh" />
     <ClInclude Include="MathUtil.cuh" />
     <ClInclude Include="Matrix4Device.cuh" />
+    <ClInclude Include="MouseClickCallback.cuh" />
+    <ClInclude Include="MouseClickListener.cuh" />
+    <ClInclude Include="MouseMoveCallback.cuh" />
+    <ClInclude Include="MouseMoveListener.cuh" />
     <ClInclude Include="NumericBoolean.cuh" />
     <ClInclude Include="PBO.cuh" />
     <ClInclude Include="Player.cuh" />
