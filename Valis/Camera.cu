@@ -60,6 +60,12 @@ Camera::rotate(float amount, glm::vec3 axis)
 	updateView();
 }
 
+__host__ void
+Camera::rotateLocalX(float ammount)
+{
+	rotate(ammount, glm::cross(direction, glm::vec3(0, 1, 0)));
+}
+
 void
 Camera::constructViewProjection(glm::mat4& target)
 {

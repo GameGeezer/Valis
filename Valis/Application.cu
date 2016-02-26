@@ -8,6 +8,8 @@ KeyboardCallback* Application::KEYBOARD = new KeyboardCallback();
 
 MouseClickCallback* Application::MOUSE_CLICK = new MouseClickCallback();
 
+MouseMoveCallback* Application::MOUSE_MOVE = new MouseMoveCallback();
+
 static void error_callback(int error, const char* description)
 {
 	fputs(description, stderr);
@@ -28,6 +30,11 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 	double xpos, ypos;
 	glfwGetCursorPos(window, &xpos, &ypos);
 	Application::MOUSE_CLICK->invoke(button, action, mods, xpos, ypos);
+}
+
+void mouse_position_callback(GLFWwindow* window, double xpos, double ypos)
+{
+	Application::MOUSE_MOVE->invoke(xpos, ypos);
 }
 
 Application::Application(Game& game, string windowTitle, int windowWidth, int windowHeight) : game(&game), windowTitle(windowTitle), windowWidth(windowWidth), windowHeight(windowHeight)
@@ -74,6 +81,10 @@ Application::init()
 	glfwSwapInterval(1);
 
 	glfwSetKeyCallback(window, key_callback);
+
+	glfwSetMouseButtonCallback(window, mouse_button_callback);
+
+	glfwSetCursorPosCallback(window, mouse_position_callback);
 
 	glewInit();
 }

@@ -30,6 +30,9 @@ public:
 	rotate(float ammount, glm::vec3 axis);
 
 	__host__ void
+	rotateLocalX(float ammount);
+
+	__host__ void
 	constructViewProjection(glm::mat4& target);
 
 	__host__ void
@@ -50,7 +53,7 @@ private:
 
 	float width, height, near, far, fieldOfView;
 	glm::mat4 projection, view;
-	glm::vec3 position, direction;
+	glm::vec3 position, direction, up;
 };
 
 #endif

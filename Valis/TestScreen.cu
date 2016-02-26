@@ -102,7 +102,7 @@ TestScreen::onResume()
 void
 TestScreen::onUpdate(int delta)
 {
-	
+	player->update(delta);
 	glm::mat4 invViewProjection;
 	player->camera->constructInverseViewProjection(invViewProjection);
 	renderer->renderToMapping(*mapping, *windowGridSize, *windowBlockSize, invViewProjection);
