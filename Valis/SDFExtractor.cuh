@@ -23,7 +23,7 @@ private:
 
 	thrust::device_vector< RenderPoint >* extractedPoints;
 
-	uint32_t gridResolution = 320;
+	uint32_t gridResolution = 400;
 	uint32_t partialExtractionSize = 200;
 };
 

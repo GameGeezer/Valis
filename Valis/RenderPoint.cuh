@@ -6,7 +6,7 @@
 
 struct ExtractionBlock
 {
-	uint32_t first, second;
+	uint32_t first = 0, second = 0;
 };
 
 struct RenderPoint
