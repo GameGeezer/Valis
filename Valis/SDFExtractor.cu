@@ -110,47 +110,76 @@ __global__ void extractPointCloudAsBitArray(ExtractionBlock *d_output, SDFDevice
 	atomicOr(&(d_output[clusterIndex].first), bitToOrWith * writeFirst);
 	atomicOr(&(d_output[clusterIndex].second), bitToOrWith * writeSecond);
 }
-/*
-__global__ void createCloudFromBuffers(RenderPoint* d_output, uint32_t *coverageBuffer, uint32_t *materialBuffer, int gridDivisions, int extractDimensions, int dimensionOffsetX, int dimensionOffsetY, int dimensionOffsetZ)
+
+__global__ void createCloudFromBuffers(RenderPoint* d_output, ExtractionBlock *coverageBuffer, ExtractionBlock *materialBuffer, uint32_t subsectionClusterDim, uint32_t totalClusterDim, int dimensionOffsetX, int dimensionOffsetY, int dimensionOffsetZ)
 {
 	uint32_t x = blockIdx.x * blockDim.x + threadIdx.x;
 	uint32_t y = blockIdx.y * blockDim.y + threadIdx.y;
 	uint32_t z = blockIdx.z * blockDim.z + threadIdx.z;
 
-	if (x >= extractDimensions || y >= extractDimensions || z >= extractDimensions)
+	// Check to see if x, y, or z exceeds the bounds of the local grid
+	if (x >= subsectionClusterDim * 4 || y >= subsectionClusterDim * 4 || z >= subsectionClusterDim * 4)
 	{
 		return;
 	}
 
-	int outputIndex = x + extractDimensions * y + extractDimensions * extractDimensions * z;
+	uint32_t offsetX = x + dimensionOffsetX;
+	uint32_t offsetY = y + dimensionOffsetY;
+	uint32_t offsetZ = z + dimensionOffsetZ;
 
-	x += dimensionOffsetX;
-	y += dimensionOffsetY;
-	z += dimensionOffsetZ;
+	// Check to see if x, y, ot z exceed the bounds of the entire grid
+	if (offsetX >= totalClusterDim * 4 || offsetY >= totalClusterDim * 4 || offsetZ >= totalClusterDim * 4)
+	{
+		return;
+	}
 
-	uint32_t intsPerRow = gridDivisions / 32;
+	// x, y, and z relative to the cluster 0, 0 , 0
+	uint32_t localX = x & 3;
+	uint32_t localY = y & 3;
+	uint32_t localZ = z & 3;
 
-	uint32_t index = (x + 1) / 32 + y * intsPerRow + z * intsPerRow * intsPerRow;
+	uint32_t bitToCheck = localX + localY * 4 + localZ * 16;
 
-	uint32_t relativeX = x & 31; // mod 32
+	// Which cluster the cell is in
+	uint32_t clusterX = offsetX / 4;
+	uint32_t clusterY = offsetY / 4;
+	uint32_t clusterZ = offsetZ / 4;
 
-	uint32_t coverageBit = coverageBuffer[index] & (1 << relativeX);
-	uint32_t materialBit = materialBuffer[index] & (1 << relativeX);
+	// The cluster index relative to the entire grid
+	uint32_t clusterIndex = clusterX + clusterY * totalClusterDim + clusterZ * totalClusterDim * totalClusterDim;
 
-	NumericBoolean materialCoverageOverlap = coverageBit > 0;
+	ExtractionBlock surfaceCoverage = coverageBuffer[clusterIndex];
+	ExtractionBlock materialCoverage = materialBuffer[clusterIndex];
 
-	float divisionsAsFloat = ((float)gridDivisions);
+	NumericBoolean checkFirst = numericLessThan_uint32_t(bitToCheck, 32);
+	NumericBoolean checkSecond = numericNegate_uint32_t(checkFirst);
 
-	float normalizeX = ((float)x) / divisionsAsFloat;
-	float normalizeY = ((float)y) / divisionsAsFloat;
-	float normalizeZ = ((float)z) / divisionsAsFloat;
+	bitToCheck = bitToCheck * checkFirst + (bitToCheck - 32) * checkSecond;
+
+	uint32_t bitToAndWith = (1 << bitToCheck);
+
+	uint32_t andCoverageFirst = (surfaceCoverage.first & materialCoverage.first) & bitToAndWith;
+	uint32_t andCoverageSecond = (surfaceCoverage.second & materialCoverage.second) & bitToAndWith;
+
+	NumericBoolean foundFirst = numericGreaterThan_uint32_t(andCoverageFirst * checkFirst, 0);
+	NumericBoolean foundSecond = numericGreaterThan_uint32_t(andCoverageSecond * checkSecond, 0);
+
+	NumericBoolean materialCoverageOverlap = numericGreaterThan_uint32_t(foundFirst + foundSecond, 0);
+
+	uint32_t gridDimension = (totalClusterDim * 4);
+
+	float divisionsAsFloat = ((float) gridDimension);
+
+	float normalizeX = ((float)offsetX) / divisionsAsFloat;
+	float normalizeY = ((float)offsetY) / divisionsAsFloat;
+	float normalizeZ = ((float)offsetZ) / divisionsAsFloat;
+
+	int outputIndex = offsetX + offsetY * subsectionClusterDim * 4 + offsetZ * subsectionClusterDim * subsectionClusterDim * 16;
 
 	d_output[outputIndex].positionX = normalizeX * materialCoverageOverlap;
 	d_output[outputIndex].positionY = normalizeY * materialCoverageOverlap;
 	d_output[outputIndex].positionZ = normalizeZ * materialCoverageOverlap;
 }
-
-*/
 
 
 SDFExtractor::SDFExtractor()
@@ -193,31 +222,7 @@ SDFExtractor::extract()
 
 	
 
-	int numberOfPointsCreated = 0;
-	for (int i = 0; i < gridResolution; i += partialExtractionSize)
-	{
-		for (int j = 0; j < gridResolution; j += partialExtractionSize)
-		{
-			for (int k = 0; k < gridResolution; k += partialExtractionSize)
-			{
-
-				//thrust::fill(partialExtractionBuffer->begin(), partialExtractionBuffer->end(), zeroRenderPoint);
-				
-				createCloudFromBuffers << <partialExtractionBlocks, partialExtractionThreads >> > (partialExtractionStart, coverageStart, coverageStart, gridResolution, partialExtractionSize, i, j, k);
-
-				int newPointsCreated = thrust::count_if(partialExtractionBuffer->begin(), partialExtractionBuffer->end(), is_not_zero());
-				if ((newPointsCreated + numberOfPointsCreated) > createdPoints->capacity())
-				{
-					createdPoints->resize(newPointsCreated + numberOfPointsCreated);
-				}
-
-				thrust::copy_if(partialExtractionBuffer->begin(), partialExtractionBuffer->end(), createdPoints->begin() + numberOfPointsCreated, is_not_zero());
-				numberOfPointsCreated += newPointsCreated;
-				
-			}
-		}
-		
-	}
+	
 	*/
 	SDSphere sdSphere(0.25f, glm::vec3(0.5f, 0.5f, 0.5f));
 	SDTorus sdTorus(0.31f, 0.1f, glm::vec3(0.5f, 0.5f, 0.5f));
@@ -230,12 +235,37 @@ SDFExtractor::extract()
 	ExtractionBlock* coverageStart = thrust::raw_pointer_cast(pointCoverageBuffer->data());
 	dim3 blocksBitAr(100, 100, 100);
 	dim3 threadsBitAr(4, 4, 4);
-	extractPointCloudAsBitArray << <blocksBitAr, threadsBitAr >> >(coverageStart, testSDFDevice, 100);
+	extractPointCloudAsBitArray << <blocksBitAr, threadsBitAr >> >(coverageStart, testSDFDevice, gridResolution / 4);
 	thrust::host_vector< RenderPoint >* createdPoints = new thrust::host_vector< RenderPoint >();
 	RenderPoint* partialExtractionStart = thrust::raw_pointer_cast(partialExtractionBuffer->data());
 
 	dim3 partialExtractionBlocks(50, 50, 50);
 	dim3 partialExtractionThreads(4, 4, 4);
+	int numberOfPointsCreated = 0;
+	for (int i = 0; i < gridResolution; i += partialExtractionSize)
+	{
+		for (int j = 0; j < gridResolution; j += partialExtractionSize)
+		{
+			for (int k = 0; k < gridResolution; k += partialExtractionSize)
+			{
+
+				//thrust::fill(partialExtractionBuffer->begin(), partialExtractionBuffer->end(), zeroRenderPoint);
+
+				
+				createCloudFromBuffers << <partialExtractionBlocks, partialExtractionThreads >> > (partialExtractionStart, coverageStart, coverageStart, partialExtractionSize / 4, gridResolution / 4, i, j, k);
+				
+				int newPointsCreated = thrust::count_if(partialExtractionBuffer->begin(), partialExtractionBuffer->end(), is_not_zero());
+				
+				createdPoints->resize(newPointsCreated + numberOfPointsCreated);
+				
+				//thrust::copy_if(partialExtractionBuffer->begin(), partialExtractionBuffer->end(), createdPoints->end(), is_not_zero());
+				/*
+				numberOfPointsCreated += newPointsCreated;
+				*/
+			}
+		}
+
+	}
 
 	/*
 	SDSphere sdSphere(0.25f, glm::vec3(0.5f, 0.5f, 0.5f));
