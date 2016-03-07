@@ -7,14 +7,28 @@
 #include "DistancePrimitive.cuh"
 #include "GLMUtil.cuh"
 
+#include "cuda_runtime.h"
+#include "CudaHelper.cuh"
+
 class SDTorus : public DistancePrimitive
 {
 public:
 
 	__host__ __device__
-	SDTorus(float outer, float radius, glm::vec3 position) : dimensions(glm::vec2(outer, radius)), position(position)
+	SDTorus(float outer, float radius, glm::vec3 position) : DistancePrimitive(1), dimensions(glm::vec2(outer, radius)), position(position)
 	{
 
+	}
+
+	__host__ inline DistancePrimitive*
+	copyToDevice()
+	{
+		SDTorus* deviceTorus;
+
+		assertCUDA(cudaMalloc((void **)&deviceTorus, sizeof(SDTorus)));
+		assertCUDA(cudaMemcpy(deviceTorus, this, sizeof(SDTorus), cudaMemcpyHostToDevice));
+
+		return deviceTorus;
 	}
 
 	__host__ __device__ inline float
@@ -25,13 +39,12 @@ public:
 		return GLMUtil::length(q) - dimensions.y;
 	}
 
-	__host__ __device__ virtual inline AABB
-	calculateBoundingVolume()
+	__host__ __device__ inline AABB
+	calculateBoundingVolume() 
 	{
 		return AABB(glm::vec2(0, 0), glm::vec2(0, 0));
 	}
 
-private:
 	glm::vec3 position;
 	glm::vec2 dimensions;
 };

@@ -2,8 +2,10 @@
 #define VALIS_SDFEXTRACTOR
 
 #include <thrust/device_vector.h>
+#include <stdint.h>
 
 class RenderPoint;
+class ExtractionBlock;
 
 class SDFExtractor
 {
@@ -15,7 +17,14 @@ public:
 	extract();
 
 private:
+	thrust::device_vector< ExtractionBlock >* pointCoverageBuffer;
+	thrust::device_vector< uint32_t >* materialCoverageBuffer;
+	thrust::device_vector< RenderPoint >* partialExtractionBuffer;
+
 	thrust::device_vector< RenderPoint >* extractedPoints;
+
+	uint32_t gridResolution = 320;
+	uint32_t partialExtractionSize = 200;
 };
 
 

@@ -4,6 +4,11 @@
 #include <stdint.h>
 #include <glm\vec3.hpp>
 
+struct ExtractionBlock
+{
+	uint32_t first, second;
+};
+
 struct RenderPoint
 {
 	float positionX, positionY, positionZ;

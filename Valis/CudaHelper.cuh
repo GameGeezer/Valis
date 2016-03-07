@@ -5,8 +5,6 @@
 #include <stdlib.h>
 
 #include "cuda_runtime.h"
-#include "CudaGLBufferMapping.cuh"
-
 
 #define assertCUDA(ans) { checkCUDAForError(ans, __FILE__, __LINE__); }
 inline void checkCUDAForError(cudaError_t code, const char *file, int line, bool abort = true)

@@ -23,6 +23,24 @@
     <CudaCompile Include="MouseMoveCallback.cu">
       <Filter>framework\src\window\windowcallbacks\private</Filter>
     </CudaCompile>
+    <CudaCompile Include="SDFDevice.cu">
+      <Filter>framework\src\distanceFields\private</Filter>
+    </CudaCompile>
+    <CudaCompile Include="SDFHost.cu">
+      <Filter>framework\src\distanceFields\private</Filter>
+    </CudaCompile>
+    <CudaCompile Include="SDSphere.cu">
+      <Filter>framework\src\distanceFields\primitives\private</Filter>
+    </CudaCompile>
+    <CudaCompile Include="SDTorus.cu">
+      <Filter>framework\src\distanceFields\primitives\private</Filter>
+    </CudaCompile>
+    <CudaCompile Include="PlaceSDPrimitive.cu">
+      <Filter>framework\src\distanceFields\modifications\private</Filter>
+    </CudaCompile>
+    <CudaCompile Include="CarveSDPrimitive.cu">
+      <Filter>framework\src\distanceFields\modifications\private</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="framework">
@@ -112,14 +130,26 @@
     <Filter Include="framework\src\window\windowcallbacks\private">
       <UniqueIdentifier>{bb993822-1be4-41fd-831a-15f8c588adac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="framework\src\distanceFields\modifications">
+      <UniqueIdentifier>{f295616e-546a-4a6b-96c9-4f4388854497}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\distanceFields\modifications\public">
+      <UniqueIdentifier>{cfbc4317-886c-4150-bb2a-d6d8a6da2ab3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\distanceFields\primitives">
+      <UniqueIdentifier>{aca00140-8d47-44a1-b5ac-acb227daa6bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\distanceFields\primitives\public">
+      <UniqueIdentifier>{7dd524ae-a698-495f-90e8-0bf2e5cee786}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\distanceFields\primitives\private">
+      <UniqueIdentifier>{6063e585-d7bb-41f1-835f-409e184c8cfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\distanceFields\modifications\private">
+      <UniqueIdentifier>{e235f06c-2ab1-4426-8b74-01c27adbf1fa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DistanceFunctions.h">
-      <Filter>framework\src\distanceFields\public</Filter>
-    </ClInclude>
-    <ClInclude Include="SDFPointCloudExtractor.h">
-      <Filter>framework\src\distanceFields\public</Filter>
-    </ClInclude>
     <ClInclude Include="GLLibraries.h">
       <Filter>framework</Filter>
     </ClInclude>
@@ -178,18 +208,6 @@
     <ClInclude Include="Player.cuh">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="SDSphere.cuh">
-      <Filter>framework\src\distanceFields\public</Filter>
-    </ClInclude>
-    <ClInclude Include="DistancePrimitive.cuh">
-      <Filter>framework\src\distanceFields\public</Filter>
-    </ClInclude>
-    <ClInclude Include="SDTorus.cuh">
-      <Filter>framework\src\distanceFields\public</Filter>
-    </ClInclude>
-    <ClInclude Include="SignedDistanceFunction.cuh">
-      <Filter>framework\src\distanceFields\public</Filter>
-    </ClInclude>
     <ClInclude Include="AABB.cuh">
       <Filter>framework\src\math</Filter>
     </ClInclude>
@@ -229,6 +247,30 @@
     <ClInclude Include="MouseMoveListener.cuh">
       <Filter>framework\src\window\windowcallbacks\public</Filter>
     </ClInclude>
+    <ClInclude Include="SDModification.cuh">
+      <Filter>framework\src\distanceFields\modifications\public</Filter>
+    </ClInclude>
+    <ClInclude Include="DistancePrimitive.cuh">
+      <Filter>framework\src\distanceFields\primitives\public</Filter>
+    </ClInclude>
+    <ClInclude Include="SDSphere.cuh">
+      <Filter>framework\src\distanceFields\primitives\public</Filter>
+    </ClInclude>
+    <ClInclude Include="SDTorus.cuh">
+      <Filter>framework\src\distanceFields\primitives\public</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaceSDPrimitive.cuh">
+      <Filter>framework\src\distanceFields\modifications\public</Filter>
+    </ClInclude>
+    <ClInclude Include="CarveSDPrimitive.cuh">
+      <Filter>framework\src\distanceFields\modifications\public</Filter>
+    </ClInclude>
+    <ClInclude Include="SDFDevice.cuh">
+      <Filter>framework\src\distanceFields\public</Filter>
+    </ClInclude>
+    <ClInclude Include="SDFHost.cuh">
+      <Filter>framework\src\distanceFields\public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TestScreen.cu" />
@@ -246,9 +288,6 @@
     </ClCompile>
     <ClCompile Include="ShaderProgram.cu">
       <Filter>framework\src\graphics\opengl\private</Filter>
-    </ClCompile>
-    <ClCompile Include="SDFPointCloudExtractor.cu">
-      <Filter>framework\src\distanceFields\private</Filter>
     </ClCompile>
     <ClCompile Include="KeyboardCallback.cu">
       <Filter>framework\src\window\keyboardcallbacks\private</Filter>

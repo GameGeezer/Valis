@@ -23,7 +23,6 @@
 #include "ShaderProgram.cuh"
 #include "Camera.cuh"
 #include "Player.cuh"
-#include "SignedDistanceFunction.cuh"
 #include "SDSphere.cuh"
 #include "Descriptor.cuh"
 #include "SDFExtractor.cuh"
@@ -61,9 +60,6 @@ TestScreen::onCreate()
 	shader = new ShaderProgram(vertShader.c_str(), fragShader.c_str(), attributes);
 	Camera* camera = new Camera(640, 680, 0.1f, 100.0f, 45.0f);
 	camera->translate(0, 0, 2);
-
-	sphereSdf = new SignedDistanceFunction();
-	sphereSdf->addFunction(*(new SDSphere(1, glm::vec3(0, 0, 0))));
 
 	extractor = new SDFExtractor();
 	thrust::device_vector< RenderPoint >* spherePoints = extractor->extract();

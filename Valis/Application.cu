@@ -100,7 +100,7 @@ Application::loop()
 
 		milliseconds currentFrame = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
 		milliseconds delta = currentFrame - lastFrameTime;
-		std::cout << delta.count() << endl;
+		//std::cout << delta.count() << endl;
 		game->update(delta.count());
 
 		glfwSwapBuffers(window);

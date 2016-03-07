@@ -43,6 +43,17 @@ NumericBoolean numericGreaterThan_int32_t(int32_t left, int32_t right)
 	return ((NumericBoolean)(left > right));
 }
 
+__host__ __device__ inline
+NumericBoolean numericGreaterThan_uint32_t(uint32_t left, uint32_t right)
+{
+	return ((NumericBoolean)(left > right));
+}
+
+__host__ __device__ inline
+NumericBoolean numericLessThan_uint32_t(uint32_t left, uint32_t right)
+{
+	return ((NumericBoolean)(left < right));
+}
 
 __host__ __device__ inline
 NumericBoolean numericLessThan_uint64_t(uint64_t left, uint64_t right)

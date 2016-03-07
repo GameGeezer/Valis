@@ -4,7 +4,6 @@
 #include "CudaGLBufferMapping.cuh"
 #include "Camera.cuh"
 #include <glm/mat4x4.hpp>
-#include "DistanceFunctions.h"
 #include "NumericBoolean.cuh"
 #include "SDSphere.cuh"
 

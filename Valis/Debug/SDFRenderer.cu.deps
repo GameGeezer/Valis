@@ -453,7 +453,6 @@ C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_pa
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\CudaGLBufferMapping.cuh
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\CudaHelper.cuh
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
-c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\CudaGLBufferMapping.cuh
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\PBO.cuh
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\GLLibraries.h
 C:\Programming\Libraries\glew-1.13.0\include\GL/glew.h
@@ -476,15 +475,24 @@ C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_pa
 C:\Programming\Libraries\glm-0.9.7.2\glm\glm\vec3.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/type_vec3.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\type_vec3.inl
-c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\DistanceFunctions.h
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\NumericBoolean.cuh
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdint.h
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDSphere.cuh
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\DistancePrimitive.cuh
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\AABB.cuh
+C:\Programming\Libraries\glm-0.9.7.2\glm\glm\vec2.hpp
+c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/type_vec2.hpp
+c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\type_vec2.inl
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\GLMUtil.cuh
 C:\Programming\Libraries\glm-0.9.7.2\glm\glm\glm.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/_fixes.hpp
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\cassert
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\assert.h
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
-c:\programming\libraries\glm-0.9.7.2\glm\glm\vec2.hpp
-c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/type_vec2.hpp
-c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\type_vec2.inl
 c:\programming\libraries\glm-0.9.7.2\glm\glm\vec4.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\mat2x2.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/type_mat2x2.hpp
@@ -543,15 +551,4 @@ c:\programming\libraries\glm-0.9.7.2\glm\glm\vector_relational.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\integer.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/func_integer.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\func_integer.inl
-C:\Programming\Libraries\glm-0.9.7.2\glm\glm\gtx\extented_min_max.hpp
-c:\programming\libraries\glm-0.9.7.2\glm\glm\gtx\extented_min_max.inl
-c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\GLMUtil.cuh
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h
-c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\NumericBoolean.cuh
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdint.h
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
-C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h
-c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDSphere.cuh
-c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\DistancePrimitive.cuh
-C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h
-c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\AABB.cuh

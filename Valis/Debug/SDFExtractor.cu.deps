@@ -876,6 +876,7 @@ C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\cassert
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\assert.h
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\type_vec3.inl
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\DistancePrimitive.cuh
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\AABB.cuh
@@ -955,7 +956,10 @@ c:\programming\libraries\glm-0.9.7.2\glm\glm\integer.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/func_integer.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\func_integer.inl
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\CudaHelper.cuh
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDTorus.cuh
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\RenderPoint.cuh
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/copy.h
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/detail/copy_if.h
@@ -1001,4 +1005,13 @@ C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/de
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/detail/sequential/count.h
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cpp/detail/count.h
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/count.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_functions.h
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDFHost.cuh
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDModification.cuh
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDFDevice.cuh
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\PlaceSDPrimitive.cuh
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
