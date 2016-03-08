@@ -75,7 +75,8 @@ __global__ void createCloudFromBuffers(RenderPoint* d_output, ExtractionBlock *c
 	uint32_t z = blockIdx.z * blockDim.z + threadIdx.z;
 
 	// Check to see if x, y, or z exceeds the bounds of the local grid
-	if (x >= subsectionClusterDim * 4 || y >= subsectionClusterDim * 4 || z >= subsectionClusterDim * 4)
+	uint32_t subGridDimension = (subsectionClusterDim * 4);
+	if (x >= subGridDimension || y >= subGridDimension || z >= subGridDimension)
 	{
 		return;
 	}
@@ -85,13 +86,15 @@ __global__ void createCloudFromBuffers(RenderPoint* d_output, ExtractionBlock *c
 	uint32_t offsetY = y + dimensionOffsetY;
 	uint32_t offsetZ = z + dimensionOffsetZ;
 
+	uint32_t gridDimension = (totalClusterDim * 4);
+
 	// Check to see if x, y, ot z exceed the bounds of the entire grid
-	if (offsetX >= totalClusterDim * 4 || offsetY >= totalClusterDim * 4 || offsetZ >= totalClusterDim * 4)
+	if (offsetX >= gridDimension || offsetY >= gridDimension || offsetZ >= gridDimension)
 	{
 		return;
 	}
 
-	int outputIndex = x + y * totalClusterDim * 4 + z * totalClusterDim * totalClusterDim * 16;
+	int outputIndex = x + y * subGridDimension + z * subGridDimension * subGridDimension;
 
 	if (outputIndex >= clusterBufferSize)
 	{
@@ -130,8 +133,6 @@ __global__ void createCloudFromBuffers(RenderPoint* d_output, ExtractionBlock *c
 	NumericBoolean foundSecond = numericGreaterThan_uint32_t(andCoverageSecond * checkSecond, 0);
 
 	NumericBoolean materialCoverageOverlap = numericGreaterThan_uint32_t(foundFirst + foundSecond, 0);
-
-	uint32_t gridDimension = (totalClusterDim * 4);
 
 	float divisionsAsFloat = ((float)gridDimension);
 
