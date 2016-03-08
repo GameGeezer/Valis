@@ -1,61 +1,17 @@
 #include "SDFExtractor.cuh"
 
-#include "Color.cuh"
-#include "NumericBoolean.cuh"
-#include "SDSphere.cuh"
-#include "SDTorus.cuh"
-#include "RenderPoint.cuh"
 #include <thrust/device_ptr.h>
-#include <thrust/host_vector.h>
 #include <thrust/copy.h>
 #include <thrust/count.h>
+#include <thrust/sort.h>
+
+#include "cuda.h"
 #include "cuda_runtime.h"
 #include "device_functions.h"
-#include "SDFHost.cuh"
+
+#include "NumericBoolean.cuh"
+#include "RenderPoint.cuh"
 #include "SDFDevice.cuh"
-#include "PlaceSDPrimitive.cuh"
-
-
-//const float SQRT2 = 1.41421f;
-
-__global__ void
-extractPointCloudSphere(RenderPoint *d_output, SDFDevice* sdf,  int length, int gridDivisions)
-{
-	float x = blockIdx.x * blockDim.x + threadIdx.x;
-	float y = blockIdx.y * blockDim.y + threadIdx.y;
-	float z = blockIdx.z * blockDim.z + threadIdx.z;
-
-	int index = x + gridDivisions * y + gridDivisions * gridDivisions * z;
-
-	if (index >= length)
-	{
-		return;
-	}
-
-	if (x > gridDivisions || y  > gridDivisions || z  > gridDivisions)
-	{
-		return;
-	}
-
-	float divisionsAsFloat = ((float) gridDivisions);
-
-	x /= divisionsAsFloat;
-	y /= divisionsAsFloat;
-	z /= divisionsAsFloat;
-
-	float distance = sdf->distanceFromPoint(sdf->primitives, sdf->modifications, sdf->modificationCount, glm::vec3(x, y, z)); //fminf(distance1, distance2);
-	
-	float cellDimension = 1.0f / divisionsAsFloat;
-
-	NumericBoolean shouldGeneratePoint = numericLessThan_float(distance, cellDimension) * numericGreaterThan_float(distance, 0);
-
-	int color = Color(1, 0, 0, 0).device_toInt();
-
-	d_output[index].positionX = x * shouldGeneratePoint;
-	d_output[index].positionY = y * shouldGeneratePoint;
-	d_output[index].positionZ = z * shouldGeneratePoint;
-	//d_output[index].color = color * shouldGeneratePoint;
-}
 
 
 __global__ void extractPointCloudAsBitArray(ExtractionBlock *d_output, SDFDevice *sdf, uint32_t clusterDim)
@@ -85,15 +41,15 @@ __global__ void extractPointCloudAsBitArray(ExtractionBlock *d_output, SDFDevice
 
 	uint32_t clusterIndex = clusterX + clusterY * clusterDim + clusterZ * clusterDim * clusterDim;
 
-	float divisionsAsFloat = ((float) gridDimension);
+	float divisionsAsFloat = ((float)gridDimension);
 
 	// normalized x, y, and z
-	float normalizeX = ((float) x) / divisionsAsFloat;
-	float normalizeY = ((float) y) / divisionsAsFloat;
-	float normalizeZ = ((float) z) / divisionsAsFloat;
+	float normalizeX = ((float)x) / divisionsAsFloat;
+	float normalizeY = ((float)y) / divisionsAsFloat;
+	float normalizeZ = ((float)z) / divisionsAsFloat;
 
 	// How far the cell is from the sdf
-	float distance = sdf->distanceFromPoint(sdf->primitives, sdf->modifications, sdf->modificationCount, glm::vec3(x, y, z));
+	float distance = sdf->distanceFromPoint(sdf->primitives, sdf->modifications, sdf->modificationCount, glm::vec3(normalizeX, normalizeY, normalizeZ));
 
 	// Decide whether to generate a point
 	float cellDimension = 1.0f / divisionsAsFloat;
@@ -104,14 +60,15 @@ __global__ void extractPointCloudAsBitArray(ExtractionBlock *d_output, SDFDevice
 	NumericBoolean writeSecond = numericNegate_uint32_t(writeFirst);
 
 	bitToFlip = bitToFlip * writeFirst + (bitToFlip - 32) * writeSecond;
-	
-	uint32_t bitToOrWith = (1 << bitToFlip) * shouldGeneratePoint;
 
-	atomicOr(&(d_output[clusterIndex].first), bitToOrWith * writeFirst);
-	atomicOr(&(d_output[clusterIndex].second), bitToOrWith * writeSecond);
+	uint32_t bitToOrWith = (1 << bitToFlip);// *shouldGeneratePoint;
+	uint32_t orFirst = bitToOrWith * writeFirst;
+	uint32_t orSecond = bitToOrWith * writeSecond;
+	atomicOr(&(d_output[clusterIndex].first), orFirst);
+	atomicOr(&(d_output[clusterIndex].second), orSecond);
 }
 
-__global__ void createCloudFromBuffers(RenderPoint* d_output, ExtractionBlock *coverageBuffer, ExtractionBlock *materialBuffer, uint32_t subsectionClusterDim, uint32_t totalClusterDim, int dimensionOffsetX, int dimensionOffsetY, int dimensionOffsetZ)
+__global__ void createCloudFromBuffers(RenderPoint* d_output, ExtractionBlock *coverageBuffer, ExtractionBlock *materialBuffer, uint32_t subsectionClusterDim, uint32_t totalClusterDim, uint32_t clusterBufferSize, int dimensionOffsetX, int dimensionOffsetY, int dimensionOffsetZ)
 {
 	uint32_t x = blockIdx.x * blockDim.x + threadIdx.x;
 	uint32_t y = blockIdx.y * blockDim.y + threadIdx.y;
@@ -123,6 +80,7 @@ __global__ void createCloudFromBuffers(RenderPoint* d_output, ExtractionBlock *c
 		return;
 	}
 
+
 	uint32_t offsetX = x + dimensionOffsetX;
 	uint32_t offsetY = y + dimensionOffsetY;
 	uint32_t offsetZ = z + dimensionOffsetZ;
@@ -133,6 +91,13 @@ __global__ void createCloudFromBuffers(RenderPoint* d_output, ExtractionBlock *c
 		return;
 	}
 
+	int outputIndex = x + y * totalClusterDim * 4 + z * totalClusterDim * totalClusterDim * 16;
+
+	if (outputIndex >= clusterBufferSize)
+	{
+		return;
+	}
+	
 	// x, y, and z relative to the cluster 0, 0 , 0
 	uint32_t localX = x & 3;
 	uint32_t localY = y & 3;
@@ -168,27 +133,24 @@ __global__ void createCloudFromBuffers(RenderPoint* d_output, ExtractionBlock *c
 
 	uint32_t gridDimension = (totalClusterDim * 4);
 
-	float divisionsAsFloat = ((float) gridDimension);
+	float divisionsAsFloat = ((float)gridDimension);
 
 	float normalizeX = ((float)offsetX) / divisionsAsFloat;
 	float normalizeY = ((float)offsetY) / divisionsAsFloat;
 	float normalizeZ = ((float)offsetZ) / divisionsAsFloat;
 
-	int outputIndex = offsetX + offsetY * subsectionClusterDim * 4 + offsetZ * subsectionClusterDim * subsectionClusterDim * 16;
-
 	d_output[outputIndex].positionX = normalizeX * materialCoverageOverlap;
 	d_output[outputIndex].positionY = normalizeY * materialCoverageOverlap;
 	d_output[outputIndex].positionZ = normalizeZ * materialCoverageOverlap;
+	
 }
 
 
-SDFExtractor::SDFExtractor()
+SDFExtractor::SDFExtractor(uint32_t clusterDensity, uint32_t extractionClusterDensity) : clusterDensity(clusterDensity), extractionClusterDensity(extractionClusterDensity)
 {
-	extractedPoints = new thrust::device_vector< RenderPoint >(300 * 300 * 300);
-
-	pointCoverageBuffer = new thrust::device_vector< ExtractionBlock >(gridResolution * gridResolution * gridResolution / 32);
-	materialCoverageBuffer = new thrust::device_vector< uint32_t >(gridResolution * gridResolution * gridResolution / 32);
-	partialExtractionBuffer = new thrust::device_vector< RenderPoint >(partialExtractionSize * partialExtractionSize * partialExtractionSize);
+	pointCoverageBuffer = new thrust::device_vector< ExtractionBlock >(clusterDensity * clusterDensity * clusterDensity);
+	materialCoverageBuffer = new thrust::device_vector< ExtractionBlock >(clusterDensity * clusterDensity * clusterDensity);
+	partialExtractionBuffer = new thrust::device_vector< RenderPoint >(extractionClusterDensity * extractionClusterDensity * extractionClusterDensity * 64);
 }
 
 struct is_not_zero
@@ -197,6 +159,15 @@ struct is_not_zero
 	bool operator()(const RenderPoint& point)
 	{
 		return point.positionX != 0 && point.positionY != 0 && point.positionZ != 0;
+	}
+};
+
+struct is_not_zero_extract
+{
+	__host__ __device__
+		bool operator()(const ExtractionBlock& point)
+	{
+		return point.first != 0 && point.second != 0;
 	}
 };
 
@@ -209,35 +180,54 @@ struct is_not_zero_uint32_t
 	}
 };
 
-thrust::device_vector< RenderPoint >*
-SDFExtractor::extract()
+struct shiftRenderPointsLeft
 {
+	__host__ __device__
+	bool operator()(const RenderPoint& point1, const RenderPoint& point2)
+	{
+		return (point1.positionX + point1.positionY + point1.positionZ) >  (point2.positionX + point2.positionY + point2.positionZ);
+	}
+};
+
+thrust::host_vector< RenderPoint >*
+SDFExtractor::extract(SDFDevice& sdf)
+{
+
+	thrust::host_vector< RenderPoint >* extractedPoints = new thrust::host_vector< RenderPoint >();
+
+	thrust::fill(pointCoverageBuffer->begin(), pointCoverageBuffer->end(), ExtractionBlock());
+
+	ExtractionBlock* pointCoverageStart = thrust::raw_pointer_cast(pointCoverageBuffer->data());
+
+	dim3 blocksBitAr(clusterDensity / 2, clusterDensity / 2, clusterDensity / 2);
+	dim3 threadsBitAr(8, 8, 8);
+	extractPointCloudAsBitArray << <blocksBitAr, threadsBitAr >> >(pointCoverageStart, &sdf, clusterDensity);
+
+	//thrust::host_vector< ExtractionBlock > checkExtract = *pointCoverageBuffer;
+	//int count3 = thrust::count_if(checkExtract.begin(), checkExtract.end(), is_not_zero_extract());
+	//int z = checkExtract.size();
+	RenderPoint* partialExtractionStart = thrust::raw_pointer_cast(partialExtractionBuffer->data());
+
+	dim3 partialExtractionBlocks(extractionClusterDensity / 2, extractionClusterDensity / 2, extractionClusterDensity / 2);
+	dim3 partialExtractionThreads(8, 8, 8);
+	createCloudFromBuffers << <partialExtractionBlocks, partialExtractionThreads >> > (partialExtractionStart, pointCoverageStart, pointCoverageStart, extractionClusterDensity, clusterDensity, partialExtractionBuffer->size(), 0, 0, 0);
+	thrust::sort(partialExtractionBuffer->begin(), partialExtractionBuffer->end(), shiftRenderPointsLeft());
+	thrust::host_vector< RenderPoint > checkExtract = *partialExtractionBuffer;
+	int numberCreated = thrust::count_if(partialExtractionBuffer->begin(), partialExtractionBuffer->end(), is_not_zero());
+	extractedPoints->resize(numberCreated);
+	cudaMemcpy(thrust::raw_pointer_cast(extractedPoints->data()), partialExtractionStart, numberCreated * sizeof(RenderPoint), cudaMemcpyDeviceToHost);
 	/*
 	
 	
-	//int vecLength = pointCoverageBuffer->size();
 
-
-	//thrust::device_vector<RenderPoint>* compactedPoints = new thrust::device_vector< RenderPoint >(pointsCreated);
-
-	
-
-	
-	*/
-	SDSphere sdSphere(0.25f, glm::vec3(0.5f, 0.5f, 0.5f));
-	SDTorus sdTorus(0.31f, 0.1f, glm::vec3(0.5f, 0.5f, 0.5f));
-	SDModification* place = new PlaceSDPrimitive();
-	SDFHost* testSDF = new SDFHost(&sdSphere);
-	testSDF->modify(&sdTorus, place);
-	SDFDevice* testSDFDevice = testSDF->copyToDevice();
 	
 	thrust::fill(pointCoverageBuffer->begin(), pointCoverageBuffer->end(), ExtractionBlock());
-	ExtractionBlock* coverageStart = thrust::raw_pointer_cast(pointCoverageBuffer->data());
+	
 	dim3 blocksBitAr(100, 100, 100);
 	dim3 threadsBitAr(4, 4, 4);
 	extractPointCloudAsBitArray << <blocksBitAr, threadsBitAr >> >(coverageStart, testSDFDevice, gridResolution / 4);
 	thrust::host_vector< RenderPoint >* createdPoints = new thrust::host_vector< RenderPoint >();
-	RenderPoint* partialExtractionStart = thrust::raw_pointer_cast(partialExtractionBuffer->data());
+	
 
 	dim3 partialExtractionBlocks(50, 50, 50);
 	dim3 partialExtractionThreads(4, 4, 4);
@@ -261,32 +251,11 @@ SDFExtractor::extract()
 				//thrust::copy_if(partialExtractionBuffer->begin(), partialExtractionBuffer->end(), createdPoints->end(), is_not_zero());
 				/*
 				numberOfPointsCreated += newPointsCreated;
-				*/
+				
 			}
 		}
 
 	}
-
-	/*
-	SDSphere sdSphere(0.25f, glm::vec3(0.5f, 0.5f, 0.5f));
-	SDTorus sdTorus(0.31f, 0.1f, glm::vec3(0.5f, 0.5f, 0.5f));
-	SDModification* place = new PlaceSDPrimitive();
-	SDFHost* testSDF = new SDFHost(&sdSphere);
-	testSDF->modify(&sdTorus, place);
-	SDFDevice* testSDFDevice = testSDF->copyToDevice();
-	
-	RenderPoint* vecStart = thrust::raw_pointer_cast(extractedPoints->data());
-	int vecLength = extractedPoints->size();
-	dim3 blocks(40, 40, 40);
-	dim3 threads(8, 8, 8);
-	extractPointCloudSphere << <blocks, threads >> >(vecStart, testSDFDevice, vecLength, 300);
-
-
-	int index = 200 + 400 * 200;
-
-	int pointsCreated = thrust::count_if(extractedPoints->begin(), extractedPoints->end(), is_not_zero());
-	thrust::device_vector<RenderPoint>* compactedPoints = new thrust::device_vector< RenderPoint >(pointsCreated);
-	thrust::copy_if(extractedPoints->begin(), extractedPoints->end(), compactedPoints->begin(), is_not_zero());
 	*/
 	
 	return extractedPoints;

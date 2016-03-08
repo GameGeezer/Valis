@@ -42,15 +42,19 @@ public:
 		switch (primitive->functionId)
 		{
 			case 0:
+			{
 				SDSphere *sphereCast = ((SDSphere*)primitive);
-				
+
 				float distance = distanceFromSphere(sphereCast->position, sphereCast->radius, position);
 				return distance;
+			}
 			case 1:
+			{
 				SDTorus *torusCast = ((SDTorus*)primitive);
 
 				float distance2 = distanceFromTorus(torusCast->position, torusCast->dimensions, position);
 				return distance2;
+			}
 		}
 
 		return 0.0f;

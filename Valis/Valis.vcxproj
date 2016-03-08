@@ -93,7 +93,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <CudaCompile>
       <Optimization>Od</Optimization>
       <FastMath>false</FastMath>
-      <GPUDebugInfo>true</GPUDebugInfo>
+      <GPUDebugInfo>false</GPUDebugInfo>
       <InterleaveSourceInPTX>false</InterleaveSourceInPTX>
       <CodeGeneration>compute_20,sm_20;%(CodeGeneration)</CodeGeneration>
     </CudaCompile>

@@ -30,6 +30,10 @@
 #include "RenderPoint.cuh"
 #include "VBO.cuh"
 
+#include "SDFHost.cuh"
+#include "SDFDevice.cuh"
+#include "PlaceSDPrimitive.cuh"
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -61,9 +65,15 @@ TestScreen::onCreate()
 	Camera* camera = new Camera(640, 680, 0.1f, 100.0f, 45.0f);
 	camera->translate(0, 0, 2);
 
-	extractor = new SDFExtractor();
-	thrust::device_vector< RenderPoint >* spherePoints = extractor->extract();
-	thrust::host_vector< RenderPoint > hostPoints = *spherePoints;
+	extractor = new SDFExtractor(64, 32);
+	SDSphere sdSphere(0.25f, glm::vec3(0.5f, 0.5f, 0.5f));
+	SDTorus sdTorus(0.31f, 0.1f, glm::vec3(0.5f, 0.5f, 0.5f));
+	SDModification* place = new PlaceSDPrimitive();
+	SDFHost* testSDF = new SDFHost(&sdSphere);
+	testSDF->modify(&sdTorus, place);
+	SDFDevice* testSDFDevice = testSDF->copyToDevice();
+
+	thrust::host_vector< RenderPoint >& hostPoints = *(extractor->extract(*testSDFDevice));
 	pointCount = hostPoints.size();
 	vbo = new VBO(&(hostPoints[0]), hostPoints.size() * 3);
 
