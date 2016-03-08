@@ -61,7 +61,7 @@ __global__ void extractPointCloudAsBitArray(ExtractionBlock *d_output, SDFDevice
 
 	bitToFlip = bitToFlip * writeFirst + (bitToFlip - 32) * writeSecond;
 
-	uint32_t bitToOrWith = (1 << bitToFlip);// *shouldGeneratePoint;
+	uint32_t bitToOrWith = (1 << bitToFlip) *shouldGeneratePoint;
 	uint32_t orFirst = bitToOrWith * writeFirst;
 	uint32_t orSecond = bitToOrWith * writeSecond;
 	atomicOr(&(d_output[clusterIndex].first), orFirst);
@@ -210,53 +210,23 @@ SDFExtractor::extract(SDFDevice& sdf)
 
 	dim3 partialExtractionBlocks(extractionClusterDensity / 2, extractionClusterDensity / 2, extractionClusterDensity / 2);
 	dim3 partialExtractionThreads(8, 8, 8);
-	createCloudFromBuffers << <partialExtractionBlocks, partialExtractionThreads >> > (partialExtractionStart, pointCoverageStart, pointCoverageStart, extractionClusterDensity, clusterDensity, partialExtractionBuffer->size(), 0, 0, 0);
-	thrust::sort(partialExtractionBuffer->begin(), partialExtractionBuffer->end(), shiftRenderPointsLeft());
-	thrust::host_vector< RenderPoint > checkExtract = *partialExtractionBuffer;
-	int numberCreated = thrust::count_if(partialExtractionBuffer->begin(), partialExtractionBuffer->end(), is_not_zero());
-	extractedPoints->resize(numberCreated);
-	cudaMemcpy(thrust::raw_pointer_cast(extractedPoints->data()), partialExtractionStart, numberCreated * sizeof(RenderPoint), cudaMemcpyDeviceToHost);
-	/*
-	
-	
-
-	
-	thrust::fill(pointCoverageBuffer->begin(), pointCoverageBuffer->end(), ExtractionBlock());
-	
-	dim3 blocksBitAr(100, 100, 100);
-	dim3 threadsBitAr(4, 4, 4);
-	extractPointCloudAsBitArray << <blocksBitAr, threadsBitAr >> >(coverageStart, testSDFDevice, gridResolution / 4);
-	thrust::host_vector< RenderPoint >* createdPoints = new thrust::host_vector< RenderPoint >();
-	
-
-	dim3 partialExtractionBlocks(50, 50, 50);
-	dim3 partialExtractionThreads(4, 4, 4);
-	int numberOfPointsCreated = 0;
-	for (int i = 0; i < gridResolution; i += partialExtractionSize)
+	int totalCreated = 0;
+	for (int i = 0; i < clusterDensity; i += extractionClusterDensity)
 	{
-		for (int j = 0; j < gridResolution; j += partialExtractionSize)
+		for (int j = 0; j < clusterDensity; j += extractionClusterDensity)
 		{
-			for (int k = 0; k < gridResolution; k += partialExtractionSize)
+			for (int k = 0; k < clusterDensity; k += extractionClusterDensity)
 			{
-
-				//thrust::fill(partialExtractionBuffer->begin(), partialExtractionBuffer->end(), zeroRenderPoint);
-
-				
-				createCloudFromBuffers << <partialExtractionBlocks, partialExtractionThreads >> > (partialExtractionStart, coverageStart, coverageStart, partialExtractionSize / 4, gridResolution / 4, i, j, k);
-				
-				int newPointsCreated = thrust::count_if(partialExtractionBuffer->begin(), partialExtractionBuffer->end(), is_not_zero());
-				
-				createdPoints->resize(newPointsCreated + numberOfPointsCreated);
-				
-				//thrust::copy_if(partialExtractionBuffer->begin(), partialExtractionBuffer->end(), createdPoints->end(), is_not_zero());
-				/*
-				numberOfPointsCreated += newPointsCreated;
-				
+				createCloudFromBuffers << <partialExtractionBlocks, partialExtractionThreads >> > (partialExtractionStart, pointCoverageStart, pointCoverageStart, extractionClusterDensity, clusterDensity, partialExtractionBuffer->size(), i * 4, j * 4, k * 4);
+				thrust::sort(partialExtractionBuffer->begin(), partialExtractionBuffer->end(), shiftRenderPointsLeft());
+				thrust::host_vector< RenderPoint > checkExtract = *partialExtractionBuffer;
+				int numberCreated = thrust::count_if(partialExtractionBuffer->begin(), partialExtractionBuffer->end(), is_not_zero());
+				extractedPoints->resize(totalCreated + numberCreated);
+				cudaMemcpy(thrust::raw_pointer_cast(extractedPoints->data()) + totalCreated, partialExtractionStart, numberCreated * sizeof(RenderPoint), cudaMemcpyDeviceToHost);
+				totalCreated += numberCreated;
 			}
 		}
-
 	}
-	*/
 	
 	return extractedPoints;
 }
