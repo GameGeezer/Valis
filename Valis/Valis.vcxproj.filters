@@ -41,6 +41,18 @@
     <CudaCompile Include="Galaxy.cu">
       <Filter>framework\src\scene\private</Filter>
     </CudaCompile>
+    <CudaCompile Include="IBO.cu">
+      <Filter>framework\src\graphics\opengl\private</Filter>
+    </CudaCompile>
+    <CudaCompile Include="PBO.cu">
+      <Filter>framework\src\graphics\opengl\private</Filter>
+    </CudaCompile>
+    <CudaCompile Include="Texture2D.cu">
+      <Filter>framework\src\graphics\opengl\private</Filter>
+    </CudaCompile>
+    <CudaCompile Include="VBO.cu">
+      <Filter>framework\src\graphics\opengl\private</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="framework">
@@ -276,6 +288,9 @@
     </ClInclude>
     <ClInclude Include="Galaxy.cuh">
       <Filter>framework\src\scene\public</Filter>
+    </ClInclude>
+    <ClInclude Include="BufferedObjectUsage.cuh">
+      <Filter>framework\src\graphics\opengl\public</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

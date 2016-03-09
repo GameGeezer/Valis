@@ -164,9 +164,11 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <CudaCompile Include="CarveSDPrimitive.cu" />
     <CudaCompile Include="Descriptor.cu" />
     <CudaCompile Include="Galaxy.cu" />
+    <CudaCompile Include="IBO.cu" />
     <CudaCompile Include="kernel.cu" />
     <CudaCompile Include="MouseClickCallback.cu" />
     <CudaCompile Include="MouseMoveCallback.cu" />
+    <CudaCompile Include="PBO.cu" />
     <CudaCompile Include="PlaceSDPrimitive.cu" />
     <CudaCompile Include="Player.cu" />
     <CudaCompile Include="SDFDevice.cu" />
@@ -174,11 +176,14 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <CudaCompile Include="SDFHost.cu" />
     <CudaCompile Include="SDSphere.cu" />
     <CudaCompile Include="SDTorus.cu" />
+    <CudaCompile Include="Texture2D.cu" />
     <CudaCompile Include="VAO.cu" />
+    <CudaCompile Include="VBO.cu" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABB.cuh" />
     <ClInclude Include="Application.cuh" />
+    <ClInclude Include="BufferedObjectUsage.cuh" />
     <ClInclude Include="Camera.cuh" />
     <ClInclude Include="CarveSDPrimitive.cuh" />
     <ClInclude Include="Color.cuh" />

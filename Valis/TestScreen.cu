@@ -28,6 +28,8 @@
 #include "SDFDevice.cuh"
 #include "PlaceSDPrimitive.cuh"
 
+#include "BufferedObjectUsage.cuh"
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -52,7 +54,7 @@ TestScreen::onCreate()
 	Camera* camera = new Camera(640, 680, 0.1f, 100.0f, 45.0f);
 	camera->translate(0, 0, 2);
 
-	extractor = new SDFExtractor(200, 50);
+	extractor = new SDFExtractor(100, 50);
 	SDSphere sdSphere(0.25f, glm::vec3(0.5f, 0.5f, 0.5f));
 	SDTorus sdTorus(0.31f, 0.1f, glm::vec3(0.5f, 0.5f, 0.5f));
 	SDModification* place = new PlaceSDPrimitive();
@@ -63,7 +65,7 @@ TestScreen::onCreate()
 	//thrust::host_vector< RenderPoint >& hostPoints = *(extractor->extract(*testSDFDevice));
 	//pointCount = hostPoints.size();
 	//vbo = new VBO(&(hostPoints[0]), hostPoints.size() * 3);
-	vbo = new VBO(6000000);
+	vbo = new VBO(6000000, BufferedObjectUsage::DYNAMIC_DRAW);
 	pointCount = extractor->extractDynamic(*testSDFDevice, *vbo);
 	
 	player = new Player(*camera);

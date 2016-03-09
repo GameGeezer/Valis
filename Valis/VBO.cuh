@@ -1,9 +1,9 @@
 #ifndef VALIS_VBO_CUH
 #define VALIS_VBO_CUH
 
-#include <vector>
-
 #include "GLLibraries.h"
+
+#include "BufferedObjectUsage.cuh"
 
 using namespace std;
 
@@ -11,50 +11,20 @@ class VBO
 {
 public:
 
-	VBO(void* data, size_t size)
-	{
-		glGenBuffers(1, &handle);
+	VBO(void* data, size_t size, BufferedObjectUsage usage);
 
-		glBindBuffer(GL_ARRAY_BUFFER, handle);
+	VBO(size_t size, BufferedObjectUsage usage);
 
-		glBufferData(GL_ARRAY_BUFFER, size * sizeof(float), data, GL_STATIC_DRAW);
+	~VBO();
 
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-	}
+	void
+	bind();
 
-	VBO(size_t size)
-	{
-		glGenBuffers(1, &handle);
+	void
+	unbind();
 
-		glBindBuffer(GL_ARRAY_BUFFER, handle);
-
-		glBufferData(GL_ARRAY_BUFFER, size * sizeof(float), NULL, GL_DYNAMIC_DRAW);
-
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-	}
-
-	~VBO()
-	{
-		glDeleteBuffers(1, &handle);
-	}
-
-	inline void
-	bind()
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, handle);
-	}
-
-	inline void
-	unbind()
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-	}
-
-	inline GLuint
-	getHandle()
-	{
-		return handle;
-	}
+	GLuint
+	getHandle();
 
 private:
 	GLuint handle;

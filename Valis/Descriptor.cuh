@@ -6,6 +6,7 @@
 class Descriptor
 {
 public:
+
 	const int32_t size, type, stride, pointer;
 	const bool normalized;
 

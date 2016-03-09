@@ -12,14 +12,14 @@ class CudaGLBufferMapping
 {
 public:
 
-	CudaGLBufferMapping(PBO& pbo)
+	CudaGLBufferMapping(PBO& pbo, cudaGraphicsMapFlags flags)
 	{
-		assertCUDA(cudaGraphicsGLRegisterBuffer(&handle, pbo.getHandle(), cudaGraphicsMapFlagsWriteDiscard));
+		assertCUDA(cudaGraphicsGLRegisterBuffer(&handle, pbo.getHandle(), flags));
 	}
 
-	CudaGLBufferMapping(VBO& vbo)
+	CudaGLBufferMapping(VBO& vbo, cudaGraphicsMapFlags flags)
 	{
-		assertCUDA(cudaGraphicsGLRegisterBuffer(&handle, vbo.getHandle(), cudaGraphicsMapFlagsNone));
+		assertCUDA(cudaGraphicsGLRegisterBuffer(&handle, vbo.getHandle(), flags));
 	}
 
 	inline void

@@ -258,7 +258,7 @@ SDFExtractor::extract(SDFDevice& sdf)
 size_t
 SDFExtractor::extractDynamic(SDFDevice& sdf, VBO& vbo)
 {
-	CudaGLBufferMapping<RenderPoint> mapping(vbo);
+	CudaGLBufferMapping<RenderPoint> mapping(vbo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
 	mapping.map();
 	size_t bufferLength = mapping.getSizeInBytes() / sizeof(RenderPoint);
 	thrust::device_ptr<RenderPoint> bufferPointer = thrust::device_pointer_cast(mapping.getDeviceOutput());
