@@ -23,7 +23,7 @@ public:
 	}
 
 	__device__ float
-	distanceFromPoint(DistancePrimitive** primitives, SDModification** modifications, size_t modificationCount, glm::vec3 position)
+	distanceFromPoint(glm::vec3 position)
 	{
 		float distance = selectDistanceFunction(primitives[0], position);
 

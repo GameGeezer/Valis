@@ -2,9 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <CudaCompile Include="kernel.cu" />
-    <CudaCompile Include="SDFRenderer.cu">
-      <Filter>game</Filter>
-    </CudaCompile>
     <CudaCompile Include="Player.cu">
       <Filter>game</Filter>
     </CudaCompile>
@@ -40,6 +37,9 @@
     </CudaCompile>
     <CudaCompile Include="CarveSDPrimitive.cu">
       <Filter>framework\src\distanceFields\modifications\private</Filter>
+    </CudaCompile>
+    <CudaCompile Include="Galaxy.cu">
+      <Filter>framework\src\scene\private</Filter>
     </CudaCompile>
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +148,15 @@
     <Filter Include="framework\src\distanceFields\modifications\private">
       <UniqueIdentifier>{e235f06c-2ab1-4426-8b74-01c27adbf1fa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="framework\src\scene">
+      <UniqueIdentifier>{c515c382-0d94-425b-98e4-9adb2f0ce668}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\scene\public">
+      <UniqueIdentifier>{c0438d0c-2b60-44f2-91e0-ac9252414c6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\scene\private">
+      <UniqueIdentifier>{c0f8cee4-9099-4c2e-be33-6b521b8101eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLLibraries.h">
@@ -181,13 +190,7 @@
     <ClInclude Include="CudaHelper.cuh">
       <Filter>framework\src\cuda</Filter>
     </ClInclude>
-    <ClInclude Include="SDFRenderer.cuh">
-      <Filter>game</Filter>
-    </ClInclude>
     <ClInclude Include="MathUtil.cuh">
-      <Filter>framework\src\math</Filter>
-    </ClInclude>
-    <ClInclude Include="Matrix4Device.cuh">
       <Filter>framework\src\math</Filter>
     </ClInclude>
     <ClInclude Include="ShaderProgram.cuh">
@@ -270,6 +273,9 @@
     </ClInclude>
     <ClInclude Include="SDFHost.cuh">
       <Filter>framework\src\distanceFields\public</Filter>
+    </ClInclude>
+    <ClInclude Include="Galaxy.cuh">
+      <Filter>framework\src\scene\public</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

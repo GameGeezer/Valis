@@ -22,6 +22,17 @@ public:
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
+	VBO(size_t size)
+	{
+		glGenBuffers(1, &handle);
+
+		glBindBuffer(GL_ARRAY_BUFFER, handle);
+
+		glBufferData(GL_ARRAY_BUFFER, size * sizeof(float), NULL, GL_DYNAMIC_DRAW);
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+
 	~VBO()
 	{
 		glDeleteBuffers(1, &handle);

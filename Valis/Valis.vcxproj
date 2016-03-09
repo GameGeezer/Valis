@@ -163,6 +163,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
   <ItemGroup>
     <CudaCompile Include="CarveSDPrimitive.cu" />
     <CudaCompile Include="Descriptor.cu" />
+    <CudaCompile Include="Galaxy.cu" />
     <CudaCompile Include="kernel.cu" />
     <CudaCompile Include="MouseClickCallback.cu" />
     <CudaCompile Include="MouseMoveCallback.cu" />
@@ -171,7 +172,6 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <CudaCompile Include="SDFDevice.cu" />
     <CudaCompile Include="SDFExtractor.cu" />
     <CudaCompile Include="SDFHost.cu" />
-    <CudaCompile Include="SDFRenderer.cu" />
     <CudaCompile Include="SDSphere.cu" />
     <CudaCompile Include="SDTorus.cu" />
     <CudaCompile Include="VAO.cu" />
@@ -186,6 +186,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClInclude Include="CudaHelper.cuh" />
     <ClInclude Include="Descriptor.cuh" />
     <ClInclude Include="DistancePrimitive.cuh" />
+    <ClInclude Include="Galaxy.cuh" />
     <ClInclude Include="Game.cuh" />
     <ClInclude Include="GLLibraries.h" />
     <ClInclude Include="GLMUtil.cuh" />
@@ -195,7 +196,6 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClInclude Include="KeyboardCallback.cuh" />
     <ClInclude Include="KeyboardListener.cuh" />
     <ClInclude Include="MathUtil.cuh" />
-    <ClInclude Include="Matrix4Device.cuh" />
     <ClInclude Include="MouseClickCallback.cuh" />
     <ClInclude Include="MouseClickListener.cuh" />
     <ClInclude Include="MouseMoveCallback.cuh" />
@@ -209,7 +209,6 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClInclude Include="SDFDevice.cuh" />
     <ClInclude Include="SDFExtractor.cuh" />
     <ClInclude Include="SDFHost.cuh" />
-    <ClInclude Include="SDFRenderer.cuh" />
     <ClInclude Include="SDModification.cuh" />
     <ClInclude Include="SDSphere.cuh" />
     <ClInclude Include="SDTorus.cuh" />

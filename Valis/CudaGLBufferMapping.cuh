@@ -3,17 +3,23 @@
 
 #include "CudaHelper.cuh"
 #include "PBO.cuh"
+#include "VBO.cuh"
 
 #include <cuda_gl_interop.h>
 
+template <class ViewType>
 class CudaGLBufferMapping
 {
 public:
 
-	
 	CudaGLBufferMapping(PBO& pbo)
 	{
 		assertCUDA(cudaGraphicsGLRegisterBuffer(&handle, pbo.getHandle(), cudaGraphicsMapFlagsWriteDiscard));
+	}
+
+	CudaGLBufferMapping(VBO& vbo)
+	{
+		assertCUDA(cudaGraphicsGLRegisterBuffer(&handle, vbo.getHandle(), cudaGraphicsMapFlagsNone));
 	}
 
 	inline void
@@ -30,12 +36,12 @@ public:
 	}
 
 	inline size_t
-	getSizeInBtyes()
+	getSizeInBytes()
 	{
 		return sizeBytes;
 	}
 
-	inline int*
+	inline ViewType*
 	getDeviceOutput()
 	{
 		return device_output;
@@ -43,8 +49,8 @@ public:
 
 private:
 	struct cudaGraphicsResource *handle;
-	int *device_output;
+	ViewType *device_output;
 	size_t sizeBytes;
 };
 
-#endif //VALIS_CUDAGLBUFFERMAPPING_H
+#endif 

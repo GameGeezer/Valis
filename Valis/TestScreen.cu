@@ -15,18 +15,12 @@
 #include <thrust/device_vector.h>
 #include <thrust/host_vector.h>
 
-#include "SDFRenderer.cuh"
-#include "PBO.cuh"
-#include "Texture2D.cuh"
-#include "CudaGLBufferMapping.cuh"
-#include "Matrix4Device.cuh"
 #include "ShaderProgram.cuh"
 #include "Camera.cuh"
 #include "Player.cuh"
 #include "SDSphere.cuh"
 #include "Descriptor.cuh"
 #include "SDFExtractor.cuh"
-#include "VAO.cuh"
 #include "RenderPoint.cuh"
 #include "VBO.cuh"
 
@@ -42,13 +36,6 @@
 void
 TestScreen::onCreate()
 {
-	renderer = new SDFRenderer();
-	pbo = new PBO(4 * 640 * 480);
-	texture = new Texture2D(640, 480);
-	mapping = new CudaGLBufferMapping(*pbo);
-	windowBlockSize = new dim3(16, 16, 1);
-	windowGridSize = new dim3(640 / windowBlockSize->x, 480 / windowBlockSize->y);
-	
 	ifstream myfile("BasicShader.vert");
 	std::stringstream buffer;
 	buffer << myfile.rdbuf();
@@ -65,7 +52,7 @@ TestScreen::onCreate()
 	Camera* camera = new Camera(640, 680, 0.1f, 100.0f, 45.0f);
 	camera->translate(0, 0, 2);
 
-	extractor = new SDFExtractor(100, 50);
+	extractor = new SDFExtractor(200, 50);
 	SDSphere sdSphere(0.25f, glm::vec3(0.5f, 0.5f, 0.5f));
 	SDTorus sdTorus(0.31f, 0.1f, glm::vec3(0.5f, 0.5f, 0.5f));
 	SDModification* place = new PlaceSDPrimitive();
@@ -73,13 +60,11 @@ TestScreen::onCreate()
 	testSDF->modify(&sdTorus, place);
 	SDFDevice* testSDFDevice = testSDF->copyToDevice();
 
-	thrust::host_vector< RenderPoint >& hostPoints = *(extractor->extract(*testSDFDevice));
-	pointCount = hostPoints.size();
-	vbo = new VBO(&(hostPoints[0]), hostPoints.size() * 3);
-
-	//vao = new VAO(*vbo, pointCount / 3);
-	//vao->addVertexAttribute(0, Descriptor(3, GL_FLOAT, false, sizeof(RenderPoint), 0));
-	//vao->init();
+	//thrust::host_vector< RenderPoint >& hostPoints = *(extractor->extract(*testSDFDevice));
+	//pointCount = hostPoints.size();
+	//vbo = new VBO(&(hostPoints[0]), hostPoints.size() * 3);
+	vbo = new VBO(6000000);
+	pointCount = extractor->extractDynamic(*testSDFDevice, *vbo);
 	
 	player = new Player(*camera);
 
@@ -111,12 +96,6 @@ TestScreen::onUpdate(int delta)
 	player->update(delta);
 	glm::mat4 invViewProjection;
 	player->camera->constructInverseViewProjection(invViewProjection);
-	renderer->renderToMapping(*mapping, *windowGridSize, *windowBlockSize, invViewProjection);
-	pbo->bind();
-
-	//glDrawPixels(texture->width, texture->height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-	//glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, texture->width, texture->height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-	pbo->unbind();
 
 	glm::mat4 viewProjection;
 	player->camera->constructViewProjection(viewProjection);

@@ -1300,22 +1300,20 @@ C:\Program Files (x86)\Windows Kits\8.1\Include\um\GL/glu.h
 C:\Program Files (x86)\Windows Kits\8.1\Include\um\GL/gl.h
 C:\Programming\Libraries\glfw-3.1.2.bin.WIN32\glfw-3.1.2.bin.WIN32\include\GLFW/glfw3.h
 C:\Program Files (x86)\Windows Kits\8.1\Include\um\GL/gl.h
-c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDFRenderer.cuh
-C:\Programming\Libraries\glm-0.9.7.2\glm\glm\mat4x4.hpp
-c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/type_mat4x4.hpp
-c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\../fwd.hpp
-c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/type_int.hpp
-c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\setup.hpp
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\cassert
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\assert.h
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
-c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/type_float.hpp
-c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/type_vec.hpp
-c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\precision.hpp
-c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/type_mat.hpp
-c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\type_vec4.hpp
-c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\type_vec4.inl
-c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\type_mat4x4.inl
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\CudaGLBufferMapping.cuh
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\CudaHelper.cuh
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\PBO.cuh
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\VBO.cuh
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_gl_interop.h
+c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\builtin_types.h
+c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\device_types.h
+c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\driver_types.h
+c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\surface_types.h
+c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\texture_types.h
+c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\vector_types.h
+c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\host_defines.h
+C:\Program Files (x86)\Windows Kits\8.1\Include\um\GL/gl.h
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\Color.cuh
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\algorithm
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h

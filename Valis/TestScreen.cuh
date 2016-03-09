@@ -8,19 +8,14 @@
 #include <thrust/host_vector.h>
 #include <thrust/sort.h>
 
-#include "SDFRenderer.cuh"
+#include "CudaGLBufferMapping.cuh"
 
-class PBO;
-class Texture2D;
-class CudaGLBufferMapping;
 class dim3;
-class SDFRenderer;
 class ShaderProgram;
 class Camera;
 class Player;
 class SignedDistanceFunction;
 class SDFExtractor;
-class VAO;
 class VBO;
 
 class TestScreen : public Screen
@@ -47,17 +42,9 @@ class TestScreen : public Screen
 	onDestroy() override;
 private:
 	GLuint vertexbuffer;
-	SDFRenderer* renderer;
-	PBO *pbo;
-	Texture2D *texture;
-	CudaGLBufferMapping *mapping;
-	dim3 *windowBlockSize;
-	dim3 *windowGridSize;
 	ShaderProgram* shader;
 	Player* player;
-	SignedDistanceFunction* sphereSdf;
 	SDFExtractor* extractor;
-	VAO* vao;
 	VBO* vbo;
 	int pointCount;
 };

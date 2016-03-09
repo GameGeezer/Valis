@@ -1275,6 +1275,57 @@ C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/de
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cpp/detail/partition.h
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/partition.h
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/detail/trivial_sequence.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/execution_policy.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cpp/execution_policy.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cpp/detail/par.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cpp/detail/adjacent_difference.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/detail/sequential/adjacent_difference.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cpp/detail/binary_search.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/detail/sequential/binary_search.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cpp/detail/extrema.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/detail/sequential/extrema.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cpp/detail/inner_product.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cpp/detail/logical.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cpp/detail/set_operations.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/detail/sequential/set_operations.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cpp/detail/transform_scan.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cpp/detail/uninitialized_copy.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cpp/detail/unique.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/detail/sequential/unique.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cpp/detail/unique_by_key.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/detail/sequential/unique_by_key.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/execution_policy.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/par.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/adjacent_difference.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/adjacent_difference.inl
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/adjacent_difference.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/detail/adjacent_difference.inl
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/detail/generic/adjacent_difference.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/detail/generic/adjacent_difference.inl
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/detail/adl/adjacent_difference.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/binary_search.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/extrema.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/inner_product.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/logical.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/set_operations.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/set_difference.inl
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/set_operations.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/detail/set_operations.inl
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/detail/generic/set_operations.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/detail/generic/set_operations.inl
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/detail/adl/set_operations.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/detail/set_operation.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/detail/set_operation.inl
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/detail/balanced_path.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/block/exclusive_scan.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/detail/uninitialized.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/set_intersection.inl
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/set_symmetric_difference.inl
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/set_union.inl
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/transform_scan.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/uninitialized_copy.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/unique.h
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/unique_by_key.h
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_functions.h
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\NumericBoolean.cuh
@@ -1379,3 +1430,21 @@ c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\CudaHelper.
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDTorus.cuh
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\CudaGLBufferMapping.cuh
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\PBO.cuh
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\GLLibraries.h
+C:\Programming\Libraries\glew-1.13.0\include\GL/glew.h
+C:\Program Files (x86)\Windows Kits\8.1\Include\um\GL/glu.h
+C:\Program Files (x86)\Windows Kits\8.1\Include\um\GL/gl.h
+C:\Programming\Libraries\glfw-3.1.2.bin.WIN32\glfw-3.1.2.bin.WIN32\include\GLFW/glfw3.h
+C:\Program Files (x86)\Windows Kits\8.1\Include\um\GL/gl.h
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\VBO.cuh
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_gl_interop.h
+c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\builtin_types.h
+c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\device_types.h
+c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\driver_types.h
+c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\surface_types.h
+c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\texture_types.h
+c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\vector_types.h
+c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\host_defines.h
+C:\Program Files (x86)\Windows Kits\8.1\Include\um\GL/gl.h
