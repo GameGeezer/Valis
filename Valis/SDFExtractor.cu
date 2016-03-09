@@ -101,7 +101,7 @@ __global__ void createCloudFromBuffers(RenderPoint* d_output, ExtractionBlock *c
 	int outputIndex = x + y * subGridDimension + z * subGridDimension * subGridDimension;
 	if (outputIndex >= clusterBufferSize)
 	{
-		return;
+		return;// Ideally this should never be hit, look into what it is.
 	}
 	
 	// x, y, and z relative to the cluster 0, 0 , 0
