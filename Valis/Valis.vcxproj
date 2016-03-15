@@ -95,7 +95,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
       <FastMath>false</FastMath>
       <GPUDebugInfo>false</GPUDebugInfo>
       <InterleaveSourceInPTX>false</InterleaveSourceInPTX>
-      <CodeGeneration>compute_20,sm_20;%(CodeGeneration)</CodeGeneration>
+      <CodeGeneration>compute_30,sm_30;%(CodeGeneration)</CodeGeneration>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -174,8 +174,10 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <CudaCompile Include="SDFDevice.cu" />
     <CudaCompile Include="SDFExtractor.cu" />
     <CudaCompile Include="SDFHost.cu" />
+    <CudaCompile Include="SDFRelativeExtractor.cu" />
     <CudaCompile Include="SDSphere.cu" />
     <CudaCompile Include="SDTorus.cu" />
+    <CudaCompile Include="TestRelativeScreen.cu" />
     <CudaCompile Include="Texture2D.cu" />
     <CudaCompile Include="VAO.cu" />
     <CudaCompile Include="VBO.cu" />
@@ -187,6 +189,9 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Camera.cuh" />
     <ClInclude Include="CarveSDPrimitive.cuh" />
     <ClInclude Include="Color.cuh" />
+    <ClInclude Include="CompactLocation.cuh" />
+    <ClInclude Include="CompactRenderPoint.cuh" />
+    <ClInclude Include="CompactRenderPointCluster.cuh" />
     <ClInclude Include="CudaGLBufferMapping.cuh" />
     <ClInclude Include="CudaHelper.cuh" />
     <ClInclude Include="Descriptor.cuh" />
@@ -201,6 +206,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClInclude Include="KeyboardCallback.cuh" />
     <ClInclude Include="KeyboardListener.cuh" />
     <ClInclude Include="MathUtil.cuh" />
+    <ClInclude Include="Morton.cuh" />
     <ClInclude Include="MouseClickCallback.cuh" />
     <ClInclude Include="MouseClickListener.cuh" />
     <ClInclude Include="MouseMoveCallback.cuh" />
@@ -214,10 +220,12 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClInclude Include="SDFDevice.cuh" />
     <ClInclude Include="SDFExtractor.cuh" />
     <ClInclude Include="SDFHost.cuh" />
+    <ClInclude Include="SDFRelativeExtractor.cuh" />
     <ClInclude Include="SDModification.cuh" />
     <ClInclude Include="SDSphere.cuh" />
     <ClInclude Include="SDTorus.cuh" />
     <ClInclude Include="ShaderProgram.cuh" />
+    <ClInclude Include="TestRelativeScreen.cuh" />
     <ClInclude Include="TestScreen.cuh" />
     <ClInclude Include="Texture2D.cuh" />
     <ClInclude Include="VAO.cuh" />
@@ -235,6 +243,8 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
   <ItemGroup>
     <None Include="BasicShader.frag" />
     <None Include="BasicShader.vert" />
+    <None Include="PointCloudRenderShader.frag" />
+    <None Include="PointCloudRenderShader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -6,11 +6,13 @@
 #include <glm/mat4x4.hpp>
 #include <glm/ext.hpp>
 
-#include "SDFExtractor.cuh"
-
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
-#include "cuda_runtime.h"
+#include "GLLibraries.h"
+
+#include "SDFExtractor.cuh"
 
 #include <thrust/device_vector.h>
 #include <thrust/host_vector.h>
@@ -18,7 +20,7 @@
 #include "ShaderProgram.cuh"
 #include "Camera.cuh"
 #include "Player.cuh"
-#include "SDSphere.cuh"
+
 #include "Descriptor.cuh"
 #include "SDFExtractor.cuh"
 #include "RenderPoint.cuh"
@@ -27,51 +29,53 @@
 #include "SDFHost.cuh"
 #include "SDFDevice.cuh"
 #include "PlaceSDPrimitive.cuh"
+#include "SDSphere.cuh"
 
 #include "BufferedObjectUsage.cuh"
-
-#include <iostream>
-#include <fstream>
-#include <sstream>
-
 
 void
 TestScreen::onCreate()
 {
+
+	// Load vertex shader
 	ifstream myfile("BasicShader.vert");
 	std::stringstream buffer;
 	buffer << myfile.rdbuf();
 	string vertShader = buffer.str();
 
+	// Load fragment shader
 	ifstream myfile2("BasicShader.frag");
 	std::stringstream buffer2;
 	buffer2 << myfile2.rdbuf();
 	string fragShader = buffer2.str();
 
+	// Create the shader
 	map<int, char *> attributes;
 	attributes.insert(pair<int, char*>(0, "in_Position"));
 	shader = new ShaderProgram(vertShader.c_str(), fragShader.c_str(), attributes);
+
+	// Create the camera
 	Camera* camera = new Camera(640, 680, 0.1f, 100.0f, 45.0f);
 	camera->translate(0, 0, 2);
 
-	extractor = new SDFExtractor(240, 60);
+	// Create the player
+	player = new Player(*camera);
+
+	// Define an SDF to parse
 	SDSphere sdSphere(0.25f, glm::vec3(0.5f, 0.5f, 0.5f));
 	SDTorus sdTorus(0.31f, 0.1f, glm::vec3(0.5f, 0.5f, 0.5f));
 	SDModification* place = new PlaceSDPrimitive();
 	SDFHost* testSDF = new SDFHost(&sdSphere);
 	testSDF->modify(&sdTorus, place);
-	SDFDevice* testSDFDevice = testSDF->copyToDevice();
+	testSDFDevice = testSDF->copyToDevice();
 
-	//thrust::host_vector< RenderPoint >& hostPoints = *(extractor->extract(*testSDFDevice));
-	//pointCount = hostPoints.size();
-	//vbo = new VBO(&(hostPoints[0]), hostPoints.size() * 3);
-	vbo = new VBO(7000000, BufferedObjectUsage::DYNAMIC_DRAW);
+	// Create the extractor
+	extractor = new SDFExtractor(32, 16);
+
+	vbo = new VBO(10000000, BufferedObjectUsage::DYNAMIC_DRAW);
 	pointCount = extractor->extractDynamic(*testSDFDevice, *vbo);
 	
-	player = new Player(*camera);
 	glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
-	
-
 }
 
 void
@@ -95,6 +99,8 @@ TestScreen::onResume()
 void
 TestScreen::onUpdate(int delta)
 {
+	
+
 	player->update(delta);
 	glm::mat4 invViewProjection;
 	player->camera->constructInverseViewProjection(invViewProjection);
@@ -110,12 +116,11 @@ TestScreen::onUpdate(int delta)
 	vbo->bind();
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, sizeof(RenderPoint), (void*)(sizeof(float) * 0));
-	//glVertexPointer(3, GL_FLOAT, sizeof(RenderPoint), (void*)(sizeof(float) * 0));
-	//glVertexAttribPointer(0, sizeof(RenderPoint), GL_FLOAT, false, 0, 0);
+
 	glDrawArrays(GL_POINTS, 0, pointCount);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	vbo->unbind();
-	//vao->draw();
+
 	shader->unbind();
 }
 

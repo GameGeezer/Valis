@@ -53,6 +53,10 @@
     <CudaCompile Include="VBO.cu">
       <Filter>framework\src\graphics\opengl\private</Filter>
     </CudaCompile>
+    <CudaCompile Include="SDFRelativeExtractor.cu">
+      <Filter>game</Filter>
+    </CudaCompile>
+    <CudaCompile Include="TestRelativeScreen.cu" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="framework">
@@ -292,6 +296,22 @@
     <ClInclude Include="BufferedObjectUsage.cuh">
       <Filter>framework\src\graphics\opengl\public</Filter>
     </ClInclude>
+    <ClInclude Include="Morton.cuh">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="CompactRenderPoint.cuh">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="CompactRenderPointCluster.cuh">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="SDFRelativeExtractor.cuh">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="CompactLocation.cuh">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="TestRelativeScreen.cuh" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TestScreen.cu" />
@@ -319,6 +339,12 @@
       <Filter>framework\res\shaders</Filter>
     </None>
     <None Include="BasicShader.frag">
+      <Filter>framework\res\shaders</Filter>
+    </None>
+    <None Include="PointCloudRenderShader.vert">
+      <Filter>framework\res\shaders</Filter>
+    </None>
+    <None Include="PointCloudRenderShader.frag">
       <Filter>framework\res\shaders</Filter>
     </None>
   </ItemGroup>

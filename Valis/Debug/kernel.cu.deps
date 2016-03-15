@@ -1294,16 +1294,21 @@ c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\MouseMoveCa
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\Game.cuh
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\TestScreen.cuh
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\Screen.cuh
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\TestRelativeScreen.cuh
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\CompactRenderPoint.cuh
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\CudaGLBufferMapping.cuh
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\CudaHelper.cuh
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\PBO.cuh
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\GLLibraries.h
 C:\Programming\Libraries\glew-1.13.0\include\GL/glew.h
 C:\Program Files (x86)\Windows Kits\8.1\Include\um\GL/glu.h
 C:\Program Files (x86)\Windows Kits\8.1\Include\um\GL/gl.h
 C:\Programming\Libraries\glfw-3.1.2.bin.WIN32\glfw-3.1.2.bin.WIN32\include\GLFW/glfw3.h
 C:\Program Files (x86)\Windows Kits\8.1\Include\um\GL/gl.h
-c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\CudaGLBufferMapping.cuh
-c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\CudaHelper.cuh
-C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
-c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\PBO.cuh
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\VBO.cuh
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\BufferedObjectUsage.cuh
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_gl_interop.h

@@ -6,6 +6,6 @@ void main()
 {
 	//projectionMatrix * gl_ModelViewMatrix *
 	vec4 t =  projectionMatrix * in_Position;
-	gl_Position = t * vec4(10, 10, 10, 10);
-	gl_PointSize  = 1.61803398f;
+	gl_Position = t;
+	gl_PointSize  = 0.61803398f;
 }

@@ -17,6 +17,9 @@
 
 #include "CudaGLBufferMapping.cuh"
 
+#include "VBO.cuh"
+#include "PBO.cuh"
+
 
 __global__ void extractPointCloudAsBitArray(ExtractionBlock *d_output, SDFDevice *sdf, uint32_t clusterDim)
 {
@@ -297,14 +300,45 @@ SDFExtractor::extractDynamic(SDFDevice& sdf, VBO& vbo)
 	return totalCreated;
 }
 
-void
-SDFExtractor::extractCoverageBuffer(thrust::device_vector< ExtractionBlock >& buffer, SDFDevice& sdf)
+size_t
+SDFExtractor::extractRelative(SDFDevice& sdf, CudaGLBufferMapping<RenderPoint>& mapping, PBO& pbo)
 {
-	thrust::fill(buffer.begin(), buffer.end(), ExtractionBlock());
+	mapping.map();
+	size_t bufferLength = mapping.getSizeInBytes() / sizeof(RenderPoint);
+	thrust::device_ptr<RenderPoint> bufferPointer = thrust::device_pointer_cast(mapping.getDeviceOutput());
 
-	ExtractionBlock* coverageStart = thrust::raw_pointer_cast(buffer.data());
+	// Zero the coverage buffer
+	thrust::fill(pointCoverageBuffer->begin(), pointCoverageBuffer->end(), ExtractionBlock());
+	// Point to the coverage buffer
+	ExtractionBlock* pointCoverageRaw = thrust::raw_pointer_cast(pointCoverageBuffer->data());
+	// Extract the coverage buffer
+	extractPointCloudAsBitArray << <coverageExtractBlockDim, parseThreadsDim >> >(pointCoverageRaw, &sdf, clusterDensity);
+	// Point to the partial extraction buffer
+	RenderPoint* partialExtractionRaw = thrust::raw_pointer_cast(partialExtractionBuffer->data());
 
-	dim3 blocksBitAr(clusterDensity / 2, clusterDensity / 2, clusterDensity / 2);
-	dim3 threadsBitAr(8, 8, 8);
-	extractPointCloudAsBitArray << <blocksBitAr, threadsBitAr >> >(coverageStart, &sdf, clusterDensity);
+	// How many points have been created thus far
+	size_t totalCreated = 0;
+	for (int i = 0; i < clusterDensity; i += extractionClusterDensity)
+	{
+		for (int j = 0; j < clusterDensity; j += extractionClusterDensity)
+		{
+			for (int k = 0; k < clusterDensity; k += extractionClusterDensity)
+			{
+				createCloudFromBuffers << <partialExtractionBlockDim, parseThreadsDim >> > (partialExtractionRaw, pointCoverageRaw, pointCoverageRaw, extractionClusterDensity, clusterDensity, partialExtractionBuffer->size(), i * 4, j * 4, k * 4);
+
+				//Improve performance by eliminating this copy to the CPU
+				int numberCreated = thrust::count_if(partialExtractionBuffer->begin(), partialExtractionBuffer->end(), is_not_zero());
+
+				thrust::copy_if(partialExtractionBuffer->begin(), partialExtractionBuffer->end(), bufferPointer + totalCreated, is_not_zero());
+
+				totalCreated += numberCreated;
+			}
+		}
+	}
+
+	mapping.unmap();
+
+
+
+	return totalCreated;
 }

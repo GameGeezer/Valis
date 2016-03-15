@@ -10,6 +10,7 @@
 #include "Application.cuh"
 #include "Game.cuh"
 #include "TestScreen.cuh"
+#include "TestRelativeScreen.cuh"
 
 #include "Color.cuh"
 
@@ -127,7 +128,7 @@ void testDetermineRange3(int32_t index, thrust::host_vector<uint64_t>& device_le
 
 int main()
 {
-	Screen* screen = new TestScreen();
+	Screen* screen = new TestRelativeScreen();
 	Game* game = new Game(*screen);
 	Application* application = new Application(*game, "Test!", 640, 480);
 

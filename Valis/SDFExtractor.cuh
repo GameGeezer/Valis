@@ -6,10 +6,13 @@
 
 #include <stdint.h>
 
-class RenderPoint;
+#include "CudaGLBufferMapping.cuh"
+#include "RenderPoint.cuh"
+
 class ExtractionBlock;
 class SDFDevice;
 class VBO;
+class PBO;
 
 class SDFExtractor
 {
@@ -25,6 +28,9 @@ public:
 	size_t
 	extractDynamic(SDFDevice& sdf, VBO& vbo);
 
+	size_t
+	extractRelative(SDFDevice& sdf, CudaGLBufferMapping<RenderPoint>& mapping, PBO& pbo);
+
 private:
 
 	void
@@ -37,6 +43,5 @@ private:
 	uint32_t clusterDensity, extractionClusterDensity;
 	dim3 coverageExtractBlockDim, partialExtractionBlockDim, parseThreadsDim;
 };
-
 
 #endif

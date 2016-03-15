@@ -22,6 +22,11 @@ public:
 		assertCUDA(cudaGraphicsGLRegisterBuffer(&handle, vbo.getHandle(), flags));
 	}
 
+	~CudaGLBufferMapping()
+	{
+		assertCUDA(cudaGraphicsUnregisterResource(handle));
+	}
+
 	inline void
 	map()
 	{
