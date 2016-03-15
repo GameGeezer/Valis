@@ -46,9 +46,9 @@ __global__ void extractPointCloudAsBitArrayRelative(CompactRenderPoint *d_output
 		return;
 	}
 
-	uint32_t localX = x & 63;
-	uint32_t localY = y & 63;
-	uint32_t localZ = z & 63;
+	uint32_t localX = offsetX & 63;
+	uint32_t localY = offsetY & 63;
+	uint32_t localZ = offsetZ & 63;
 
 	uint32_t index = localX + localY * parseDimension + localZ * parseDimension * parseDimension;
 
@@ -162,6 +162,18 @@ __global__ void copyLocalRelative(RenderPoint* d_output, RenderPoint *coverageBu
 	d_output[index] = coverageBuffer[index];
 }
 
+__global__ void writeOffsetPBO(CompactLocation* d_output, uint32_t timesToWrite, uint32_t dimensionOffsetX, uint32_t dimensionOffsetY, uint32_t dimensionOffsetZ)
+{
+	uint32_t index = blockIdx.x * blockDim.x + threadIdx.x;
+
+	if (index >= timesToWrite)
+	{
+		return;
+	}
+
+	d_output[index].pack(dimensionOffsetX, dimensionOffsetY, dimensionOffsetZ);
+}
+
 
 SDFRelativeExtractor::SDFRelativeExtractor(uint32_t clusterDensity, uint32_t extractionClusterDensity) :
 clusterDensity(clusterDensity),
@@ -251,17 +263,19 @@ SDFRelativeExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactRenderP
 				thrust::sort(thrust::device, bufferPointerRaw + totalCreated, bufferPointerRaw + totalCreated + maxExtractedElements, is_less_Relative());
 				// multiple of 64 must be buffered
 				int extraSpaceToBuffer = numberCreated & 63;
+				int numberOfPBOEntries = (numberCreated + extraSpaceToBuffer) / 64;
 				// Fill in the extra space with the last point
 				//thrust::fill(bufferPointerRaw + totalCreated + numberCreated, bufferPointerRaw + totalCreated + numberCreated + extraSpaceToBuffer, CompactRenderPoint());
-
+				writeOffsetPBO << <1, extraSpaceToBuffer >> >()
 				//uint32_t offsetY = j * 4;
+				/*
 				CompactLocation relativeLocation;
 				relativeLocation.pack(offsetX, offsetY, offsetZ);
 				for (int i = 0; i < (numberCreated / 64) + 63; ++i)
 				{
 					locationBuffer.push_back(relativeLocation);
 				}
-
+				*/
 				//thrust::copy_if(partialExtractionBuffer->begin(), partialExtractionBuffer->end(), bufferPointer + totalCreated, is_not_zeroRelative());
 
 				totalCreated += (numberCreated + extraSpaceToBuffer);

@@ -37,20 +37,20 @@ TestRelativeScreen::onCreate()
 {
 
 	// Load vertex shader
-	ifstream myfile("BasicShader.vert");
+	ifstream myfile("PointCloudRenderShader.vert");
 	std::stringstream buffer;
 	buffer << myfile.rdbuf();
 	string vertShader = buffer.str();
 
 	// Load fragment shader
-	ifstream myfile2("BasicShader.frag");
+	ifstream myfile2("PointCloudRenderShader.frag");
 	std::stringstream buffer2;
 	buffer2 << myfile2.rdbuf();
 	string fragShader = buffer2.str();
 
 	// Create the shader
 	map<int, char *> attributes;
-	attributes.insert(pair<int, char*>(0, "in_Position"));
+	//attributes.insert(pair<int, char*>(0, "in_CompactData"));
 	shader = new ShaderProgram(vertShader.c_str(), fragShader.c_str(), attributes);
 
 	// Create the camera
@@ -73,6 +73,7 @@ TestRelativeScreen::onCreate()
 
 	ibo = new IBO(10000000, BufferedObjectUsage::DYNAMIC_DRAW);
 	PBO* pbo = new PBO(1000);
+	pboMapping = new CudaGLBufferMapping<CompactLocation>(*pbo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
 	mapping = new CudaGLBufferMapping<CompactRenderPoint>(*ibo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
 	pointCount = extractor->extract(*testSDFDevice, *mapping, *pbo);
 
@@ -114,9 +115,16 @@ TestRelativeScreen::onUpdate(int delta)
 	GLint projectionLocation = shader->getUniformLocation("projectionMatrix");
 	shader->setUnifromMatrix4f(projectionLocation, viewProjection);
 
+	GLint resolutionLocation = shader->getUniformLocation("gridResolution");
+	shader->setUniformf(resolutionLocation, 128);
+
+	GLint compactDataAttribute = shader->getAttributeLocation("in_CompactData");
+	
 	ibo->bind();
+	glEnableVertexAttribArray(compactDataAttribute);
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(1, GL_INT, sizeof(CompactRenderPoint), (void*)(sizeof(uint32_t) * 0));
+	
+	glVertexAttribIPointer(compactDataAttribute, 1, GL_UNSIGNED_INT, 0, (void*)(sizeof(uint32_t) * 0));
 
 	glDrawArrays(GL_POINTS, 0, pointCount);
 	glDisableClientState(GL_VERTEX_ARRAY);

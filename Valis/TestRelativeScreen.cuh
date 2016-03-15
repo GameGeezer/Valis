@@ -6,6 +6,7 @@
 #include "cuda_runtime.h"
 
 #include "CompactRenderPoint.cuh"
+#include "CompactLocation.cuh"
 #include "CudaGLBufferMapping.cuh"
 
 class ShaderProgram;
@@ -43,6 +44,7 @@ private:
 	SDFRelativeExtractor* extractor;
 	SDFDevice* testSDFDevice;
 	CudaGLBufferMapping<CompactRenderPoint>* mapping;
+	CudaGLBufferMapping<CompactLocation>* pboMapping;
 	IBO* ibo;
 	int pointCount;
 };

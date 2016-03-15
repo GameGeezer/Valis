@@ -28,8 +28,14 @@ public:
 	GLuint
 	getUniformLocation(const char *uniformName);
 
+	GLuint
+	getAttributeLocation(const char *uniformName);
+
 	void
 	setUnifromMatrix4f(int location, glm::mat4& matrix);
+
+	void
+	setUniformf(int location, float value);
 
 private:
 

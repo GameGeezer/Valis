@@ -57,10 +57,22 @@ ShaderProgram::getUniformLocation(const char *uniformName)
 	return glGetUniformLocation(handle, uniformName);
 }
 
+GLuint
+ShaderProgram::getAttributeLocation(const char *uniformName)
+{
+	return glGetAttribLocation(handle, uniformName);
+}
+
 void
 ShaderProgram::setUnifromMatrix4f(int location, glm::mat4& matrix)
 {
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+}
+
+void
+ShaderProgram::setUniformf(int location, float value)
+{
+	glUniform1f(location, value);
 }
 
 GLuint
