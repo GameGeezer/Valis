@@ -12,7 +12,7 @@ class ShaderProgram;
 class Camera;
 class Player;
 class SDFRelativeExtractor;
-class VBO;
+class IBO;
 class SDFDevice;
 
 class TestRelativeScreen : public Screen
@@ -43,7 +43,7 @@ private:
 	SDFRelativeExtractor* extractor;
 	SDFDevice* testSDFDevice;
 	CudaGLBufferMapping<CompactRenderPoint>* mapping;
-	VBO* vbo;
+	IBO* ibo;
 	int pointCount;
 };
 

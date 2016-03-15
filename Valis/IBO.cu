@@ -27,19 +27,19 @@ IBO::~IBO()
 	glDeleteBuffers(1, &handle);
 }
 
-inline void
+void
 IBO::bind()
 {
 	glBindBuffer(GL_ARRAY_BUFFER, handle);
 }
 
-inline void
+void
 IBO::unbind()
 {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-inline GLuint
+GLuint
 IBO::getHandle()
 {
 	return handle;

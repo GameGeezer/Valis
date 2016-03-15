@@ -4,6 +4,7 @@
 #include "CudaHelper.cuh"
 #include "PBO.cuh"
 #include "VBO.cuh"
+#include "IBO.cuh"
 
 #include <cuda_gl_interop.h>
 
@@ -20,6 +21,11 @@ public:
 	CudaGLBufferMapping(VBO& vbo, cudaGraphicsMapFlags flags)
 	{
 		assertCUDA(cudaGraphicsGLRegisterBuffer(&handle, vbo.getHandle(), flags));
+	}
+
+	CudaGLBufferMapping(IBO& ibo, cudaGraphicsMapFlags flags)
+	{
+		assertCUDA(cudaGraphicsGLRegisterBuffer(&handle, ibo.getHandle(), flags));
 	}
 
 	~CudaGLBufferMapping()

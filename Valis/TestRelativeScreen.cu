@@ -23,7 +23,7 @@
 #include "Descriptor.cuh"
 #include "SDFExtractor.cuh"
 #include "RenderPoint.cuh"
-#include "VBO.cuh"
+#include "IBO.cuh"
 
 #include "SDFHost.cuh"
 #include "SDFDevice.cuh"
@@ -71,9 +71,9 @@ TestRelativeScreen::onCreate()
 	// Create the extractor
 	extractor = new SDFRelativeExtractor(32, 16);
 
-	vbo = new VBO(10000000, BufferedObjectUsage::DYNAMIC_DRAW);
+	ibo = new IBO(10000000, BufferedObjectUsage::DYNAMIC_DRAW);
 	PBO* pbo = new PBO(1000);
-	mapping = new CudaGLBufferMapping<CompactRenderPoint>(*vbo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
+	mapping = new CudaGLBufferMapping<CompactRenderPoint>(*ibo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
 	pointCount = extractor->extract(*testSDFDevice, *mapping, *pbo);
 
 	glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
@@ -114,13 +114,13 @@ TestRelativeScreen::onUpdate(int delta)
 	GLint projectionLocation = shader->getUniformLocation("projectionMatrix");
 	shader->setUnifromMatrix4f(projectionLocation, viewProjection);
 
-	vbo->bind();
+	ibo->bind();
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, sizeof(RenderPoint), (void*)(sizeof(float) * 0));
+	glVertexPointer(1, GL_INT, sizeof(CompactRenderPoint), (void*)(sizeof(uint32_t) * 0));
 
 	glDrawArrays(GL_POINTS, 0, pointCount);
 	glDisableClientState(GL_VERTEX_ARRAY);
-	vbo->unbind();
+	ibo->unbind();
 
 	shader->unbind();
 }
