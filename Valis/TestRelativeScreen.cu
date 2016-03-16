@@ -72,10 +72,20 @@ TestRelativeScreen::onCreate()
 	extractor = new SDFRelativeExtractor(32, 16);
 
 	ibo = new IBO(10000000, BufferedObjectUsage::DYNAMIC_DRAW);
-	PBO* pbo = new PBO(1000);
+	pbo = new PBO(1000);
 	pboMapping = new CudaGLBufferMapping<CompactLocation>(*pbo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
 	mapping = new CudaGLBufferMapping<CompactRenderPoint>(*ibo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
-	pointCount = extractor->extract(*testSDFDevice, *mapping, *pbo);
+	pointCount = extractor->extract(*testSDFDevice, *mapping, *pboMapping);
+
+	glActiveTexture(GL_TEXTURE0);
+	// This code is using the immediate mode texture object 0. Add an own texture object if needed.
+	glBindTexture(GL_TEXTURE_2D, 0); // Just use the immediate mode texture.
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // Don't sample the border color.
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE); // Not a texture. default is modulate.
 
 	glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 }
@@ -101,8 +111,6 @@ TestRelativeScreen::onResume()
 void
 TestRelativeScreen::onUpdate(int delta)
 {
-
-
 	player->update(delta);
 	glm::mat4 invViewProjection;
 	player->camera->constructInverseViewProjection(invViewProjection);
@@ -111,6 +119,13 @@ TestRelativeScreen::onUpdate(int delta)
 	player->camera->constructViewProjection(viewProjection);
 
 	shader->bind();
+
+	glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo->getHandle());
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)400, (GLsizei)1, 0, GL_RGBA, GL_UNSIGNED_INT, nullptr);
+	glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+	
+	GLint offsetTextureLocation = shader->getUniformLocation("offsetTexture");
+	shader->setUniform1i(offsetTextureLocation, 0);
 
 	GLint projectionLocation = shader->getUniformLocation("projectionMatrix");
 	shader->setUnifromMatrix4f(projectionLocation, viewProjection);

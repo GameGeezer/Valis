@@ -45,6 +45,7 @@ private:
 	SDFDevice* testSDFDevice;
 	CudaGLBufferMapping<CompactRenderPoint>* mapping;
 	CudaGLBufferMapping<CompactLocation>* pboMapping;
+	PBO* pbo;
 	IBO* ibo;
 	int pointCount;
 };

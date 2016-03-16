@@ -29,6 +29,7 @@
 #include "SDFHost.cuh"
 #include "SDFDevice.cuh"
 #include "PlaceSDPrimitive.cuh"
+#include "CarveSDPrimitive.cuh"
 #include "SDSphere.cuh"
 
 #include "BufferedObjectUsage.cuh"
@@ -64,13 +65,16 @@ TestScreen::onCreate()
 	// Define an SDF to parse
 	SDSphere sdSphere(0.25f, glm::vec3(0.5f, 0.5f, 0.5f));
 	SDTorus sdTorus(0.31f, 0.1f, glm::vec3(0.5f, 0.5f, 0.5f));
+	SDTorus sdTorus2(0.33f, 0.07f, glm::vec3(0.5f, 0.5f, 0.5f));
 	SDModification* place = new PlaceSDPrimitive();
+	SDModification* carve = new CarveSDPrimitive();
 	SDFHost* testSDF = new SDFHost(&sdSphere);
 	testSDF->modify(&sdTorus, place);
+	//testSDF->modify(&sdTorus2, carve);
 	testSDFDevice = testSDF->copyToDevice();
 
 	// Create the extractor
-	extractor = new SDFExtractor(32, 16);
+	extractor = new SDFExtractor(250, 50);
 
 	vbo = new VBO(10000000, BufferedObjectUsage::DYNAMIC_DRAW);
 	pointCount = extractor->extractDynamic(*testSDFDevice, *vbo);
@@ -115,7 +119,7 @@ TestScreen::onUpdate(int delta)
 
 	vbo->bind();
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, sizeof(RenderPoint), (void*)(sizeof(float) * 0));
+	glVertexPointer(3, GL_FLOAT, 0, (void*)(sizeof(float) * 0));
 
 	glDrawArrays(GL_POINTS, 0, pointCount);
 	glDisableClientState(GL_VERTEX_ARRAY);

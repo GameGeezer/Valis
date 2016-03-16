@@ -75,13 +75,15 @@ public:
 	}
 
 	__device__ float
-		selectModificationFunction(SDModification* modification, float distance1, float distance2)
+	selectModificationFunction(SDModification* modification, float distance1, float distance2)
 	{
 		switch (modification->functionId)
 		{
-		case 0:
-			//PlaceSDPrimitive *placeCast = ((PlaceSDPrimitive*)modification);
-			return placeModification(distance1, distance2);
+			case 0:
+				//PlaceSDPrimitive *placeCast = ((PlaceSDPrimitive*)modification);
+				return placeModification(distance1, distance2);
+			case 1:
+				return carveModification(distance1, distance2);
 		}
 		return 0;
 	}
@@ -90,6 +92,12 @@ public:
 	placeModification(float originalDistance, float modifierDistance)
 	{
 		return fminf(originalDistance, modifierDistance);
+	}
+
+	__device__ inline float
+		carveModification(float originalDistance, float modifierDistance)
+	{
+		return fmaxf(originalDistance, -modifierDistance);
 	}
 
 	size_t modificationCount;

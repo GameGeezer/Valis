@@ -75,6 +75,12 @@ ShaderProgram::setUniformf(int location, float value)
 	glUniform1f(location, value);
 }
 
+void
+ShaderProgram::setUniform1i(int location, int value)
+{
+	glUniform1i(location, value);
+}
+
 GLuint
 ShaderProgram::compileShader(GLuint handle, const char *shader, GLuint shaderType)
 {

@@ -37,6 +37,9 @@ public:
 	void
 	setUniformf(int location, float value);
 
+	void
+	setUniform1i(int location, int value);
+
 private:
 
 	GLuint handle;

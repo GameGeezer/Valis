@@ -55,9 +55,9 @@ __global__ void extractPointCloudAsBitArrayRelative(CompactRenderPoint *d_output
 	float divisionsAsFloat = ((float)gridDimension);
 
 	// normalized x, y, and z
-	float normalizeX = ((float)x) / divisionsAsFloat;
-	float normalizeY = ((float)y) / divisionsAsFloat;
-	float normalizeZ = ((float)z) / divisionsAsFloat;
+	float normalizeX = ((float)offsetX) / divisionsAsFloat;
+	float normalizeY = ((float)offsetY) / divisionsAsFloat;
+	float normalizeZ = ((float)offsetZ) / divisionsAsFloat;
 
 	// How far the cell is from the sdf
 	float distance = sdf->distanceFromPoint(glm::vec3(normalizeX, normalizeY, normalizeZ));
@@ -230,12 +230,17 @@ struct is_not_zero_uint32_tRelative
 
 
 size_t
-SDFRelativeExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactRenderPoint>& mapping, PBO& pbo)
+SDFRelativeExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactRenderPoint>& mapping, CudaGLBufferMapping<CompactLocation>& pbo)
 {
 	mapping.map();
 	size_t bufferLength = mapping.getSizeInBytes() / sizeof(CompactRenderPoint);
 	CompactRenderPoint* bufferPointerRaw = thrust::raw_pointer_cast(mapping.getDeviceOutput());
 	thrust::device_ptr<CompactRenderPoint> bufferPointerDevice = thrust::device_pointer_cast(mapping.getDeviceOutput());
+
+	pbo.map();
+	size_t pboBufferLength = pbo.getSizeInBytes() / sizeof(CompactLocation);
+	CompactLocation* pboBufferPointerRaw = thrust::raw_pointer_cast(pbo.getDeviceOutput());
+	thrust::device_ptr<CompactLocation> pboBufferPointerDevice = thrust::device_pointer_cast(pbo.getDeviceOutput());
 	
 	// Point to the partial extraction buffer
 	CompactRenderPoint* partialExtractionRaw = thrust::raw_pointer_cast(partialExtractionBuffer->data());
@@ -243,6 +248,7 @@ SDFRelativeExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactRenderP
 	int maxExtractedElements = extractionClusterDensity * extractionClusterDensity * extractionClusterDensity * 64;
 	// How many points have been created thus far
 	thrust::host_vector<CompactLocation> locationBuffer;
+	size_t pboEntries = 0;
 	size_t totalCreated = 0;
 	for (int i = 0; i < clusterDensity; i += extractionClusterDensity)
 	{
@@ -262,22 +268,13 @@ SDFRelativeExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactRenderP
 				// Move all the newly created points to the left
 				thrust::sort(thrust::device, bufferPointerRaw + totalCreated, bufferPointerRaw + totalCreated + maxExtractedElements, is_less_Relative());
 				// multiple of 64 must be buffered
-				int extraSpaceToBuffer = numberCreated & 63;
+				int extraSpaceToBuffer = (64 - (numberCreated & 63));
 				int numberOfPBOEntries = (numberCreated + extraSpaceToBuffer) / 64;
 				// Fill in the extra space with the last point
 				//thrust::fill(bufferPointerRaw + totalCreated + numberCreated, bufferPointerRaw + totalCreated + numberCreated + extraSpaceToBuffer, CompactRenderPoint());
-				writeOffsetPBO << <1, extraSpaceToBuffer >> >()
-				//uint32_t offsetY = j * 4;
-				/*
-				CompactLocation relativeLocation;
-				relativeLocation.pack(offsetX, offsetY, offsetZ);
-				for (int i = 0; i < (numberCreated / 64) + 63; ++i)
-				{
-					locationBuffer.push_back(relativeLocation);
-				}
-				*/
-				//thrust::copy_if(partialExtractionBuffer->begin(), partialExtractionBuffer->end(), bufferPointer + totalCreated, is_not_zeroRelative());
-
+				writeOffsetPBO << <1, numberOfPBOEntries >> >(pboBufferPointerRaw + pboEntries, numberOfPBOEntries, offsetX, offsetY, offsetZ);
+		
+				pboEntries += numberOfPBOEntries;
 				totalCreated += (numberCreated + extraSpaceToBuffer);
 				/*
 				*/
@@ -286,7 +283,7 @@ SDFRelativeExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactRenderP
 	}
 
 	mapping.unmap();
-
+	pbo.unmap();
 
 
 	return totalCreated;
