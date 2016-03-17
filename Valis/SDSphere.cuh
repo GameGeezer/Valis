@@ -13,7 +13,7 @@ class SDSphere : public DistancePrimitive
 public:
 
 	__host__ __device__
-	SDSphere(float radius, glm::vec3 position) : DistancePrimitive(0), radius(radius), position(position)
+	SDSphere(float radius, glm::vec3 scale, glm::vec3 translation, glm::vec3 rotationAxis, float angle) : DistancePrimitive(0, scale, translation, rotationAxis, angle), radius(radius)
 	{
 
 	}
@@ -30,19 +30,18 @@ public:
 	}
 
 	__host__ __device__ inline float
-	distanceFromPoint(glm::vec3 point)
+	distanceFromPoint(glm::vec4 point)
 	{
-		return GLMUtil::length(point - position) - radius;
+		return GLMUtil::length(transform * point) - radius;
 	}
 
 	__host__ __device__ inline AABB
 	calculateBoundingVolume()
 	{
-		return AABB(glm::vec2(position.x - radius, position.y - radius), glm::vec2(position.x + radius, position.y + radius));
+		return AABB(glm::vec2(0,0),glm::vec2(0,0)); //AABB(glm::vec2(position.x - radius, position.y - radius), glm::vec2(position.x + radius, position.y + radius));
 	}
 
 	float radius;
-	glm::vec3 position;
 };
 
 #endif

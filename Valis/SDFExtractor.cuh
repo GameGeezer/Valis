@@ -26,7 +26,7 @@ public:
 	extract(SDFDevice& sdf);
 
 	size_t
-	extractDynamic(SDFDevice& sdf, VBO& vbo);
+		extractDynamic(SDFDevice& sdf, CudaGLBufferMapping<RenderPoint>& mapping);
 
 	size_t
 	extractRelative(SDFDevice& sdf, CudaGLBufferMapping<RenderPoint>& mapping, PBO& pbo);

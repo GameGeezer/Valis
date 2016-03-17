@@ -11,6 +11,7 @@
 #include "SDSphere.cuh"
 #include "SDTorus.cuh"
 #include "GLMUtil.cuh"
+#include "CudaHelper.cuh"
 
 class SDFDevice
 {
@@ -22,6 +23,12 @@ public:
 
 	}
 
+	__host__
+	~SDFDevice()
+	{
+
+	}
+
 	__device__ float
 	distanceFromPoint(glm::vec3 position)
 	{
@@ -29,8 +36,8 @@ public:
 
 		for (int i = 0; i < modificationCount; ++i)
 		{
-			float distance2 = selectDistanceFunction(primitives[i + 1], position); //COME BACK AND FIGURE OUT HOW TO INDEX PROPPERLY
-			distance = selectModificationFunction(modifications[i], distance, distance2); //COME BACK AND FIGURE OUT HOW TO INDEX PROPPERLY
+			float distance2 = selectDistanceFunction(primitives[i + 1], position); 
+			distance = selectModificationFunction(modifications[i], distance, distance2); 
 		}
 		
 		return distance;
@@ -45,14 +52,14 @@ public:
 			{
 				SDSphere *sphereCast = ((SDSphere*)primitive);
 
-				float distance = distanceFromSphere(sphereCast->position, sphereCast->radius, position);
+				float distance = distanceFromSphere(glm::vec4(position, 1), sphereCast->transform, sphereCast->radius);
 				return distance;
 			}
 			case 1:
 			{
 				SDTorus *torusCast = ((SDTorus*)primitive);
 
-				float distance2 = distanceFromTorus(torusCast->position, torusCast->dimensions, position);
+				float distance2 = distanceFromTorus(glm::vec4(position, 1), torusCast->transform, torusCast->dimensions);
 				return distance2;
 			}
 		}
@@ -60,16 +67,33 @@ public:
 		return 0.0f;
 	}
 
+	/*
 	__device__ inline float
 	distanceFromSphere(glm::vec3 position, float radius, glm::vec3 point)
 	{
 		return GLMUtil::length(point - position) - radius;
 	}
+	*/
 
+	__host__ __device__ inline float
+	distanceFromSphere(glm::vec4 point, glm::mat4 transform, float radius)
+	{
+		point = transform * point;
+		return GLMUtil::length(glm::vec3(point)) - radius;
+	}
+	/*
 	__device__ inline float
 	distanceFromTorus(glm::vec3 position, glm::vec2 dimensions, glm::vec3 point)
 	{
 		point -= position;
+		glm::vec2 q = glm::vec2(GLMUtil::length(glm::vec2(point.x, point.y)) - dimensions.x, point.z);
+		return GLMUtil::length(q) - dimensions.y;
+	}
+	*/
+	__host__ __device__ inline float
+		distanceFromTorus(glm::vec4 point, glm::mat4 transform, glm::vec2 dimensions)
+	{
+		point = transform * point;
 		glm::vec2 q = glm::vec2(GLMUtil::length(glm::vec2(point.x, point.y)) - dimensions.x, point.z);
 		return GLMUtil::length(q) - dimensions.y;
 	}

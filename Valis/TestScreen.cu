@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/ext.hpp>
+#include <glm/gtc/constants.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -63,21 +64,25 @@ TestScreen::onCreate()
 	player = new Player(*camera);
 
 	// Define an SDF to parse
-	SDSphere sdSphere(0.25f, glm::vec3(0.5f, 0.5f, 0.5f));
-	SDTorus sdTorus(0.31f, 0.1f, glm::vec3(0.5f, 0.5f, 0.5f));
-	SDTorus sdTorus2(0.33f, 0.07f, glm::vec3(0.5f, 0.5f, 0.5f));
-	SDModification* place = new PlaceSDPrimitive();
-	SDModification* carve = new CarveSDPrimitive();
-	SDFHost* testSDF = new SDFHost(&sdSphere);
-	testSDF->modify(&sdTorus, place);
+	SDSphere sdSphere(0.25f, glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
+	SDTorus sdTorus(0.31f, 0.1f, glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
+	SDTorus sdTorus2(0.2f, 0.1f, glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
+	place = new PlaceSDPrimitive();
+	carve = new CarveSDPrimitive();
+	testSDF = new SDFHost(&sdSphere, 30);
 	//testSDF->modify(&sdTorus2, carve);
+	//testSDF->modify(&sdTorus, place);
+	
 	testSDFDevice = testSDF->copyToDevice();
 
-	// Create the extractor
-	extractor = new SDFExtractor(250, 50);
+	
 
-	vbo = new VBO(10000000, BufferedObjectUsage::DYNAMIC_DRAW);
-	pointCount = extractor->extractDynamic(*testSDFDevice, *vbo);
+	// Create the extractor
+	extractor = new SDFExtractor(32, 32);
+
+	vbo = new VBO(1000000, BufferedObjectUsage::DYNAMIC_DRAW);
+	mapping = new CudaGLBufferMapping<RenderPoint>(*vbo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
+	
 	
 	glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 }
@@ -104,6 +109,13 @@ void
 TestScreen::onUpdate(int delta)
 {
 	
+	SDTorus sdTorus(0.31f, 0.3f, glm::vec3(1, 1 / spinOffset, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), spinOffset);
+	testSDF->modify(&sdTorus, place);
+	testSDFDevice = testSDF->copyToDevice();
+	pointCount = extractor->extractDynamic(*testSDFDevice, *mapping);
+	spinOffset += 0.01f;
+	testSDF->popEdit();
+
 
 	player->update(delta);
 	glm::mat4 invViewProjection;

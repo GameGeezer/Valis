@@ -61,15 +61,16 @@ TestRelativeScreen::onCreate()
 	player = new Player(*camera);
 
 	// Define an SDF to parse
-	SDSphere sdSphere(0.25f, glm::vec3(0.5f, 0.5f, 0.5f));
-	SDTorus sdTorus(0.31f, 0.1f, glm::vec3(0.5f, 0.5f, 0.5f));
+	SDSphere sdSphere(0.25f, glm::vec3(1, 0.5f, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
+	SDTorus sdTorus(0.31f, 0.1f, glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 90);
+	//SDTorus sdTorus2(0.33f, 0.07f, glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
 	SDModification* place = new PlaceSDPrimitive();
-	SDFHost* testSDF = new SDFHost(&sdSphere);
+	SDFHost* testSDF = new SDFHost(&sdSphere, 30);
 	testSDF->modify(&sdTorus, place);
 	testSDFDevice = testSDF->copyToDevice();
 
 	// Create the extractor
-	extractor = new SDFRelativeExtractor(32, 16);
+	extractor = new SDFRelativeExtractor(20, 16);
 
 	ibo = new IBO(10000000, BufferedObjectUsage::DYNAMIC_DRAW);
 	pbo = new PBO(1000);
@@ -119,9 +120,9 @@ TestRelativeScreen::onUpdate(int delta)
 	player->camera->constructViewProjection(viewProjection);
 
 	shader->bind();
-
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo->getHandle());
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)400, (GLsizei)1, 0, GL_RGBA, GL_UNSIGNED_INT, nullptr);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)400, (GLsizei)2, 0, GL_RGBA, GL_UNSIGNED_INT, nullptr);
 	glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 	
 	GLint offsetTextureLocation = shader->getUniformLocation("offsetTexture");

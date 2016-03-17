@@ -3,7 +3,8 @@
 
 #include "Screen.cuh"
 #include "cuda_runtime.h"
-
+#include "CudaGLBufferMapping.cuh"
+#include "RenderPoint.cuh"
 
 class ShaderProgram;
 class Camera;
@@ -11,6 +12,9 @@ class Player;
 class SDFExtractor;
 class VBO;
 class SDFDevice;
+class SDFHost;
+class SDTorus;
+class SDModification;
 
 class TestScreen : public Screen
 {
@@ -39,7 +43,13 @@ private:
 	Player* player;
 	SDFExtractor* extractor;
 	SDFDevice* testSDFDevice;
+	SDFHost* testSDF;
 	VBO* vbo;
+	CudaGLBufferMapping<RenderPoint>* mapping;
+	SDTorus* spinTorus;
+	SDModification* place;
+	SDModification* carve;
+	float spinOffset = 0;
 	int pointCount;
 };
 

@@ -17,7 +17,7 @@ class SDFHost
 public:
 
 	__host__
-	SDFHost(DistancePrimitive* primative);
+	SDFHost(DistancePrimitive* primative, size_t editCapacity);
 
 	__host__ SDFDevice*
 	copyToDevice();
@@ -25,10 +25,14 @@ public:
 	__host__ void
 	modify(DistancePrimitive* primative, SDModification* modification);
 
+	__host__ void
+	popEdit();
+
 	//void
 	//normalize();
 
 private:
+	SDFDevice* deviceSDF;
 	AABB bounds;
 	size_t modificationCount = 0;
 	thrust::host_vector<DistancePrimitive*>& host_primitives;

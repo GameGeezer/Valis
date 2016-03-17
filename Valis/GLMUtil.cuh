@@ -23,6 +23,13 @@ public:
 	{
 		return sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
 	}
+
+	__host__ __device__
+	static inline float
+	length(glm::vec4 vector)
+	{
+		return sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z + vector.w * vector.w);
+	}
 };
 
 #endif

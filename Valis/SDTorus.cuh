@@ -15,7 +15,7 @@ class SDTorus : public DistancePrimitive
 public:
 
 	__host__ __device__
-	SDTorus(float outer, float radius, glm::vec3 position) : DistancePrimitive(1), dimensions(glm::vec2(outer, radius)), position(position)
+		SDTorus(float outer, float radius, glm::vec3 scale, glm::vec3 translation, glm::vec3 rotationAxis, float angle) : DistancePrimitive(1, scale, translation, rotationAxis, angle), dimensions(glm::vec2(outer, radius))
 	{
 
 	}
@@ -32,9 +32,9 @@ public:
 	}
 
 	__host__ __device__ inline float
-	distanceFromPoint(glm::vec3 point)
+	distanceFromPoint(glm::vec4 point)
 	{
-		point -= position;
+		point = transform * point;
 		glm::vec2 q = glm::vec2(GLMUtil::length(glm::vec2(point.x, point.y)) - dimensions.x, point.z);
 		return GLMUtil::length(q) - dimensions.y;
 	}
@@ -45,7 +45,6 @@ public:
 		return AABB(glm::vec2(0, 0), glm::vec2(0, 0));
 	}
 
-	glm::vec3 position;
 	glm::vec2 dimensions;
 };
 

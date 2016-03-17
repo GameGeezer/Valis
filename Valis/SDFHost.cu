@@ -4,7 +4,7 @@
 
 #include "CudaHelper.cuh"
 
-SDFHost::SDFHost(DistancePrimitive *primative) : host_primitives(*(new thrust::host_vector<DistancePrimitive*>())), host_modifications(*(new thrust::host_vector<SDModification*>())), device_primitives(*(new thrust::device_vector<DistancePrimitive*>())), device_modifications(*(new thrust::device_vector<SDModification*>()))
+SDFHost::SDFHost(DistancePrimitive *primative, size_t editCapacity) : host_primitives(*(new thrust::host_vector<DistancePrimitive*>())), host_modifications(*(new thrust::host_vector<SDModification*>())), device_primitives(*(new thrust::device_vector<DistancePrimitive*>())), device_modifications(*(new thrust::device_vector<SDModification*>()))
 {
 	DistancePrimitive* devicePrimitive = primative->copyToDevice();
 
@@ -22,8 +22,6 @@ SDFHost::copyToDevice()
 
 	SDFDevice sdfInfo(primitivesBegin, modificationsBegin, modificationCount);
 
-	SDFDevice* deviceSDF;
-
 	assertCUDA(cudaMalloc((void **)&deviceSDF, sizeof(SDFDevice)));
 	assertCUDA(cudaMemcpy(deviceSDF, &sdfInfo, sizeof(SDFDevice), cudaMemcpyHostToDevice));
 
@@ -40,4 +38,13 @@ SDFHost::modify(DistancePrimitive *primative, SDModification *modification)
 	host_modifications.push_back(deviceModification);
 
 	++modificationCount;
+}
+
+void
+SDFHost::popEdit()
+{
+	host_primitives.pop_back();
+	host_modifications.pop_back();
+
+	--modificationCount;
 }

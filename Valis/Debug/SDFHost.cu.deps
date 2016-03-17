@@ -872,19 +872,7 @@ C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\type_vec3.inl
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\DistancePrimitive.cuh
-C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h
-c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\AABB.cuh
-C:\Programming\Libraries\glm-0.9.7.2\glm\glm\vec2.hpp
-c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/type_vec2.hpp
-c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\type_vec2.inl
-c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDModification.cuh
-C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h
-c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDFDevice.cuh
-C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h
-c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDSphere.cuh
-C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
-c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\GLMUtil.cuh
-C:\Programming\Libraries\glm-0.9.7.2\glm\glm\glm.hpp
+C:\Programming\Libraries\glm-0.9.7.2\glm\glm/glm.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/_fixes.hpp
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\cassert
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\assert.h
@@ -892,6 +880,9 @@ C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
 c:\programming\libraries\glm-0.9.7.2\glm\glm\fwd.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/type_float.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/type_mat.hpp
+c:\programming\libraries\glm-0.9.7.2\glm\glm\vec2.hpp
+c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/type_vec2.hpp
+c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\type_vec2.inl
 c:\programming\libraries\glm-0.9.7.2\glm\glm\vec4.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/type_vec4.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\type_vec4.inl
@@ -955,6 +946,19 @@ c:\programming\libraries\glm-0.9.7.2\glm\glm\vector_relational.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\integer.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/func_integer.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\func_integer.inl
+C:\Programming\Libraries\glm-0.9.7.2\glm\glm/gtc/matrix_transform.hpp
+c:\programming\libraries\glm-0.9.7.2\glm\glm\gtc\../gtc/constants.hpp
+c:\programming\libraries\glm-0.9.7.2\glm\glm\gtc\constants.inl
+c:\programming\libraries\glm-0.9.7.2\glm\glm\gtc\matrix_transform.inl
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\AABB.cuh
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDModification.cuh
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDFDevice.cuh
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDSphere.cuh
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\GLMUtil.cuh
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\CudaHelper.cuh
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
