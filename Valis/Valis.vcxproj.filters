@@ -312,6 +312,9 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="TestRelativeScreen.cuh" />
+    <ClInclude Include="BlendSDModification.cuh">
+      <Filter>framework\src\distanceFields\modifications\public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TestScreen.cu" />

@@ -185,6 +185,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
   <ItemGroup>
     <ClInclude Include="AABB.cuh" />
     <ClInclude Include="Application.cuh" />
+    <ClInclude Include="BlendSDModification.cuh" />
     <ClInclude Include="BufferedObjectUsage.cuh" />
     <ClInclude Include="Camera.cuh" />
     <ClInclude Include="CarveSDPrimitive.cuh" />

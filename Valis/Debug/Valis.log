@@ -1,42 +1,6 @@
-﻿Build started 3/17/2016 6:54:27 PM.
+﻿Build started 3/18/2016 2:55:08 AM.
      1>Project "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\Valis.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt TestScreen.cu
-         TestScreen.cu
-     1>c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\thrust\system\detail\error_category.inl(102): warning C4996: 'strerror': This function or variable may be unsafe. Consider using strerror_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\string.h(168) : see declaration of 'strerror'
-     1>c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\thrust\system\cuda\detail\bulk\detail\pointer_traits.hpp(55): warning C4800: 'unsigned int' : forcing value to bool 'true' or 'false' (performance warning)
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\sdfextractor.cuh(12): warning C4099: 'ExtractionBlock' : type name first seen using 'struct' now seen using 'class'
-                 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\renderpoint.cuh(10) : see declaration of 'ExtractionBlock'
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\sdfdevice.cuh(37): warning C4018: '<' : signed/unsigned mismatch
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Debug\Valis.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\wpger_000\Downloads\glfw-3.1.2.bin.WIN32.zip\glfw-3.1.2.bin.WIN32\lib-vc2013" /LIBPATH:"C:\Programming\Libraries\glew-1.13.0\bin\Release\Win32" /LIBPATH:"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\lib\Win32" cudart.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib glew32.lib glfw3.lib glfw3dll.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Debug\Valis.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Debug\Valis.lib" /MACHINE:X86 Debug\CarveSDPrimitive.cu.obj
-         Debug\Descriptor.cu.obj
-         Debug\Galaxy.cu.obj
-         Debug\IBO.cu.obj
-         Debug\kernel.cu.obj
-         Debug\MouseClickCallback.cu.obj
-         Debug\MouseMoveCallback.cu.obj
-         Debug\PBO.cu.obj
-         Debug\PlaceSDPrimitive.cu.obj
-         Debug\Player.cu.obj
-         Debug\SDFDevice.cu.obj
-         Debug\SDFExtractor.cu.obj
-         Debug\SDFHost.cu.obj
-         Debug\SDFRelativeExtractor.cu.obj
-         Debug\SDSphere.cu.obj
-         Debug\SDTorus.cu.obj
-         Debug\TestRelativeScreen.cu.obj
-         Debug\Texture2D.cu.obj
-         Debug\VAO.cu.obj
-         Debug\VBO.cu.obj
-         Debug\Application.obj
-         Debug\Camera.obj
-         Debug\Game.obj
-         Debug\KDLeafNodeCollection.obj
-         Debug\KeyboardCallback.obj
-         Debug\ShaderProgram.obj
-         Debug\TestScreen.obj
+     1>Link:
          Valis.vcxproj -> C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Debug\Valis.exe
        PostBuildEvent:
          echo copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart*.dll" "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Debug\"
@@ -50,4 +14,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.92
+Time Elapsed 00:00:00.54

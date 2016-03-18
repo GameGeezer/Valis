@@ -78,9 +78,9 @@ TestScreen::onCreate()
 	
 
 	// Create the extractor
-	extractor = new SDFExtractor(32, 32);
+	extractor = new SDFExtractor(24, 24);
 
-	vbo = new VBO(1000000, BufferedObjectUsage::DYNAMIC_DRAW);
+	vbo = new VBO(10000000, BufferedObjectUsage::DYNAMIC_DRAW);
 	mapping = new CudaGLBufferMapping<RenderPoint>(*vbo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
 	
 	
@@ -109,11 +109,11 @@ void
 TestScreen::onUpdate(int delta)
 {
 	
-	SDTorus sdTorus(0.31f, 0.3f, glm::vec3(1, 1 / spinOffset, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), spinOffset);
-	testSDF->modify(&sdTorus, place);
+	SDTorus sdTorus(0.31f, 0.15f, glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.1f + spinOffset), glm::vec3(0, 1, 0), spinOffset);
+	testSDF->modify(&sdTorus, carve);
 	testSDFDevice = testSDF->copyToDevice();
 	pointCount = extractor->extractDynamic(*testSDFDevice, *mapping);
-	spinOffset += 0.01f;
+	spinOffset += 0.001f;
 	testSDF->popEdit();
 
 
@@ -131,7 +131,8 @@ TestScreen::onUpdate(int delta)
 
 	vbo->bind();
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, (void*)(sizeof(float) * 0));
+	glVertexPointer(3, GL_FLOAT, sizeof(float) * 6, 0);
+	glNormalPointer(GL_FLOAT, sizeof(float) * 6, (void*) (sizeof(float) * 3));
 
 	glDrawArrays(GL_POINTS, 0, pointCount);
 	glDisableClientState(GL_VERTEX_ARRAY);

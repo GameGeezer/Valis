@@ -36,6 +36,7 @@ private:
 	void
 	extractCoverageBuffer(thrust::device_vector< ExtractionBlock >& buffer, SDFDevice& sdf);
 
+	thrust::device_vector< ExtractionBlock >* sdfGridIntersectionBuffer;
 	thrust::device_vector< ExtractionBlock >* pointCoverageBuffer;
 	thrust::device_vector< ExtractionBlock >* materialCoverageBuffer;
 	thrust::device_vector< RenderPoint >* partialExtractionBuffer;

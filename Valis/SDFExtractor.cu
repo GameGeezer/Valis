@@ -21,6 +21,63 @@
 #include "PBO.cuh"
 
 
+__global__ void extractVertexPlacementAsBitArray(ExtractionBlock *d_output, SDFDevice *sdf, uint32_t clusterDim)
+{
+	uint32_t x = blockIdx.x * blockDim.x + threadIdx.x;
+	uint32_t y = blockIdx.y * blockDim.y + threadIdx.y;
+	uint32_t z = blockIdx.z * blockDim.z + threadIdx.z;
+
+	uint32_t gridDimension = (clusterDim * 4);
+
+	if (x > (gridDimension + 2) || y > (gridDimension + 2) || z > (gridDimension + 2))
+	{
+		return;
+	}
+
+	// The index of the cell in relation to 4 x 4 x 4 block of bits it's contained in
+	uint32_t localX = x & 3;
+	uint32_t localY = y & 3;
+	uint32_t localZ = z & 3;
+
+	uint32_t bitToFlip = localX + localY * 4 + localZ * 16;
+
+	// Which cluster the cell is in
+	uint32_t clusterX = x / 4;
+	uint32_t clusterY = y / 4;
+	uint32_t clusterZ = z / 4;
+
+	uint32_t clusterIndex = clusterX + clusterY * clusterDim + clusterZ * clusterDim * clusterDim;
+
+	float divisionsAsFloat = ((float)gridDimension);
+
+	float offset = 1.0f / divisionsAsFloat;
+
+	// normalized x, y, and z
+	float normalizeX = (((float)x) / divisionsAsFloat) - offset;
+	float normalizeY = (((float)y) / divisionsAsFloat) - offset;
+	float normalizeZ = (((float)z) / divisionsAsFloat) - offset;
+
+	// How far the cell is from the sdf
+	float distance = sdf->distanceFromPoint(glm::vec3(normalizeX, normalizeY, normalizeZ));
+
+	// Decide whether to generate a point
+	float cellDimension = 1.0f / divisionsAsFloat;
+
+	NumericBoolean isOutside = numericGreaterThan_float(distance, 0);
+
+	NumericBoolean writeFirst = numericLessThan_uint32_t(bitToFlip, 32);
+	NumericBoolean writeSecond = numericNegate_uint32_t(writeFirst);
+
+	bitToFlip = bitToFlip * writeFirst + (bitToFlip - 32) * writeSecond;
+
+	uint32_t bitToOrWith = (1 << bitToFlip) * isOutside;
+	uint32_t orFirst = bitToOrWith * writeFirst;
+	uint32_t orSecond = bitToOrWith * writeSecond;
+
+	atomicOr(&(d_output[clusterIndex].first), orFirst);
+	atomicOr(&(d_output[clusterIndex].second), orSecond);
+}
+
 __global__ void extractPointCloudAsBitArray(ExtractionBlock *d_output, SDFDevice *sdf, uint32_t clusterDim)
 {
 	uint32_t x = blockIdx.x * blockDim.x + threadIdx.x;
@@ -76,7 +133,42 @@ __global__ void extractPointCloudAsBitArray(ExtractionBlock *d_output, SDFDevice
 	atomicOr(&(d_output[clusterIndex].second), orSecond);
 }
 
-__global__ void createCloudFromBuffers(RenderPoint* d_output, ExtractionBlock *coverageBuffer, ExtractionBlock *materialBuffer, uint32_t subsectionClusterDim, uint32_t totalClusterDim, uint32_t clusterBufferSize, int dimensionOffsetX, int dimensionOffsetY, int dimensionOffsetZ)
+__device__ __inline__ NumericBoolean
+isExtractionBlockBitFlipped(ExtractionBlock *buffer, uint32_t x, uint32_t y, uint32_t z, uint32_t offsetX, uint32_t offsetY, uint32_t offsetZ, uint32_t subsectionClusterDim, uint32_t totalClusterDim)
+{
+	uint32_t localX = x & 3;
+	uint32_t localY = y & 3;
+	uint32_t localZ = z & 3;
+
+	uint32_t bitToCheck = localX + localY * 4 + localZ * 16;
+
+	// Which cluster the cell is in
+	uint32_t clusterX = offsetX / 4;
+	uint32_t clusterY = offsetY / 4;
+	uint32_t clusterZ = offsetZ / 4;
+
+	// The cluster index relative to the entire grid
+	uint32_t clusterIndex = clusterX + clusterY * totalClusterDim + clusterZ * totalClusterDim * totalClusterDim;
+
+	NumericBoolean checkFirst = numericLessThan_uint32_t(bitToCheck, 32);
+	NumericBoolean checkSecond = numericNegate_uint32_t(checkFirst);
+
+	bitToCheck = bitToCheck * checkFirst + (bitToCheck - 32) * checkSecond;
+
+	uint32_t bitToAndWith = (1 << bitToCheck);
+
+	ExtractionBlock bufferValue = buffer[clusterIndex];
+
+	uint32_t andCoverageFirst = bufferValue.first & bitToAndWith;
+	uint32_t andCoverageSecond = bufferValue.second & bitToAndWith;
+
+	NumericBoolean foundFirst = numericGreaterThan_uint32_t(andCoverageFirst * checkFirst, 0);
+	NumericBoolean foundSecond = numericGreaterThan_uint32_t(andCoverageSecond * checkSecond, 0);
+
+	return foundFirst + foundSecond;
+}
+
+__global__ void createCloudFromBuffers(RenderPoint* d_output, ExtractionBlock * gridIntersection, ExtractionBlock *coverageBuffer, ExtractionBlock *materialBuffer, uint32_t subsectionClusterDim, uint32_t totalClusterDim, uint32_t clusterBufferSize, int dimensionOffsetX, int dimensionOffsetY, int dimensionOffsetZ)
 {
 	uint32_t x = blockIdx.x * blockDim.x + threadIdx.x;
 	uint32_t y = blockIdx.y * blockDim.y + threadIdx.y;
@@ -106,39 +198,21 @@ __global__ void createCloudFromBuffers(RenderPoint* d_output, ExtractionBlock *c
 	{
 		return;// Ideally this should never be hit, look into what it is.
 	}
-	
-	// x, y, and z relative to the cluster 0, 0 , 0
-	uint32_t localX = x & 3;
-	uint32_t localY = y & 3;
-	uint32_t localZ = z & 3;
 
-	uint32_t bitToCheck = localX + localY * 4 + localZ * 16;
 
-	// Which cluster the cell is in
-	uint32_t clusterX = offsetX / 4;
-	uint32_t clusterY = offsetY / 4;
-	uint32_t clusterZ = offsetZ / 4;
+	NumericBoolean coverageFlipped = isExtractionBlockBitFlipped(coverageBuffer, x, y, z, offsetX, offsetY, offsetZ, subsectionClusterDim, totalClusterDim);
 
-	// The cluster index relative to the entire grid
-	uint32_t clusterIndex = clusterX + clusterY * totalClusterDim + clusterZ * totalClusterDim * totalClusterDim;
+	NumericBoolean bottomLeftBack = isExtractionBlockBitFlipped(gridIntersection, x, y, z, offsetX, offsetY, offsetZ, subsectionClusterDim, totalClusterDim);
+	NumericBoolean bottomRightBack = isExtractionBlockBitFlipped(gridIntersection, x + 1, y, z, offsetX + 1, offsetY, offsetZ, subsectionClusterDim, totalClusterDim);
+	NumericBoolean topLeftBack = isExtractionBlockBitFlipped(gridIntersection, x, y + 1, z, offsetX, offsetY + 1, offsetZ, subsectionClusterDim, totalClusterDim);
+	NumericBoolean bottomLeftForward = isExtractionBlockBitFlipped(gridIntersection, x, y, z + 1, offsetX, offsetY, offsetZ + 1, subsectionClusterDim, totalClusterDim);
+	NumericBoolean topRightBack = isExtractionBlockBitFlipped(gridIntersection, x + 1, y + 1, z, offsetX + 1, offsetY + 1, offsetZ, subsectionClusterDim, totalClusterDim);
+	NumericBoolean BottmRightForward = isExtractionBlockBitFlipped(gridIntersection, x + 1, y, z + 1, offsetX + 1, offsetY, offsetZ + 1, subsectionClusterDim, totalClusterDim);
+	NumericBoolean TopLeftForward = isExtractionBlockBitFlipped(gridIntersection, x, y + 1, z + 1, offsetX, offsetY + 1, offsetZ + 1, subsectionClusterDim, totalClusterDim);
+	NumericBoolean TopRightForward = isExtractionBlockBitFlipped(gridIntersection, x + 1, y + 1, z + 1, offsetX + 1, offsetY + 1, offsetZ + 1, subsectionClusterDim, totalClusterDim);
+	//NumericBoolean materialFlipped = isExtractionBlockBitFlipped(coverageBuffer, x, y, z, offsetX, offsetY, offsetZ, subsectionClusterDim, totalClusterDim);
 
-	ExtractionBlock surfaceCoverage = coverageBuffer[clusterIndex];
-	ExtractionBlock materialCoverage = materialBuffer[clusterIndex];
-
-	NumericBoolean checkFirst = numericLessThan_uint32_t(bitToCheck, 32);
-	NumericBoolean checkSecond = numericNegate_uint32_t(checkFirst);
-
-	bitToCheck = bitToCheck * checkFirst + (bitToCheck - 32) * checkSecond;
-
-	uint32_t bitToAndWith = (1 << bitToCheck);
-
-	uint32_t andCoverageFirst = (surfaceCoverage.first & materialCoverage.first) & bitToAndWith;
-	uint32_t andCoverageSecond = (surfaceCoverage.second & materialCoverage.second) & bitToAndWith;
-
-	NumericBoolean foundFirst = numericGreaterThan_uint32_t(andCoverageFirst * checkFirst, 0);
-	NumericBoolean foundSecond = numericGreaterThan_uint32_t(andCoverageSecond * checkSecond, 0);
-
-	NumericBoolean materialCoverageOverlap = numericGreaterThan_uint32_t(foundFirst + foundSecond, 0);
+	NumericBoolean materialCoverageOverlap = numericGreaterThan_uint32_t(coverageFlipped, 0);
 
 	float divisionsAsFloat = ((float)gridDimension);
 
@@ -175,7 +249,8 @@ SDFExtractor::SDFExtractor(uint32_t clusterDensity, uint32_t extractionClusterDe
 	parseThreadsDim(8, 8, 8),
 	pointCoverageBuffer(new thrust::device_vector< ExtractionBlock >(clusterDensity * clusterDensity * clusterDensity)),
 	materialCoverageBuffer(new thrust::device_vector< ExtractionBlock >(clusterDensity * clusterDensity * clusterDensity)),
-	partialExtractionBuffer(new thrust::device_vector< RenderPoint >(extractionClusterDensity * extractionClusterDensity * extractionClusterDensity * 64))
+	partialExtractionBuffer(new thrust::device_vector< RenderPoint >(extractionClusterDensity * extractionClusterDensity * extractionClusterDensity * 64)),
+	sdfGridIntersectionBuffer(new thrust::device_vector< ExtractionBlock >((clusterDensity + 2) * (clusterDensity + 2) * (clusterDensity + 2)))
 {
 
 }
@@ -231,7 +306,7 @@ SDFExtractor::extract(SDFDevice& sdf)
 	// Point to the coverage buffer
 	ExtractionBlock* pointCoverageStart = thrust::raw_pointer_cast(pointCoverageBuffer->data());
 	// Extract the coverage buffer
-	extractPointCloudAsBitArray << <coverageExtractBlockDim, parseThreadsDim >> >(pointCoverageStart, &sdf, clusterDensity);
+	//extractPointCloudAsBitArray << <coverageExtractBlockDim, parseThreadsDim >> >(pointCoverageStart, &sdf, clusterDensity);
 	// Point to the partial extraction buffer
 	RenderPoint* partialExtractionStart = thrust::raw_pointer_cast(partialExtractionBuffer->data());
 	// Create the buffer where all points will be stored
@@ -244,7 +319,7 @@ SDFExtractor::extract(SDFDevice& sdf)
 		{
 			for (int k = 0; k < clusterDensity; k += extractionClusterDensity)
 			{
-				createCloudFromBuffers << <partialExtractionBlockDim, parseThreadsDim >> > (partialExtractionStart, pointCoverageStart, pointCoverageStart, extractionClusterDensity, clusterDensity, partialExtractionBuffer->size(), i * 4, j * 4, k * 4);
+				//createCloudFromBuffers << <partialExtractionBlockDim, parseThreadsDim >> > (partialExtractionStart, pointCoverageStart, pointCoverageStart, extractionClusterDensity, clusterDensity, partialExtractionBuffer->size(), i * 4, j * 4, k * 4);
 				thrust::sort(partialExtractionBuffer->begin(), partialExtractionBuffer->end(), shiftRenderPointsLeft());
 				thrust::host_vector< RenderPoint > checkExtract = *partialExtractionBuffer;
 				int numberCreated = thrust::count_if(partialExtractionBuffer->begin(), partialExtractionBuffer->end(), is_not_zero());
@@ -266,10 +341,13 @@ SDFExtractor::extractDynamic(SDFDevice& sdf, CudaGLBufferMapping<RenderPoint>& m
 	thrust::device_ptr<RenderPoint> bufferPointer = thrust::device_pointer_cast(mapping.getDeviceOutput());
 
 	// Zero the coverage buffer
+	thrust::fill(sdfGridIntersectionBuffer->begin(), sdfGridIntersectionBuffer->end(), ExtractionBlock());
 	thrust::fill(pointCoverageBuffer->begin(), pointCoverageBuffer->end(), ExtractionBlock());
 	// Point to the coverage buffer
+	ExtractionBlock* gridIntersectionRaw = thrust::raw_pointer_cast(sdfGridIntersectionBuffer->data());
 	ExtractionBlock* pointCoverageRaw = thrust::raw_pointer_cast(pointCoverageBuffer->data());
 	// Extract the coverage buffer
+	extractVertexPlacementAsBitArray << <coverageExtractBlockDim, parseThreadsDim >> >(gridIntersectionRaw, &sdf, clusterDensity);
 	extractPointCloudAsBitArray << <coverageExtractBlockDim, parseThreadsDim >> >(pointCoverageRaw, &sdf, clusterDensity);
 	// Point to the partial extraction buffer
 	RenderPoint* partialExtractionRaw = thrust::raw_pointer_cast(partialExtractionBuffer->data());
@@ -282,7 +360,7 @@ SDFExtractor::extractDynamic(SDFDevice& sdf, CudaGLBufferMapping<RenderPoint>& m
 		{
 			for (int k = 0; k < clusterDensity; k += extractionClusterDensity)
 			{
-				createCloudFromBuffers << <partialExtractionBlockDim, parseThreadsDim >> > (partialExtractionRaw, pointCoverageRaw, pointCoverageRaw, extractionClusterDensity, clusterDensity, partialExtractionBuffer->size(), i * 4, j * 4, k * 4);
+				createCloudFromBuffers << <partialExtractionBlockDim, parseThreadsDim >> > (partialExtractionRaw, gridIntersectionRaw, pointCoverageRaw, pointCoverageRaw, extractionClusterDensity, clusterDensity, partialExtractionBuffer->size(), i * 4, j * 4, k * 4);
 				
 				//Improve performance by eliminating this copy to the CPU
 				int numberCreated = thrust::count_if(partialExtractionBuffer->begin(), partialExtractionBuffer->end(), is_not_zero());
@@ -311,7 +389,7 @@ SDFExtractor::extractRelative(SDFDevice& sdf, CudaGLBufferMapping<RenderPoint>& 
 	// Point to the coverage buffer
 	ExtractionBlock* pointCoverageRaw = thrust::raw_pointer_cast(pointCoverageBuffer->data());
 	// Extract the coverage buffer
-	extractPointCloudAsBitArray << <coverageExtractBlockDim, parseThreadsDim >> >(pointCoverageRaw, &sdf, clusterDensity);
+	//extractPointCloudAsBitArray << <coverageExtractBlockDim, parseThreadsDim >> >(pointCoverageRaw, &sdf, clusterDensity);
 	// Point to the partial extraction buffer
 	RenderPoint* partialExtractionRaw = thrust::raw_pointer_cast(partialExtractionBuffer->data());
 
@@ -323,7 +401,7 @@ SDFExtractor::extractRelative(SDFDevice& sdf, CudaGLBufferMapping<RenderPoint>& 
 		{
 			for (int k = 0; k < clusterDensity; k += extractionClusterDensity)
 			{
-				createCloudFromBuffers << <partialExtractionBlockDim, parseThreadsDim >> > (partialExtractionRaw, pointCoverageRaw, pointCoverageRaw, extractionClusterDensity, clusterDensity, partialExtractionBuffer->size(), i * 4, j * 4, k * 4);
+				//createCloudFromBuffers << <partialExtractionBlockDim, parseThreadsDim >> > (partialExtractionRaw, pointCoverageRaw, pointCoverageRaw, extractionClusterDensity, clusterDensity, partialExtractionBuffer->size(), i * 4, j * 4, k * 4);
 
 				//Improve performance by eliminating this copy to the CPU
 				int numberCreated = thrust::count_if(partialExtractionBuffer->begin(), partialExtractionBuffer->end(), is_not_zero());
