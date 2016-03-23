@@ -1,6 +1,90 @@
-﻿Build started 3/18/2016 2:55:08 AM.
+﻿Build started 3/22/2016 3:34:17 PM.
      1>Project "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\Valis.vcxproj" on node 2 (Build target(s)).
-     1>Link:
+     1>CudaBuild:
+         Compiling CUDA source file SDFHilbertExtractor.cu...
+         cmd.exe /C "C:\Users\wpger_000\AppData\Local\Temp\tmp070f06e52b4e4c2c84ada0ec68e4cf39.cmd"
+         "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_30,code=\"sm_30,compute_30\" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"     --keep-dir Debug -maxrregcount=0  --machine 32 --compile -cudart static  -g   -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MDd " -o Debug\SDFHilbertExtractor.cu.obj "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\SDFHilbertExtractor.cu"
+         
+         C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_30,code=\"sm_30,compute_30\" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"     --keep-dir Debug -maxrregcount=0  --machine 32 --compile -cudart static  -g   -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MDd " -o Debug\SDFHilbertExtractor.cu.obj "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\SDFHilbertExtractor.cu" 
+     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDSphere.cuh(41): warning : calling a __host__ function from a __host__ __device__ function is not allowed
+     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDTorus.cuh(45): warning : calling a __host__ function from a __host__ __device__ function is not allowed
+     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/SDFHilbertExtractor.cu(19): warning : missing return statement at end of non-void function "findIndex"
+     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/SDFHilbertExtractor.cu(18): warning : variable "index" was declared but never referenced
+     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/SDFHilbertExtractor.cu(149): warning : variable "isLegal" was declared but never referenced
+     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDSphere.cuh(41): warning : calling a __host__ function from a __host__ __device__ function is not allowed
+     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDTorus.cuh(45): warning : calling a __host__ function from a __host__ __device__ function is not allowed
+     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/SDFHilbertExtractor.cu(19): warning : missing return statement at end of non-void function "findIndex"
+     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/SDFHilbertExtractor.cu(18): warning : variable "index" was declared but never referenced
+     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/SDFHilbertExtractor.cu(149): warning : variable "isLegal" was declared but never referenced
+     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/SDFHilbertExtractor.cu(19): warning : missing return statement at end of non-void function "findIndex"
+     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/SDFHilbertExtractor.cu(18): warning : variable "index" was declared but never referenced
+     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/SDFHilbertExtractor.cu(149): warning : variable "isLegal" was declared but never referenced
+     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/SDFHilbertExtractor.cu(19): warning : missing return statement at end of non-void function "findIndex"
+     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/SDFHilbertExtractor.cu(18): warning : variable "index" was declared but never referenced
+     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/SDFHilbertExtractor.cu(149): warning : variable "isLegal" was declared but never referenced
+         SDFHilbertExtractor.cu
+     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/SDFHilbertExtractor.cu(210): warning C4018: '<' : signed/unsigned mismatch
+     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/SDFHilbertExtractor.cu(212): warning C4018: '<' : signed/unsigned mismatch
+     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/SDFHilbertExtractor.cu(214): warning C4018: '<' : signed/unsigned mismatch
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN64 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Application.cu Camera.cu Game.cu KDLeafNodeCollection.cu KeyboardCallback.cu ShaderProgram.cu TestScreen.cu
+         TestScreen.cu
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\thrust\system\detail\error_category.inl(102): warning C4996: 'strerror': This function or variable may be unsafe. Consider using strerror_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\string.h(168) : see declaration of 'strerror'
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\thrust\system\cuda\detail\bulk\detail\pointer_traits.hpp(55): warning C4800: 'unsigned int' : forcing value to bool 'true' or 'false' (performance warning)
+     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\sdfextractor.cuh(12): warning C4099: 'ExtractionBlock' : type name first seen using 'struct' now seen using 'class'
+                 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\renderpoint.cuh(10) : see declaration of 'ExtractionBlock'
+     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\sdfdevice.cuh(37): warning C4018: '<' : signed/unsigned mismatch
+         ShaderProgram.cu
+         KeyboardCallback.cu
+     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\keyboardcallback.cuh(7): warning C4099: 'GLFWwindow' : type name first seen using 'struct' now seen using 'class'
+                 c:\programming\libraries\glfw-3.1.2.bin.win32\glfw-3.1.2.bin.win32\include\glfw\glfw3.h(722) : see declaration of 'GLFWwindow'
+         KDLeafNodeCollection.cu
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\thrust\system\detail\error_category.inl(102): warning C4996: 'strerror': This function or variable may be unsafe. Consider using strerror_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\string.h(168) : see declaration of 'strerror'
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\thrust\system\cuda\detail\bulk\detail\pointer_traits.hpp(55): warning C4800: 'unsigned int' : forcing value to bool 'true' or 'false' (performance warning)
+         Game.cu
+         Camera.cu
+         Application.cu
+     1>c:\programming\libraries\glfw-3.1.2.bin.win32\glfw-3.1.2.bin.win32\include\glfw\glfw3.h(722): warning C4099: 'GLFWwindow' : type name first seen using 'class' now seen using 'struct'
+                 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\keyboardcallback.cuh(7) : see declaration of 'GLFWwindow'
+     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\application.cu(32): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\application.cu(37): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\application.cu(104): warning C4244: 'argument' : conversion from '__int64' to 'int', possible loss of data
+         Generating Code...
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Debug\Valis.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\wpger_000\Downloads\glfw-3.1.2.bin.WIN32.zip\glfw-3.1.2.bin.WIN32\lib-vc2013" /LIBPATH:"C:\Programming\Libraries\glew-1.13.0\bin\Release\Win32" /LIBPATH:"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\lib\Win32" cudart.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib glew32.lib glfw3.lib glfw3dll.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Debug\Valis.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Debug\Valis.lib" /MACHINE:X86 Debug\CarveSDPrimitive.cu.obj
+         Debug\Descriptor.cu.obj
+         Debug\Galaxy.cu.obj
+         Debug\IBO.cu.obj
+         Debug\kernel.cu.obj
+         Debug\MouseClickCallback.cu.obj
+         Debug\MouseMoveCallback.cu.obj
+         Debug\PBO.cu.obj
+         Debug\PlaceSDPrimitive.cu.obj
+         Debug\Player.cu.obj
+         Debug\SDFDevice.cu.obj
+         Debug\SDFExtractor.cu.obj
+         Debug\SDFHilbertExtractor.cu.obj
+         Debug\SDFHost.cu.obj
+         Debug\SDFRelativeExtractor.cu.obj
+         Debug\SDSphere.cu.obj
+         Debug\SDTorus.cu.obj
+         Debug\TestRelativeScreen.cu.obj
+         Debug\Texture2D.cu.obj
+         Debug\VAO.cu.obj
+         Debug\VBO.cu.obj
+         Debug\Application.obj
+         Debug\Camera.obj
+         Debug\Game.obj
+         Debug\KDLeafNodeCollection.obj
+         Debug\KeyboardCallback.obj
+         Debug\ShaderProgram.obj
+         Debug\TestScreen.obj
          Valis.vcxproj -> C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Debug\Valis.exe
        PostBuildEvent:
          echo copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart*.dll" "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Debug\"
@@ -14,4 +98,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.54
+Time Elapsed 00:00:39.98

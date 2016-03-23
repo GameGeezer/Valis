@@ -25,8 +25,8 @@ void main()
 	uint raw_z = (in_CompactData & 0x3F000) >> 12;
 
 	uint raw_nx = in_CompactData & 0x1C0000 >> 18;
-	uint raw_ny = in_CompactData & 0xE00000 >> 21;
-	uint raw_nz = in_CompactData & 0x7000000 >> 24;
+	uint raw_ny = (in_CompactData & 0xE00000) >> 21;
+	uint raw_nz = (in_CompactData & 0x7000000) >> 24;
 
 	float x = ((float(raw_x) + float(offsetX)) / gridResolution); //add the offset pased via texture
 	float y = ((float(raw_y) + float(offsetY)) / gridResolution);

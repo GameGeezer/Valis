@@ -7,7 +7,7 @@
 #include "CudaGLBufferMapping.cuh"
 #include "RenderPoint.cuh"
 #include "CompactRenderPoint.cuh"
-#include "CompactLocation.cuh"
+#include "ThreeCompact10BitUInts.cuh"
 
 #include <stdint.h>
 
@@ -25,7 +25,7 @@ public:
 	~SDFRelativeExtractor();
 
 	size_t
-	extract(SDFDevice& sdf, CudaGLBufferMapping<CompactRenderPoint>& mapping, CudaGLBufferMapping<CompactLocation>& pbo);
+		extract(SDFDevice& sdf, CudaGLBufferMapping<CompactRenderPoint>& mapping, CudaGLBufferMapping<ThreeCompact10BitUInts>& pbo);
 
 private:
 

@@ -16,13 +16,13 @@ void
 Player::update(int delta)
 {
 	if (isDPressed)
-		camera->moveRight(0.01f);
+		camera->moveRight(0.04f);
 	if (isAPressed)
-		camera->moveLeft(0.01f);
+		camera->moveLeft(0.04f);
 	if (isWPressed)
-		camera->moveForward(0.01f);
+		camera->moveForward(0.04f);
 	if (isSPressed)
-		camera->moveBackward(0.01f);
+		camera->moveBackward(0.04f);
 }
 
 void

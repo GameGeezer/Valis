@@ -57,6 +57,9 @@
       <Filter>game</Filter>
     </CudaCompile>
     <CudaCompile Include="TestRelativeScreen.cu" />
+    <CudaCompile Include="SDFHilbertExtractor.cu">
+      <Filter>game</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="framework">
@@ -308,12 +311,15 @@
     <ClInclude Include="SDFRelativeExtractor.cuh">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="CompactLocation.cuh">
-      <Filter>game</Filter>
-    </ClInclude>
     <ClInclude Include="TestRelativeScreen.cuh" />
     <ClInclude Include="BlendSDModification.cuh">
       <Filter>framework\src\distanceFields\modifications\public</Filter>
+    </ClInclude>
+    <ClInclude Include="SDFHilbertExtractor.cuh">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreeCompact10BitUInts.cuh">
+      <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

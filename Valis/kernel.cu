@@ -20,6 +20,7 @@
 
 #include "NumericBoolean.cuh"
 
+/*
 #define Morton uint64_t
 #define MortonHighestOrder uint64_t
 #define Direction int32_t
@@ -125,7 +126,7 @@ void testDetermineRange3(int32_t index, thrust::host_vector<uint64_t>& device_le
 
 	int x = 5;
 }
-
+*/
 int main()
 {
 	Screen* screen = new TestScreen();
@@ -133,7 +134,7 @@ int main()
 	Application* application = new Application(*game, "Test!", 640, 480);
 
 	application->start();
-	
+	/*
 	uint64_t highDifference = 5;
 	uint64_t lowDifference = 10;
 	int32_t direction = ((int32_t)((highDifference > lowDifference))) - ((int32_t)((highDifference < lowDifference)));
@@ -166,7 +167,7 @@ int main()
 	testDetermineRange3(10, device_leafNodes);
 	testDetermineRange3(11, device_leafNodes);
 	testDetermineRange3(12, device_leafNodes);
-
+	*/
 //	cout << "Hello, World!" << endl;
 	return 0;
 }

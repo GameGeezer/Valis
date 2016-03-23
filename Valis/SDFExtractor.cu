@@ -201,7 +201,7 @@ __global__ void createCloudFromBuffers(RenderPoint* d_output, ExtractionBlock * 
 
 
 	NumericBoolean coverageFlipped = isExtractionBlockBitFlipped(coverageBuffer, x, y, z, offsetX, offsetY, offsetZ, subsectionClusterDim, totalClusterDim);
-
+	/*
 	NumericBoolean bottomLeftBack = isExtractionBlockBitFlipped(gridIntersection, x, y, z, offsetX, offsetY, offsetZ, subsectionClusterDim, totalClusterDim);
 	NumericBoolean bottomRightBack = isExtractionBlockBitFlipped(gridIntersection, x + 1, y, z, offsetX + 1, offsetY, offsetZ, subsectionClusterDim, totalClusterDim);
 	NumericBoolean topLeftBack = isExtractionBlockBitFlipped(gridIntersection, x, y + 1, z, offsetX, offsetY + 1, offsetZ, subsectionClusterDim, totalClusterDim);
@@ -210,6 +210,7 @@ __global__ void createCloudFromBuffers(RenderPoint* d_output, ExtractionBlock * 
 	NumericBoolean BottmRightForward = isExtractionBlockBitFlipped(gridIntersection, x + 1, y, z + 1, offsetX + 1, offsetY, offsetZ + 1, subsectionClusterDim, totalClusterDim);
 	NumericBoolean TopLeftForward = isExtractionBlockBitFlipped(gridIntersection, x, y + 1, z + 1, offsetX, offsetY + 1, offsetZ + 1, subsectionClusterDim, totalClusterDim);
 	NumericBoolean TopRightForward = isExtractionBlockBitFlipped(gridIntersection, x + 1, y + 1, z + 1, offsetX + 1, offsetY + 1, offsetZ + 1, subsectionClusterDim, totalClusterDim);
+	*/
 	//NumericBoolean materialFlipped = isExtractionBlockBitFlipped(coverageBuffer, x, y, z, offsetX, offsetY, offsetZ, subsectionClusterDim, totalClusterDim);
 
 	NumericBoolean materialCoverageOverlap = numericGreaterThan_uint32_t(coverageFlipped, 0);
@@ -347,7 +348,7 @@ SDFExtractor::extractDynamic(SDFDevice& sdf, CudaGLBufferMapping<RenderPoint>& m
 	ExtractionBlock* gridIntersectionRaw = thrust::raw_pointer_cast(sdfGridIntersectionBuffer->data());
 	ExtractionBlock* pointCoverageRaw = thrust::raw_pointer_cast(pointCoverageBuffer->data());
 	// Extract the coverage buffer
-	extractVertexPlacementAsBitArray << <coverageExtractBlockDim, parseThreadsDim >> >(gridIntersectionRaw, &sdf, clusterDensity);
+	//extractVertexPlacementAsBitArray << <coverageExtractBlockDim, parseThreadsDim >> >(gridIntersectionRaw, &sdf, clusterDensity);
 	extractPointCloudAsBitArray << <coverageExtractBlockDim, parseThreadsDim >> >(pointCoverageRaw, &sdf, clusterDensity);
 	// Point to the partial extraction buffer
 	RenderPoint* partialExtractionRaw = thrust::raw_pointer_cast(partialExtractionBuffer->data());

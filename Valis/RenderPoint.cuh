@@ -13,7 +13,7 @@ struct ExtractionBlock
 
 struct RenderPoint
 {
-	float positionX, positionY, positionZ, normalX, normalY, normalZ;
+	float positionX, positionY, positionZ;
 //	int color;
 };
 

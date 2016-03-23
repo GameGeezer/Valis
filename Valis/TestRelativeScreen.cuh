@@ -6,15 +6,17 @@
 #include "cuda_runtime.h"
 
 #include "CompactRenderPoint.cuh"
-#include "CompactLocation.cuh"
+#include "ThreeCompact10BitUInts.cuh"
 #include "CudaGLBufferMapping.cuh"
 
 class ShaderProgram;
 class Camera;
 class Player;
-class SDFRelativeExtractor;
+class SDFHilbertExtractor;
 class IBO;
 class SDFDevice;
+
+typedef ThreeCompact10BitUInts CompactLocation;
 
 class TestRelativeScreen : public Screen
 {
@@ -41,7 +43,7 @@ class TestRelativeScreen : public Screen
 private:
 	ShaderProgram* shader;
 	Player* player;
-	SDFRelativeExtractor* extractor;
+	SDFHilbertExtractor* extractor;
 	SDFDevice* testSDFDevice;
 	CudaGLBufferMapping<CompactRenderPoint>* mapping;
 	CudaGLBufferMapping<CompactLocation>* pboMapping;

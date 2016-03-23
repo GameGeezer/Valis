@@ -64,25 +64,24 @@ TestScreen::onCreate()
 	player = new Player(*camera);
 
 	// Define an SDF to parse
-	SDSphere sdSphere(0.25f, glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
-	SDTorus sdTorus(0.31f, 0.1f, glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
+	SDSphere sdSphere(0.2f, glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
+	SDTorus sdTorus(0.31f, 0.15f, glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
 	SDTorus sdTorus2(0.2f, 0.1f, glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
 	place = new PlaceSDPrimitive();
 	carve = new CarveSDPrimitive();
 	testSDF = new SDFHost(&sdSphere, 30);
 	//testSDF->modify(&sdTorus2, carve);
 	//testSDF->modify(&sdTorus, place);
-	
 	testSDFDevice = testSDF->copyToDevice();
-
+	
 	
 
 	// Create the extractor
-	extractor = new SDFExtractor(24, 24);
+	extractor = new SDFExtractor(26, 26);
 
 	vbo = new VBO(10000000, BufferedObjectUsage::DYNAMIC_DRAW);
 	mapping = new CudaGLBufferMapping<RenderPoint>(*vbo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
-	
+	pointCount = extractor->extractDynamic(*testSDFDevice, *mapping);
 	
 	glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 }
@@ -109,13 +108,16 @@ void
 TestScreen::onUpdate(int delta)
 {
 	
-	SDTorus sdTorus(0.31f, 0.15f, glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.1f + spinOffset), glm::vec3(0, 1, 0), spinOffset);
-	testSDF->modify(&sdTorus, carve);
+	//SDTorus sdTorus(0.3f, 0.05f, glm::vec3(1.0f, 1.0f , 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1, 1, 1), 0);
+	//SDTorus sdTorus(0.3f, 0.1f, glm::vec3(1.0f / spinOffset, 1.0f / spinOffset, 1.0f / spinOffset), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1, 1, 1), spinOffset);
+	SDTorus sdTorus(0.2f, 0.1f, glm::vec3(0.5f, 1.0f, 0.5f), glm::vec3(0.5f, 0.0f + (spinOffset / 10), 0.5f), glm::vec3(1, 1, 1), spinOffset);
+	//SDSphere sdTorus(0.2f, glm::vec3(.4f, 1, .4f), glm::vec3(0.5f, 0.0f + (spinOffset / 10), 0.5f), glm::vec3(0, 1, 1), spinOffset);
+	testSDF->modify(&sdTorus, place);
 	testSDFDevice = testSDF->copyToDevice();
 	pointCount = extractor->extractDynamic(*testSDFDevice, *mapping);
-	spinOffset += 0.001f;
-	testSDF->popEdit();
-
+	spinOffset += 0.1f;
+	//testSDF->popEdit();
+	
 
 	player->update(delta);
 	glm::mat4 invViewProjection;
@@ -131,8 +133,8 @@ TestScreen::onUpdate(int delta)
 
 	vbo->bind();
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, sizeof(float) * 6, 0);
-	glNormalPointer(GL_FLOAT, sizeof(float) * 6, (void*) (sizeof(float) * 3));
+	glVertexPointer(3, GL_FLOAT, 0, 0);
+	//glNormalPointer(GL_FLOAT, sizeof(float) * 6, (void*) (sizeof(float) * 3));
 
 	glDrawArrays(GL_POINTS, 0, pointCount);
 	glDisableClientState(GL_VERTEX_ARRAY);

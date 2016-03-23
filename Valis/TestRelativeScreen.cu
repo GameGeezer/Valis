@@ -21,7 +21,7 @@
 #include "Player.cuh"
 
 #include "Descriptor.cuh"
-#include "SDFExtractor.cuh"
+#include "SDFHilbertExtractor.cuh"
 #include "RenderPoint.cuh"
 #include "IBO.cuh"
 
@@ -70,7 +70,7 @@ TestRelativeScreen::onCreate()
 	testSDFDevice = testSDF->copyToDevice();
 
 	// Create the extractor
-	extractor = new SDFRelativeExtractor(20, 16);
+	extractor = new SDFHilbertExtractor(20, 16);
 
 	ibo = new IBO(10000000, BufferedObjectUsage::DYNAMIC_DRAW);
 	pbo = new PBO(1000);

@@ -1,0 +1,64 @@
+﻿Build started 3/22/2016 3:52:49 PM.
+     1>Project "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\Valis.vcxproj" on node 2 (Build target(s)).
+     1>AddCudaCompileDeps:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\cl.exe /E /nologo /showIncludes /TP /D__CUDACC__ /DWIN32 /DWIN64 /D_DEBUG /D_CONSOLE /D_MBCS /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /I. /FIcuda_runtime.h /c "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\kernel.cu" 
+       CudaBuild:
+         Compiling CUDA source file kernel.cu...
+         cmd.exe /C "C:\Users\wpger_000\AppData\Local\Temp\tmp00e4d3d525da4750942fe81be12b677d.cmd"
+         "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile -cudart static  -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MDd " -o x64\Debug\kernel.cu.obj "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\kernel.cu"
+         
+         C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile -cudart static  -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MDd " -o x64\Debug\kernel.cu.obj "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\kernel.cu" 
+         kernel.cu
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/bulk/execution_policy.hpp(241): warning C4267: 'argument' : conversion from 'size_t' to 'thrust::system::cuda::detail::bulk_::parallel_group<thrust::system::cuda::detail::bulk_::agent<0x01>,0x00>::size_type', possible loss of data
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/bulk/execution_policy.hpp(303): warning C4267: 'argument' : conversion from 'size_t' to 'thrust::system::cuda::detail::bulk_::parallel_group<thrust::system::cuda::detail::bulk_::agent<0x01>,0x00>::size_type', possible loss of data
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/bulk/execution_policy.hpp(319): warning C4267: 'argument' : conversion from 'size_t' to 'thrust::system::cuda::detail::bulk_::parallel_group<thrust::system::cuda::detail::bulk_::agent<0x01>,0x00>::size_type', possible loss of data
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/bulk/execution_policy.hpp(439): warning C4267: 'argument' : conversion from 'size_t' to 'thrust::system::cuda::detail::bulk_::concurrent_group<thrust::system::cuda::detail::bulk_::agent<0x01>,0x00>::size_type', possible loss of data
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/bulk/execution_policy.hpp(250): warning C4267: 'argument' : conversion from 'size_t' to 'thrust::system::cuda::detail::bulk_::parallel_group<thrust::system::cuda::detail::bulk_::concurrent_group<thrust::system::cuda::detail::bulk_::agent<0x01>,0x00>,0x00>::size_type', possible loss of data
+                 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cuda/detail/bulk/execution_policy.hpp(625) : see reference to function template instantiation 'thrust::system::cuda::detail::bulk_::parallel_group<thrust::system::cuda::detail::bulk_::concurrent_group<thrust::system::cuda::detail::bulk_::agent<0x01>,0x00>,0x00> thrust::system::cuda::detail::bulk_::par<thrust::system::cuda::detail::bulk_::concurrent_group<thrust::system::cuda::detail::bulk_::agent<0x01>,0x00>>(ExecutionAgent,size_t)' being compiled
+                 with
+                 [
+                     ExecutionAgent=thrust::system::cuda::detail::bulk_::concurrent_group<thrust::system::cuda::detail::bulk_::agent<0x01>,0x00>
+                 ]
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\x64\Debug\Valis.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Programming\Libraries\glfw-3.1.2.bin.WIN64\lib-vc2013" /LIBPATH:"C:\Programming\Libraries\glew-1.13.0\bin\Release\x64" /LIBPATH:"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\lib\x64" cudart.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib glew32.lib glfw3.lib glfw3dll.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\x64\Debug\Valis.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\x64\Debug\Valis.lib" /MACHINE:X64 x64\Debug\CarveSDPrimitive.cu.obj
+         x64\Debug\Descriptor.cu.obj
+         x64\Debug\Galaxy.cu.obj
+         x64\Debug\IBO.cu.obj
+         x64\Debug\kernel.cu.obj
+         x64\Debug\MouseClickCallback.cu.obj
+         x64\Debug\MouseMoveCallback.cu.obj
+         x64\Debug\PBO.cu.obj
+         x64\Debug\PlaceSDPrimitive.cu.obj
+         x64\Debug\Player.cu.obj
+         x64\Debug\SDFDevice.cu.obj
+         x64\Debug\SDFExtractor.cu.obj
+         x64\Debug\SDFHilbertExtractor.cu.obj
+         x64\Debug\SDFHost.cu.obj
+         x64\Debug\SDFRelativeExtractor.cu.obj
+         x64\Debug\SDSphere.cu.obj
+         x64\Debug\SDTorus.cu.obj
+         x64\Debug\TestRelativeScreen.cu.obj
+         x64\Debug\Texture2D.cu.obj
+         x64\Debug\VAO.cu.obj
+         x64\Debug\VBO.cu.obj
+         x64\Debug\Application.obj
+         x64\Debug\Camera.obj
+         x64\Debug\Game.obj
+         x64\Debug\KDLeafNodeCollection.obj
+         x64\Debug\KeyboardCallback.obj
+         x64\Debug\ShaderProgram.obj
+         x64\Debug\TestScreen.obj
+         Valis.vcxproj -> C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\x64\Debug\Valis.exe
+       PostBuildEvent:
+         echo copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart*.dll" "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\x64\Debug\"
+         copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart*.dll" "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\x64\Debug\"
+         :VCEnd
+         copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart*.dll" "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\x64\Debug\"
+         C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart32_75.dll
+         C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart64_75.dll
+                 2 file(s) copied.
+     1>Done Building Project "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\Valis.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:12.16
