@@ -41,13 +41,13 @@ TestRelativeScreen::onCreate()
 {
 
 	// Load vertex shader
-	ifstream myfile("PointCloudRenderShader.vert");
+	ifstream myfile("MortonCompactedCloudRenderShader.vert");
 	std::stringstream buffer;
 	buffer << myfile.rdbuf();
 	string vertShader = buffer.str();
 
 	// Load fragment shader
-	ifstream myfile2("PointCloudRenderShader.frag");
+	ifstream myfile2("MortonCompactedCloudRenderShader.frag");
 	std::stringstream buffer2;
 	buffer2 << myfile2.rdbuf();
 	string fragShader = buffer2.str();
@@ -84,7 +84,7 @@ TestRelativeScreen::onCreate()
 	testSDFDevice = testSDF->copyToDevice();
 
 	// Create the extractor
-	extractor = new SDFHilbertExtractor(256, 64);
+	extractor = new SDFHilbertExtractor(30, 30);
 
 	ibo = new IBO(10000000, BufferedObjectUsage::DYNAMIC_DRAW);
 	pbo = new PBO(10000);
@@ -146,7 +146,7 @@ TestRelativeScreen::onUpdate(int delta)
 	shader->setUnifromMatrix4f(projectionLocation, viewProjection);
 
 	GLint resolutionLocation = shader->getUniformLocation("gridResolution");
-	shader->setUniformf(resolutionLocation, 128);
+	shader->setUniformf(resolutionLocation, 30);
 
 	GLint compactDataAttribute = shader->getAttributeLocation("in_CompactData");
 	
