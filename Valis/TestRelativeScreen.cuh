@@ -5,7 +5,7 @@
 #include "Screen.cuh"
 #include "cuda_runtime.h"
 
-#include "CompactRenderPoint.cuh"
+#include "CompactMortonPoint.cuh"
 #include "ThreeCompact10BitUInts.cuh"
 #include "CudaGLBufferMapping.cuh"
 
@@ -45,8 +45,8 @@ private:
 	Player* player;
 	SDFHilbertExtractor* extractor;
 	SDFDevice* testSDFDevice;
-	CudaGLBufferMapping<CompactRenderPoint>* mapping;
-	CudaGLBufferMapping<CompactLocation>* pboMapping;
+	CudaGLBufferMapping<CompactMortonPoint>* mapping;
+	CudaGLBufferMapping<uint64_t>* pboMapping;
 	PBO* pbo;
 	IBO* ibo;
 	int pointCount;

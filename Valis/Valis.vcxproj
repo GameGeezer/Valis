@@ -95,7 +95,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <CudaCompile>
       <Optimization>Od</Optimization>
       <FastMath>false</FastMath>
-      <GPUDebugInfo>false</GPUDebugInfo>
+      <GPUDebugInfo>true</GPUDebugInfo>
       <InterleaveSourceInPTX>false</InterleaveSourceInPTX>
       <CodeGeneration>compute_30,sm_30;%(CodeGeneration)</CodeGeneration>
     </CudaCompile>
@@ -194,6 +194,8 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Camera.cuh" />
     <ClInclude Include="CarveSDPrimitive.cuh" />
     <ClInclude Include="Color.cuh" />
+    <ClInclude Include="CompactMortonPoint.cuh" />
+    <ClInclude Include="Morton30.cuh" />
     <ClInclude Include="ThreeCompact10BitUInts.cuh" />
     <ClInclude Include="CompactRenderPoint.cuh" />
     <ClInclude Include="CompactRenderPointCluster.cuh" />
@@ -211,7 +213,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClInclude Include="KeyboardCallback.cuh" />
     <ClInclude Include="KeyboardListener.cuh" />
     <ClInclude Include="MathUtil.cuh" />
-    <ClInclude Include="Morton.cuh" />
+    <ClInclude Include="Morton64.cuh" />
     <ClInclude Include="MouseClickCallback.cuh" />
     <ClInclude Include="MouseClickListener.cuh" />
     <ClInclude Include="MouseMoveCallback.cuh" />
@@ -249,6 +251,8 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
   <ItemGroup>
     <None Include="BasicShader.frag" />
     <None Include="BasicShader.vert" />
+    <None Include="MortonCompactedCloudRenderShader.frag" />
+    <None Include="MortonCompactedCloudRenderShader.vert" />
     <None Include="PointCloudRenderShader.frag" />
     <None Include="PointCloudRenderShader.vert" />
   </ItemGroup>

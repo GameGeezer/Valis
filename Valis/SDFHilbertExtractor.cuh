@@ -8,16 +8,16 @@
 
 #include "CudaGLBufferMapping.cuh"
 #include "ThreeCompact10BitUInts.cuh"
-#include "CompactRenderPoint.cuh"
+#include "CompactMortonPoint.cuh"
 
 class SDFDevice;
 
-typedef ThreeCompact10BitUInts CompactLocation;
+typedef uint64_t WorldPositionMorton;
 typedef ThreeCompact10BitUInts CompactNormals;
 
 struct ExtractedPoint
 {
-	CompactLocation location;
+	uint64_t morton;
 	CompactNormals normals;
 };
 
@@ -30,13 +30,13 @@ public:
 	~SDFHilbertExtractor();
 
 	size_t
-	extract(SDFDevice& sdf, CudaGLBufferMapping<CompactRenderPoint>& mapping, CudaGLBufferMapping<CompactLocation>& pbo);
+	extract(SDFDevice& sdf, CudaGLBufferMapping<CompactMortonPoint>& mapping, CudaGLBufferMapping<WorldPositionMorton>& pbo);
 
 private:
 	thrust::device_vector< uint32_t >* areVerticiesOutsideIsoBuffer;
-	thrust::device_vector< ExtractedPoint >* mortonSortedPointsBuffer;
+	thrust::device_vector< ExtractedPoint >* mortonSortedPointsBuffer, *mortonSortedPointsCompactBuffer;
 
 	dim3 extractInMortonOrderBlockDim, extractInMortonOrderThreadDim;
-	uint32_t gridDimension, parseDimension;
+	uint32_t gridDimension, parseDimension, mortonSortedPointBlockSize, mortonSortedPointThreadSize;
 };
 #endif

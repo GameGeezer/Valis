@@ -32,6 +32,10 @@
 
 #include "BufferedObjectUsage.cuh"
 
+#include "Morton30.cuh"
+
+#include "CompactMortonPoint.cuh"
+
 void
 TestRelativeScreen::onCreate()
 {
@@ -60,6 +64,16 @@ TestRelativeScreen::onCreate()
 	// Create the player
 	player = new Player(*camera);
 
+	uint32_t morton = Morton30::encode(10, 5, 8);
+
+
+	CompactMortonPoint mortonPoint;
+	mortonPoint.pack(morton, 2, 4, 5);
+	uint32_t unpackMorton, unpackNX, unpackNY, unpackNZ;
+	mortonPoint.unpack(unpackMorton, unpackNX, unpackNY, unpackNZ);
+	uint32_t unpackX, unpackY, unpackZ;
+	Morton30::decode(unpackMorton, unpackX, unpackY, unpackZ);
+
 	// Define an SDF to parse
 	SDSphere sdSphere(0.25f, glm::vec3(1, 0.5f, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
 	SDTorus sdTorus(0.31f, 0.1f, glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 90);
@@ -70,12 +84,12 @@ TestRelativeScreen::onCreate()
 	testSDFDevice = testSDF->copyToDevice();
 
 	// Create the extractor
-	extractor = new SDFHilbertExtractor(20, 16);
+	extractor = new SDFHilbertExtractor(256, 64);
 
 	ibo = new IBO(10000000, BufferedObjectUsage::DYNAMIC_DRAW);
-	pbo = new PBO(1000);
-	pboMapping = new CudaGLBufferMapping<CompactLocation>(*pbo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
-	mapping = new CudaGLBufferMapping<CompactRenderPoint>(*ibo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
+	pbo = new PBO(10000);
+	pboMapping = new CudaGLBufferMapping<uint64_t>(*pbo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
+	mapping = new CudaGLBufferMapping<CompactMortonPoint>(*ibo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
 	pointCount = extractor->extract(*testSDFDevice, *mapping, *pboMapping);
 
 	glActiveTexture(GL_TEXTURE0);

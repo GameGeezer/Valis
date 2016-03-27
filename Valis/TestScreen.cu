@@ -1,89 +1,10 @@
 #include "TestScreen.cuh"
 
-#include <map>
-#include <glm/fwd.hpp>
-#include <glm/glm.hpp>
-#include <glm/mat4x4.hpp>
-#include <glm/ext.hpp>
-#include <glm/gtc/constants.hpp>
-
-#include <iostream>
-#include <fstream>
-#include <sstream>
-
-#include "GLLibraries.h"
-
-#include "SDFExtractor.cuh"
-
-#include <thrust/device_vector.h>
-#include <thrust/host_vector.h>
-
-#include "ShaderProgram.cuh"
-#include "Camera.cuh"
-#include "Player.cuh"
-
-#include "Descriptor.cuh"
-#include "SDFExtractor.cuh"
-#include "RenderPoint.cuh"
-#include "VBO.cuh"
-
-#include "SDFHost.cuh"
-#include "SDFDevice.cuh"
-#include "PlaceSDPrimitive.cuh"
-#include "CarveSDPrimitive.cuh"
-#include "SDSphere.cuh"
-
-#include "BufferedObjectUsage.cuh"
 
 void
 TestScreen::onCreate()
 {
 
-	// Load vertex shader
-	ifstream myfile("BasicShader.vert");
-	std::stringstream buffer;
-	buffer << myfile.rdbuf();
-	string vertShader = buffer.str();
-
-	// Load fragment shader
-	ifstream myfile2("BasicShader.frag");
-	std::stringstream buffer2;
-	buffer2 << myfile2.rdbuf();
-	string fragShader = buffer2.str();
-
-	// Create the shader
-	map<int, char *> attributes;
-	attributes.insert(pair<int, char*>(0, "in_Position"));
-	shader = new ShaderProgram(vertShader.c_str(), fragShader.c_str(), attributes);
-
-	// Create the camera
-	Camera* camera = new Camera(640, 680, 0.1f, 100.0f, 45.0f);
-	camera->translate(0, 0, 2);
-
-	// Create the player
-	player = new Player(*camera);
-
-	// Define an SDF to parse
-	SDSphere sdSphere(0.2f, glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
-	SDTorus sdTorus(0.31f, 0.15f, glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
-	SDTorus sdTorus2(0.2f, 0.1f, glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
-	place = new PlaceSDPrimitive();
-	carve = new CarveSDPrimitive();
-	testSDF = new SDFHost(&sdSphere, 30);
-	//testSDF->modify(&sdTorus2, carve);
-	//testSDF->modify(&sdTorus, place);
-	testSDFDevice = testSDF->copyToDevice();
-	
-	
-
-	// Create the extractor
-	extractor = new SDFExtractor(26, 26);
-
-	vbo = new VBO(10000000, BufferedObjectUsage::DYNAMIC_DRAW);
-	mapping = new CudaGLBufferMapping<RenderPoint>(*vbo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
-	pointCount = extractor->extractDynamic(*testSDFDevice, *mapping);
-	
-	glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 }
 
 void
@@ -107,40 +28,7 @@ TestScreen::onResume()
 void
 TestScreen::onUpdate(int delta)
 {
-	
-	//SDTorus sdTorus(0.3f, 0.05f, glm::vec3(1.0f, 1.0f , 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1, 1, 1), 0);
-	//SDTorus sdTorus(0.3f, 0.1f, glm::vec3(1.0f / spinOffset, 1.0f / spinOffset, 1.0f / spinOffset), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1, 1, 1), spinOffset);
-	SDTorus sdTorus(0.2f, 0.1f, glm::vec3(0.5f, 1.0f, 0.5f), glm::vec3(0.5f, 0.0f + (spinOffset / 10), 0.5f), glm::vec3(1, 1, 1), spinOffset);
-	//SDSphere sdTorus(0.2f, glm::vec3(.4f, 1, .4f), glm::vec3(0.5f, 0.0f + (spinOffset / 10), 0.5f), glm::vec3(0, 1, 1), spinOffset);
-	testSDF->modify(&sdTorus, place);
-	testSDFDevice = testSDF->copyToDevice();
-	pointCount = extractor->extractDynamic(*testSDFDevice, *mapping);
-	spinOffset += 0.1f;
-	//testSDF->popEdit();
-	
 
-	player->update(delta);
-	glm::mat4 invViewProjection;
-	player->camera->constructInverseViewProjection(invViewProjection);
-
-	glm::mat4 viewProjection;
-	player->camera->constructViewProjection(viewProjection);
-
-	shader->bind();
-
-	GLint projectionLocation = shader->getUniformLocation("projectionMatrix");
-	shader->setUnifromMatrix4f(projectionLocation, viewProjection);
-
-	vbo->bind();
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, 0);
-	//glNormalPointer(GL_FLOAT, sizeof(float) * 6, (void*) (sizeof(float) * 3));
-
-	glDrawArrays(GL_POINTS, 0, pointCount);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	vbo->unbind();
-
-	shader->unbind();
 }
 
 void
