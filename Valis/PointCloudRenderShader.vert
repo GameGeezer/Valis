@@ -1,20 +1,21 @@
 #version 450
 
-uniform usampler2D offsetTexture;
+uniform usampler1D offsetTexture;
 
 uniform mat4 projectionMatrix;
 
 uniform float gridResolution;
 
+uniform float offsetBufferSize;
+
 attribute uint in_CompactData;
-attribute int gl_VertexID;
 
 void main()
 {
-	float locationIndexX = (float(gl_VertexID) / 64.0f) / gridResolution;
-	uvec4 offsetLocation = texture2D(offsetTexture, vec2(locationIndexX, 0));
+	float locationIndexX = (float(gl_VertexID) / 64.0f) / offsetBufferSize;
+	uint compactOffsetLocation = texelFetch(offsetTexture, int(locationIndexX), 0).r;
 
-	uint compactOffsetLocation = offsetLocation.x | (offsetLocation.y << 8) | (offsetLocation.z << 16) | (offsetLocation.w << 24);
+	//uint compactOffsetLocation = offsetLocation.x | (offsetLocation.y << 8) | (offsetLocation.z << 16) | (offsetLocation.w << 24);
 
 	uint offsetX = compactOffsetLocation & 0x3FF;
 	uint offsetY = (compactOffsetLocation & 0xFFC00) >> 10;

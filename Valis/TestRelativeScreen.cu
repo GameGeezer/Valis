@@ -136,7 +136,7 @@ TestRelativeScreen::onUpdate(int delta)
 	shader->bind();
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo->getHandle());
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)400, (GLsizei)2, 0, GL_RGBA, GL_UNSIGNED_INT, nullptr);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)400, (GLsizei)1, 0, GL_RGBA, GL_UNSIGNED_INT, nullptr);
 	glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 	
 	GLint offsetTextureLocation = shader->getUniformLocation("offsetTexture");

@@ -208,6 +208,15 @@ struct is_not_zero_uint32_tRelative
 	}
 };
 
+struct is_not_zero_ThreeCompact10BitUInts_tRelative
+{
+	__host__ __device__
+		bool operator()(const ThreeCompact10BitUInts& point)
+	{
+		return point.compactData != 0;
+	}
+};
+
 
 size_t
 SDFRelativeExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactRenderPoint>& mapping, CudaGLBufferMapping<ThreeCompact10BitUInts>& pbo)
@@ -249,11 +258,11 @@ SDFRelativeExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactRenderP
 				thrust::sort(thrust::device, bufferPointerRaw + totalCreated, bufferPointerRaw + totalCreated + maxExtractedElements, is_less_Relative());
 				// multiple of 64 must be buffered
 				int extraSpaceToBuffer = (64 - (numberCreated & 63));
-				int numberOfPBOEntries = (numberCreated + extraSpaceToBuffer) / 64;
+				int numberOfPBOEntries = ((numberCreated + extraSpaceToBuffer)) / 64;
 				// Fill in the extra space with the last point
 				//thrust::fill(bufferPointerRaw + totalCreated + numberCreated, bufferPointerRaw + totalCreated + numberCreated + extraSpaceToBuffer, CompactRenderPoint());
 				writeOffsetPBO << <1, numberOfPBOEntries >> >(pboBufferPointerRaw + pboEntries, numberOfPBOEntries, offsetX, offsetY, offsetZ);
-
+				int numberCreated2 = thrust::count_if(pboBufferPointerDevice + pboEntries, pboBufferPointerDevice + pboEntries + numberOfPBOEntries, is_not_zero_ThreeCompact10BitUInts_tRelative());
 				pboEntries += numberOfPBOEntries;
 				totalCreated += (numberCreated + extraSpaceToBuffer);
 				/*
@@ -261,6 +270,9 @@ SDFRelativeExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactRenderP
 			}
 		}
 	}
+	ThreeCompact10BitUInts f;
+	f.pack(50, 100, 200);
+	thrust::fill(pboBufferPointerDevice, pboBufferPointerDevice + pboBufferLength, f);
 
 	mapping.unmap();
 	pbo.unmap();

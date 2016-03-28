@@ -60,6 +60,9 @@
     <CudaCompile Include="SDFHilbertExtractor.cu">
       <Filter>game</Filter>
     </CudaCompile>
+    <CudaCompile Include="Texture1D.cu">
+      <Filter>framework\src\graphics\opengl\private</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="framework">
@@ -326,6 +329,9 @@
     </ClInclude>
     <ClInclude Include="CompactMortonPoint.cuh">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture1D.cuh">
+      <Filter>framework\src\graphics\opengl\public</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

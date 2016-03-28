@@ -15,6 +15,7 @@ class Player;
 class SDFHilbertExtractor;
 class IBO;
 class SDFDevice;
+class Texture1D;
 
 typedef ThreeCompact10BitUInts CompactLocation;
 
@@ -49,6 +50,7 @@ private:
 	CudaGLBufferMapping<uint64_t>* pboMapping;
 	PBO* pbo;
 	IBO* ibo;
+	Texture1D* pboTexture;
 	int pointCount;
 };
 

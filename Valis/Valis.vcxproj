@@ -182,6 +182,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <CudaCompile Include="SDSphere.cu" />
     <CudaCompile Include="SDTorus.cu" />
     <CudaCompile Include="TestRelativeScreen.cu" />
+    <CudaCompile Include="Texture1D.cu" />
     <CudaCompile Include="Texture2D.cu" />
     <CudaCompile Include="VAO.cu" />
     <CudaCompile Include="VBO.cu" />
@@ -196,6 +197,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Color.cuh" />
     <ClInclude Include="CompactMortonPoint.cuh" />
     <ClInclude Include="Morton30.cuh" />
+    <ClInclude Include="Texture1D.cuh" />
     <ClInclude Include="ThreeCompact10BitUInts.cuh" />
     <ClInclude Include="CompactRenderPoint.cuh" />
     <ClInclude Include="CompactRenderPointCluster.cuh" />

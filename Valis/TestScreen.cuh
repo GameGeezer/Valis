@@ -22,28 +22,29 @@ class Player;
 class SDFRelativeExtractor;
 class IBO;
 class SDFDevice;
+class Texture1D;
 
 class TestScreen : public Screen
 {
-	__host__ void
+	void
 		onCreate() override;
 
-	__host__ void
+	void
 		onPause() override;
 
-	__host__ void
+	void
 		onLeave() override;
 
-	__host__ void
+	void
 		onResume() override;
 
-	__host__ void
+	void
 		onUpdate(int delta) override;
 
-	__host__ void
+	void
 		onResize(int width, int height) override;
 
-	__host__ void
+	void
 		onDestroy() override;
 private:
 	ShaderProgram* shader;
@@ -54,6 +55,7 @@ private:
 	CudaGLBufferMapping<ThreeCompact10BitUInts>* pboMapping;
 	PBO* pbo;
 	IBO* ibo;
+	Texture1D* pboTexture;
 	int pointCount;
 };
 

@@ -32,6 +32,8 @@
 
 #include "BufferedObjectUsage.cuh"
 
+#include "Texture1D.cuh"
+
 void
 TestScreen::onCreate()
 {
@@ -70,23 +72,25 @@ TestScreen::onCreate()
 	testSDFDevice = testSDF->copyToDevice();
 
 	// Create the extractor
-	extractor = new SDFRelativeExtractor(32, 16);
+	extractor = new SDFRelativeExtractor(32, 32);
 
-	ibo = new IBO(10000000, BufferedObjectUsage::DYNAMIC_DRAW);
-	pbo = new PBO(1000);
+	ibo = new IBO(100000000, BufferedObjectUsage::DYNAMIC_DRAW);
+	pbo = new PBO(100000);
 	pboMapping = new CudaGLBufferMapping<ThreeCompact10BitUInts>(*pbo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
 	mapping = new CudaGLBufferMapping<CompactRenderPoint>(*ibo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
 	pointCount = extractor->extract(*testSDFDevice, *mapping, *pboMapping);
 
+	pboTexture = new Texture1D(4000);
+
 	glActiveTexture(GL_TEXTURE0);
 	// This code is using the immediate mode texture object 0. Add an own texture object if needed.
-	glBindTexture(GL_TEXTURE_2D, 0); // Just use the immediate mode texture.
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // Don't sample the border color.
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glBindTexture(GL_TEXTURE_1D, 0); // Just use the immediate mode texture.
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // Don't sample the border color.
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE); // Not a texture. default is modulate.
+	//glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE); // Not a texture. default is modulate.
 
 	glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 }
@@ -119,11 +123,23 @@ TestScreen::onUpdate(int delta)
 	glm::mat4 viewProjection;
 	player->camera->constructViewProjection(viewProjection);
 
-	shader->bind();
+	
+	
+	glActiveTexture(GL_TEXTURE0);
+	pbo->bind();
+	pboTexture->bind();
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // Don't sample the border color.
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexSubImage1D(GL_TEXTURE_1D, 0, 0, (GLsizei)(pointCount + 63) / 64, GL_RED_INTEGER, GL_UNSIGNED_INT, NULL);
+	//glTexImage1D(GL_TEXTURE_1D, 0, GL_R32UI, (GLsizei)(pointCount + 63) / 64, 0, GL_RED_INTEGER, GL_UNSIGNED_INT, 0);
+	//glBindTexture(GL_TEXTURE_1D, 0);
 
-	glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo->getHandle());
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)400, (GLsizei)1, 0, GL_RGBA, GL_UNSIGNED_INT, nullptr);
-	glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+	//pbo->unbind();
+
+	shader->bind();
+	
 
 	GLint offsetTextureLocation = shader->getUniformLocation("offsetTexture");
 	shader->setUniform1i(offsetTextureLocation, 0);
@@ -133,6 +149,9 @@ TestScreen::onUpdate(int delta)
 
 	GLint resolutionLocation = shader->getUniformLocation("gridResolution");
 	shader->setUniformf(resolutionLocation, 128);
+
+	GLint offstSizeLocation = shader->getUniformLocation("offsetBufferSize");
+	shader->setUniformf(offstSizeLocation, (pointCount + 63) / 64);
 
 	GLint compactDataAttribute = shader->getAttributeLocation("in_CompactData");
 
