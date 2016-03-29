@@ -12,12 +12,12 @@
 
 class SDFDevice;
 
-typedef uint64_t WorldPositionMorton;
+typedef uint32_t WorldPositionMorton;
 typedef ThreeCompact10BitUInts CompactNormals;
 
 struct ExtractedPoint
 {
-	uint64_t morton;
+	uint32_t morton;
 	CompactNormals normals;
 };
 
@@ -30,7 +30,7 @@ public:
 	~SDFHilbertExtractor();
 
 	size_t
-	extract(SDFDevice& sdf, CudaGLBufferMapping<CompactMortonPoint>& mapping, CudaGLBufferMapping<WorldPositionMorton>& pbo);
+		extract(SDFDevice& sdf, CudaGLBufferMapping<CompactMortonPoint>& mapping, CudaGLBufferMapping<WorldPositionMorton>& pbo, uint32_t overlapSize);
 
 private:
 	thrust::device_vector< uint32_t >* areVerticiesOutsideIsoBuffer;
@@ -38,5 +38,7 @@ private:
 
 	dim3 extractInMortonOrderBlockDim, extractInMortonOrderThreadDim;
 	uint32_t gridDimension, parseDimension, mortonSortedPointBlockSize, mortonSortedPointThreadSize;
+
+	uint32_t* device_sizeBucket;
 };
 #endif

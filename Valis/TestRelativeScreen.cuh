@@ -47,7 +47,7 @@ private:
 	SDFHilbertExtractor* extractor;
 	SDFDevice* testSDFDevice;
 	CudaGLBufferMapping<CompactMortonPoint>* mapping;
-	CudaGLBufferMapping<uint64_t>* pboMapping;
+	CudaGLBufferMapping<uint32_t>* pboMapping;
 	PBO* pbo;
 	IBO* ibo;
 	Texture1D* pboTexture;

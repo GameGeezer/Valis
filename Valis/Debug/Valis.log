@@ -1,25 +1,25 @@
-﻿Build started 3/28/2016 12:41:26 PM.
+﻿Build started 3/28/2016 11:24:28 PM.
      1>Project "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\Valis.vcxproj" on node 2 (Build target(s)).
-     1>AddCudaCompileDeps:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\cl.exe /E /nologo /showIncludes /TP /D__CUDACC__ /DWIN32 /D_DEBUG /D_CONSOLE /D_MBCS /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /I. /FIcuda_runtime.h /c "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\SDFRelativeExtractor.cu" 
-       CudaBuild:
-         Compiling CUDA source file SDFRelativeExtractor.cu...
-         cmd.exe /C "C:\Users\wpger_000\AppData\Local\Temp\tmp9dc948ea587443678dfa9b80b0788f6a.cmd"
-         "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_30,code=\"sm_30,compute_30\" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"  -G   --keep-dir Debug -maxrregcount=0  --machine 32 --compile -cudart static  -g   -DWIN32 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MDd " -o Debug\SDFRelativeExtractor.cu.obj "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\SDFRelativeExtractor.cu"
+     1>CudaBuild:
+         Compiling CUDA source file TestRelativeScreen.cu...
+         cmd.exe /C "C:\Users\wpger_000\AppData\Local\Temp\tmpaf610720fb5940b4bfe671dcf34f43c8.cmd"
+         "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_30,code=\"sm_30,compute_30\" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"  -G   --keep-dir Debug -maxrregcount=0  --machine 32 --compile -cudart static  -g   -DWIN32 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MDd " -o Debug\TestRelativeScreen.cu.obj "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\TestRelativeScreen.cu"
          
-         C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_30,code=\"sm_30,compute_30\" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"  -G   --keep-dir Debug -maxrregcount=0  --machine 32 --compile -cudart static  -g   -DWIN32 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MDd " -o Debug\SDFRelativeExtractor.cu.obj "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\SDFRelativeExtractor.cu" 
-     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+         C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_30,code=\"sm_30,compute_30\" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"  -G   --keep-dir Debug -maxrregcount=0  --machine 32 --compile -cudart static  -g   -DWIN32 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MDd " -o Debug\TestRelativeScreen.cu.obj "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\TestRelativeScreen.cu" 
      1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDSphere.cuh(41): warning : calling a __host__ function from a __host__ __device__ function is not allowed
      1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDTorus.cuh(45): warning : calling a __host__ function from a __host__ __device__ function is not allowed
-     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\DistancePrimitive.cuh(21): warning : calling a __host__ function("DistancePrimitive::DistancePrimitive") from a __host__ __device__ function("DistancePrimitive::DistancePrimitive [subobject]") is not allowed
+     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDModification.cuh(15): warning : calling a __host__ function("SDModification::SDModification") from a __host__ __device__ function("SDModification::SDModification [subobject]") is not allowed
+     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDSphere.cuh(41): warning : calling a __host__ function("AABB::AABB") from a __host__ __device__ function("SDSphere::calculateBoundingVolume") is not allowed
+     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDTorus.cuh(45): warning : calling a __host__ function("AABB::AABB") from a __host__ __device__ function("SDTorus::calculateBoundingVolume") is not allowed
      1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDSphere.cuh(41): warning : calling a __host__ function from a __host__ __device__ function is not allowed
      1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDTorus.cuh(45): warning : calling a __host__ function from a __host__ __device__ function is not allowed
-     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
-     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
-         SDFRelativeExtractor.cu
-     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/SDFRelativeExtractor.cu(242): warning C4018: '<' : signed/unsigned mismatch
-     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/SDFRelativeExtractor.cu(244): warning C4018: '<' : signed/unsigned mismatch
-     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/SDFRelativeExtractor.cu(246): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\DistancePrimitive.cuh(21): warning : calling a __host__ function("DistancePrimitive::DistancePrimitive") from a __host__ __device__ function("DistancePrimitive::DistancePrimitive [subobject]") is not allowed
+     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDModification.cuh(15): warning : calling a __host__ function("SDModification::SDModification") from a __host__ __device__ function("SDModification::SDModification [subobject]") is not allowed
+     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDSphere.cuh(41): warning : calling a __host__ function("AABB::AABB") from a __host__ __device__ function("SDSphere::calculateBoundingVolume") is not allowed
+     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDTorus.cuh(45): warning : calling a __host__ function("AABB::AABB") from a __host__ __device__ function("SDTorus::calculateBoundingVolume") is not allowed
+         TestRelativeScreen.cu
+     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/TestRelativeScreen.cu(155): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Debug\Valis.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\wpger_000\Downloads\glfw-3.1.2.bin.WIN32.zip\glfw-3.1.2.bin.WIN32\lib-vc2013" /LIBPATH:"C:\Programming\Libraries\glew-1.13.0\bin\Release\Win32" /LIBPATH:"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\lib\Win32" cudart.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glu32.lib glew32.lib glfw3.lib glfw3dll.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Debug\Valis.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Debug\Valis.lib" /MACHINE:X86 Debug\CarveSDPrimitive.cu.obj
          Debug\Descriptor.cu.obj
@@ -63,4 +63,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:58.91
+Time Elapsed 00:00:14.76

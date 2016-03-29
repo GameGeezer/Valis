@@ -22,7 +22,7 @@
 
 #include "Descriptor.cuh"
 #include "SDFHilbertExtractor.cuh"
-#include "RenderPoint.cuh"
+#include "CompactMortonPoint.cuh"
 #include "IBO.cuh"
 
 #include "SDFHost.cuh"
@@ -32,9 +32,7 @@
 
 #include "BufferedObjectUsage.cuh"
 
-#include "Morton30.cuh"
-
-#include "CompactMortonPoint.cuh"
+#include "Texture1D.cuh"
 
 void
 TestRelativeScreen::onCreate()
@@ -64,16 +62,6 @@ TestRelativeScreen::onCreate()
 	// Create the player
 	player = new Player(*camera);
 
-	uint32_t morton = Morton30::encode(10, 5, 8);
-
-
-	CompactMortonPoint mortonPoint;
-	mortonPoint.pack(morton, 2, 4, 5);
-	uint32_t unpackMorton, unpackNX, unpackNY, unpackNZ;
-	mortonPoint.unpack(unpackMorton, unpackNX, unpackNY, unpackNZ);
-	uint32_t unpackX, unpackY, unpackZ;
-	Morton30::decode(unpackMorton, unpackX, unpackY, unpackZ);
-
 	// Define an SDF to parse
 	SDSphere sdSphere(0.25f, glm::vec3(1, 0.5f, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
 	SDTorus sdTorus(0.31f, 0.1f, glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 90);
@@ -84,24 +72,25 @@ TestRelativeScreen::onCreate()
 	testSDFDevice = testSDF->copyToDevice();
 
 	// Create the extractor
-	extractor = new SDFHilbertExtractor(30, 30);
+	extractor = new SDFHilbertExtractor(256, 128);
 
 	ibo = new IBO(10000000, BufferedObjectUsage::DYNAMIC_DRAW);
-	pbo = new PBO(10000);
-	pboMapping = new CudaGLBufferMapping<uint64_t>(*pbo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
+	pbo = new PBO(100000);
+	pboMapping = new CudaGLBufferMapping<uint32_t>(*pbo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
 	mapping = new CudaGLBufferMapping<CompactMortonPoint>(*ibo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
-	pointCount = extractor->extract(*testSDFDevice, *mapping, *pboMapping);
+
+	pboTexture = new Texture1D(4000);
 
 	glActiveTexture(GL_TEXTURE0);
 	// This code is using the immediate mode texture object 0. Add an own texture object if needed.
-	glBindTexture(GL_TEXTURE_2D, 0); // Just use the immediate mode texture.
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // Don't sample the border color.
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glBindTexture(GL_TEXTURE_1D, 0); // Just use the immediate mode texture.
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // Don't sample the border color.
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE); // Not a texture. default is modulate.
-
+	//glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE); // Not a texture. default is modulate.
+	pointCount = extractor->extract(*testSDFDevice, *mapping, *pboMapping, 8);
 	glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 }
 
@@ -126,6 +115,10 @@ TestRelativeScreen::onResume()
 void
 TestRelativeScreen::onUpdate(int delta)
 {
+
+	
+
+
 	player->update(delta);
 	glm::mat4 invViewProjection;
 	player->camera->constructInverseViewProjection(invViewProjection);
@@ -133,12 +126,22 @@ TestRelativeScreen::onUpdate(int delta)
 	glm::mat4 viewProjection;
 	player->camera->constructViewProjection(viewProjection);
 
+	glActiveTexture(GL_TEXTURE0);
+	pbo->bind();
+	pboTexture->bind();
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // Don't sample the border color.
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexSubImage1D(GL_TEXTURE_1D, 0, 0, (GLsizei)(pointCount + 63) / 64, GL_RED_INTEGER, GL_UNSIGNED_INT, NULL);
+	//glTexImage1D(GL_TEXTURE_1D, 0, GL_R32UI, (GLsizei)(pointCount + 63) / 64, 0, GL_RED_INTEGER, GL_UNSIGNED_INT, 0);
+	//glBindTexture(GL_TEXTURE_1D, 0);
+
+	//pbo->unbind();
+
 	shader->bind();
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo->getHandle());
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)400, (GLsizei)1, 0, GL_RGBA, GL_UNSIGNED_INT, nullptr);
-	glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
-	
+
+
 	GLint offsetTextureLocation = shader->getUniformLocation("offsetTexture");
 	shader->setUniform1i(offsetTextureLocation, 0);
 
@@ -146,14 +149,17 @@ TestRelativeScreen::onUpdate(int delta)
 	shader->setUnifromMatrix4f(projectionLocation, viewProjection);
 
 	GLint resolutionLocation = shader->getUniformLocation("gridResolution");
-	shader->setUniformf(resolutionLocation, 30);
+	shader->setUniformf(resolutionLocation, 128);
+
+	GLint offstSizeLocation = shader->getUniformLocation("offsetBufferSize");
+	shader->setUniformf(offstSizeLocation, (pointCount + 63) / 64);
 
 	GLint compactDataAttribute = shader->getAttributeLocation("in_CompactData");
-	
+
 	ibo->bind();
 	glEnableVertexAttribArray(compactDataAttribute);
 	glEnableClientState(GL_VERTEX_ARRAY);
-	
+
 	glVertexAttribIPointer(compactDataAttribute, 1, GL_UNSIGNED_INT, 0, (void*)(sizeof(uint32_t) * 0));
 
 	glDrawArrays(GL_POINTS, 0, pointCount);

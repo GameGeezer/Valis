@@ -9,7 +9,7 @@
 #include "NumericBoolean.cuh"
 
 #include "SDFDevice.cuh"
-#include "Morton64.cuh"
+#include "Morton30.cuh"
 
 
 __device__ __inline__ uint32_t
@@ -82,7 +82,7 @@ extractPointsInMortonOrder(ExtractedPoint *d_output, SDFDevice *sdf, uint32_t *v
 		return;
 	}
 
-	uint64_t index = Morton64::encode(x, y, z);
+	uint32_t index = Morton30::encode(x, y, z);
 	
 	float divisionsAsFloat = ((float)gridDimension);
 
@@ -121,7 +121,7 @@ extractPointsInMortonOrder(ExtractedPoint *d_output, SDFDevice *sdf, uint32_t *v
 	NumericBoolean shouldGeneratePoint = numericLessThan_float(distance, cellDimension) * numericGreaterThan_float(distance, 0);
 
 	//d_output[index].point.pack(localX * shouldGeneratePoint, localY * shouldGeneratePoint, localZ * shouldGeneratePoint, 0, 0, 0);
-	d_output[index].morton = Morton64::encode(offsetX , offsetY, offsetZ);
+	d_output[index].morton = Morton30::encode(offsetX , offsetY, offsetZ);
 	d_output[index].morton *= shouldGeneratePoint;
 }
 
@@ -161,7 +161,7 @@ clusterPoints(CompactMortonPoint* renderPointBuffer, WorldPositionMorton* offset
 	for (uint32_t i = 0; i < 64; ++i)
 	{
 		uint64_t upperMorton = sortedPoints[startingIndex + i].morton;
-		uint64_t highestDifferent = Morton64::highestOrderBitDifferent(baseMorton, upperMorton);
+		uint64_t highestDifferent = Morton30::highestOrderBitDifferent(baseMorton, upperMorton);
 		// Make sure the highest bit different is less than x is 64
 		NumericBoolean isWithingBounds = numericLessThan_uint32_t(highestDifferent, 0x40000);
 		// Subtract the base morton from the upper morton so relative offset can be stored
@@ -218,7 +218,7 @@ findEndOfWrittenWorldMortons(WorldPositionMorton* bufferBegin, size_t bufferLeng
 
 ///TODO
 __global__ void
-countCompactMortons(CompactMortonPoint* bufferBegin, size_t bufferLength, CompactMortonPoint* out_bufferDataEnd)
+countCompactMortons(CompactMortonPoint* bufferBegin, size_t bufferLength, uint32_t* out_size)
 {
 	uint32_t x = (blockIdx.x * blockDim.x + threadIdx.x);
 	// One higher than index x is being checked
@@ -232,7 +232,7 @@ countCompactMortons(CompactMortonPoint* bufferBegin, size_t bufferLength, Compac
 
 	if (lowerHasValue && !upperHasValue)
 	{
-		out_bufferDataEnd = &(bufferBegin[x]);
+		*out_size = x; // out_bufferDataEnd = &(bufferBegin[x]);
 	}
 }
 
@@ -275,10 +275,11 @@ SDFHilbertExtractor::SDFHilbertExtractor(uint32_t gridDimension, uint32_t parseD
 	areVerticiesOutsideIsoBuffer(new thrust::device_vector< uint32_t >((parseDimension + 2) * (parseDimension + 2) * (parseDimension + 2)))
 {
 	mortonSortedPointBlockSize = (mortonSortedPointsBuffer->size() + 255) / 256;
+	cudaMalloc((void**)&device_sizeBucket, sizeof(uint32_t));
 }
 
 size_t
-SDFHilbertExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactMortonPoint>& mapping, CudaGLBufferMapping<WorldPositionMorton>& pbo)
+SDFHilbertExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactMortonPoint>& mapping, CudaGLBufferMapping<WorldPositionMorton>& pbo, uint32_t overlapSize)
 {
 	mapping.map();
 	size_t bufferLength = mapping.getSizeInBytes() / sizeof(CompactMortonPoint);
@@ -286,7 +287,7 @@ SDFHilbertExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactMortonPo
 	CompactMortonPoint* bufferPointerEndRaw = thrust::raw_pointer_cast(mapping.getDeviceOutput()) + bufferLength;
 	thrust::device_ptr<CompactMortonPoint> bufferPointerDevice = thrust::device_pointer_cast(mapping.getDeviceOutput());
 	uint32_t compactMortonBlockSize = ((bufferLength + 255) / 256), compactMortonThreadSize = 256;
-	thrust::fill(bufferPointerDevice, bufferPointerDevice + bufferLength, CompactMortonPoint());
+	//thrust::fill(bufferPointerDevice, bufferPointerDevice + bufferLength, CompactMortonPoint());
 
 	pbo.map();
 	size_t pboBufferLength = pbo.getSizeInBytes() / sizeof(WorldPositionMorton);
@@ -294,11 +295,14 @@ SDFHilbertExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactMortonPo
 	WorldPositionMorton* pboBufferPointerEndRaw = thrust::raw_pointer_cast(pbo.getDeviceOutput()) + pboBufferLength;
 	thrust::device_ptr<WorldPositionMorton> pboBufferPointerDevice = thrust::device_pointer_cast(pbo.getDeviceOutput());
 	uint32_t worldPositionBlockSize = ((pboBufferLength + 255) / 256), worldPositionThreadSize = 256;
-	thrust::fill(pboBufferPointerDevice, pboBufferPointerDevice + pboBufferLength, 0);
+	//thrust::fill(pboBufferPointerDevice, pboBufferPointerDevice + pboBufferLength, 0);
 
 	ExtractedPoint* mortenSortedPointsRaw = thrust::raw_pointer_cast(mortonSortedPointsBuffer->data());
 	ExtractedPoint* mortenSortedPointsEndRaw = thrust::raw_pointer_cast(mortonSortedPointsBuffer->data()) + mortonSortedPointsBuffer->size();
 	uint32_t* isVertexOusideIsoBufferRaw = thrust::raw_pointer_cast(areVerticiesOutsideIsoBuffer->data());
+
+	ExtractedPoint* mortonSortedBegin = thrust::raw_pointer_cast(mortonSortedPointsCompactBuffer->data());
+	ExtractedPoint* mortonSortedEnd = mortonSortedBegin + mortonSortedPointsCompactBuffer->size();
 
 	CompactMortonPoint* endOfWrittenCompactMortons = bufferPointerRaw;
 	WorldPositionMorton* endOfWrittenWorldMortons = pboBufferPointerRaw;
@@ -309,12 +313,11 @@ SDFHilbertExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactMortonPo
 		{
 			for (int k = 0; k < gridDimension; k += parseDimension)
 			{
+				areVerticesOutsideIsosurface << <extractInMortonOrderBlockDim, extractInMortonOrderThreadDim >> > (isVertexOusideIsoBufferRaw, &sdf, gridDimension, parseDimension, i, j, k);
 				extractPointsInMortonOrder << <extractInMortonOrderBlockDim, extractInMortonOrderThreadDim >> >(mortenSortedPointsRaw, &sdf, isVertexOusideIsoBufferRaw, gridDimension, parseDimension, i, j, k);
 				//int numberCreated = thrust::count_if(mortonSortedPointsBuffer->begin(), mortonSortedPointsBuffer->end(), is_extracted_not_zero());
 				thrust::copy_if(thrust::device, mortonSortedPointsBuffer->begin(), mortonSortedPointsBuffer->end(), mortonSortedPointsCompactBuffer->begin(), is_extracted_not_zero());
-				ExtractedPoint* mortonSortedBegin = thrust::raw_pointer_cast(mortonSortedPointsCompactBuffer->data());
-				ExtractedPoint* mortonSortedEnd = mortonSortedBegin + mortonSortedPointsCompactBuffer->size();
-				clusterPoints << < mortonSortedPointBlockSize, mortonSortedPointThreadSize >> >(endOfWrittenCompactMortons, endOfWrittenWorldMortons, mortonSortedBegin, 0, bufferPointerEndRaw, pboBufferPointerEndRaw, mortonSortedEnd);
+				clusterPoints << < mortonSortedPointBlockSize, mortonSortedPointThreadSize >> >(endOfWrittenCompactMortons, endOfWrittenWorldMortons, mortonSortedBegin, overlapSize, bufferPointerEndRaw, pboBufferPointerEndRaw, mortonSortedEnd);
 
 				findEndOfWrittenCompactMortons << <compactMortonBlockSize, compactMortonThreadSize>> >(bufferPointerRaw, bufferLength, endOfWrittenCompactMortons);
 				findEndOfWrittenWorldMortons << <worldPositionBlockSize, worldPositionThreadSize >> >(pboBufferPointerRaw, pboBufferLength, endOfWrittenWorldMortons);
@@ -322,11 +325,14 @@ SDFHilbertExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactMortonPo
 		}
 	}
 
-	int numberCreated = thrust::count_if(bufferPointerDevice, bufferPointerDevice + bufferLength, is_morton_point_not_zero());
+	uint32_t size = 0;
+	countCompactMortons << <compactMortonBlockSize, compactMortonThreadSize >> >(bufferPointerRaw, bufferLength, device_sizeBucket);
+	//int numberCreated = thrust::count_if(bufferPointerDevice, bufferPointerDevice + bufferLength, is_morton_point_not_zero());
+	cudaMemcpy(&size, device_sizeBucket, sizeof(int), cudaMemcpyDeviceToHost);
 
 	mapping.unmap();
 	pbo.unmap();
 
 
-	return numberCreated;
+	return size;
 }
