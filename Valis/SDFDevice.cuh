@@ -11,6 +11,7 @@
 #include "SDSphere.cuh"
 #include "SDTorus.cuh"
 #include "SDCube.cuh"
+#include "SDCylinder.cuh"
 #include "GLMUtil.cuh"
 #include "CudaHelper.cuh"
 #include "BlendSDModification.cuh"
@@ -70,6 +71,12 @@ public:
 
 				return distanceFromCube(glm::vec4(position, 1), cubeCast->transform, cubeCast->corner);
 			}
+			case 3:
+			{
+				SDCylinder *cylinderCast = ((SDCylinder*)primitive);
+
+				return distanceFromCylinder(glm::vec4(position, 1), cylinderCast->transform, cylinderCast->dimensions);
+			}
 		}
 
 		return 0.0f;
@@ -114,6 +121,13 @@ public:
 		return fminf(fmaxf(d.x, fmaxf(d.y, d.z)), 0.0) + GLMUtil::length(glm::vec3(fmaxf(d.x, 0), fmaxf(d.y, 0), fmaxf(d.z, 0)));
 	}
 
+	__host__ __device__ inline float
+		distanceFromCylinder(glm::vec4 point, glm::mat4 transform, glm::vec3 dimensions)
+	{
+		point = transform * point;
+		return glm::length(glm::vec2(point.x, point.z) - glm::vec2(dimensions.x, dimensions.y)) - dimensions.z;
+	}
+
 	__device__ float
 	selectModificationFunction(SDModification* modification, float distance1, float distance2)
 	{
@@ -155,6 +169,9 @@ public:
 		float h = glm::clamp(0.5 + 0.5*(modifierDistance - originalDistance) / k, 0.0, 1.0);
 		return glm::mix(modifierDistance, originalDistance, h) - k * h * (1.0 - h);
 	}
+
+
+
 
 	size_t modificationCount;
 	DistancePrimitive** primitives;

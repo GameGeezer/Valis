@@ -74,12 +74,12 @@ TestRelativeScreen::onCreate()
 	// Create the extractor
 	extractor = new SDFHilbertExtractor(128, 128);
 
-	ibo = new IBO(300000, BufferedObjectUsage::DYNAMIC_DRAW);
-	pbo = new PBO(4000);
+	ibo = new IBO(1000000, BufferedObjectUsage::DYNAMIC_DRAW);
+	pbo = new PBO(16000);
 	pboMapping = new CudaGLBufferMapping<uint32_t>(*pbo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
 	mapping = new CudaGLBufferMapping<CompactMortonPoint>(*ibo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
 
-	pboTexture = new Texture1D(10000);
+	pboTexture = new Texture1D(16000);
 
 
 	//glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE); // Not a texture. default is modulate.

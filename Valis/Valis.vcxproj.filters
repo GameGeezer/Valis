@@ -323,6 +323,12 @@
     <ClInclude Include="SDCube.cuh">
       <Filter>framework\src\distanceFields\primitives\public</Filter>
     </ClInclude>
+    <ClInclude Include="SDCylinder.cuh">
+      <Filter>framework\src\distanceFields\primitives\public</Filter>
+    </ClInclude>
+    <ClInclude Include="SDCappedCylinder.cuh">
+      <Filter>framework\src\distanceFields\primitives\public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cu">

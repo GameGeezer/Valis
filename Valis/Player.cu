@@ -58,22 +58,27 @@ Player::update(int delta)
 
 	
 
-	glm::vec4 position = glm::inverse(*(camera->getView())) * glm::vec4(0, 0, -0.5f, 1);
+	glm::vec4 position = glm::inverse(*(camera->getView())) * glm::vec4(0, 0, -1.0f, 1);
 
 	if (brushType == 1)
 	{
 		SDSphere sdSphere(0.1f, scale, glm::vec3(position.x, position.y, position.z), glm::vec3(0, 1, 0), 0);
 		hostEditSDF->modify(&sdSphere, currentMod);
 	}
-	if (brushType == 2)
+	else if (brushType == 2)
 	{
 		SDTorus sdTorus(0.1f, 0.025f, scale, glm::vec3(position.x, position.y, position.z), glm::vec3(0, 1, 0), 0);
 		hostEditSDF->modify(&sdTorus, currentMod);
 	}
-	if (brushType == 3)
+	else if(brushType == 3)
 	{
 		SDCube sdCube(glm::vec3(0.1f, 0.1f, 0.1f), scale, glm::vec3(position.x, position.y, position.z), glm::vec3(0, 1, 0), 0);
 		hostEditSDF->modify(&sdCube, currentMod);
+	}
+	else if (brushType == 4)
+	{
+		SDCylinder sdCylinder(glm::vec3(0.05f, 0.05f, 0.05f), scale, glm::vec3(position.x, position.y, position.z), glm::vec3(0, 1, 0), 0);
+		hostEditSDF->modify(&sdCylinder, currentMod);
 	}
 	
 	deviceEditSDF = hostEditSDF->copyToDevice();
@@ -138,6 +143,8 @@ Player::onKeyPress(int keyCode)
 		brushType = 2;
 	if (keyCode == GLFW_KEY_3)
 		brushType = 3;
+	if (keyCode == GLFW_KEY_4)
+		brushType = 4;
 
 	if (keyCode == GLFW_KEY_Z)
 		hostEditSDF->popEdit();
@@ -186,22 +193,27 @@ Player::onMousePress(MouseButton button, float posX, float posY)
 		{
 			lastPlaceTime = currentFrame;
 
-			glm::vec4 position = glm::inverse(*(camera->getView())) * glm::vec4(0, 0, -0.5f, 1);
+			glm::vec4 position = glm::inverse(*(camera->getView())) * glm::vec4(0, 0, -1.0f, 1);
 
 			if (brushType == 1)
 			{
 				SDSphere sdSphere(0.1f, scale, glm::vec3(position.x, position.y, position.z), glm::vec3(0, 1, 0), 0);
 				hostEditSDF->modify(&sdSphere, currentMod);
 			}
-			if (brushType == 2)
+			else if(brushType == 2)
 			{
 				SDTorus sdTorus(0.1f, 0.025f, scale, glm::vec3(position.x, position.y, position.z), glm::vec3(0, 1, 0), 0);
 				hostEditSDF->modify(&sdTorus, currentMod);
 			}
-			if (brushType == 3)
+			else if(brushType == 3)
 			{
 				SDCube sdCube(glm::vec3(0.1f, 0.1f, 0.1f), scale, glm::vec3(position.x, position.y, position.z), glm::vec3(0, 1, 0), 0);
 				hostEditSDF->modify(&sdCube, currentMod);
+			}
+			else if (brushType == 4)
+			{
+				SDCylinder sdCylinder(glm::vec3(0.05f, 0.05f, 0.05f), scale, glm::vec3(position.x, position.y, position.z), glm::vec3(0, 1, 0), 0);
+				hostEditSDF->modify(&sdCylinder, currentMod);
 			}
 
 		}

@@ -278,7 +278,9 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Color.cuh" />
     <ClInclude Include="CompactMortonPoint.cuh" />
     <ClInclude Include="Morton30.cuh" />
+    <ClInclude Include="SDCappedCylinder.cuh" />
     <ClInclude Include="SDCube.cuh" />
+    <ClInclude Include="SDCylinder.cuh" />
     <ClInclude Include="Texture1D.cuh" />
     <ClInclude Include="ThreeCompact10BitUInts.cuh" />
     <ClInclude Include="CompactRenderPoint.cuh" />
