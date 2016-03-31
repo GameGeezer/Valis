@@ -5,12 +5,16 @@
 
 #include "SDModification.cuh"
 
+#include <glm/glm.hpp>
+
 class BlendSDModification : public SDModification
 {
 public:
+	float smoothness;
+
 
 	__host__ __device__
-		BlendSDModification() : SDModification(1)
+		BlendSDModification(float smoothness) : SDModification(2), smoothness(smoothness)
 	{
 
 	}
@@ -27,9 +31,10 @@ public:
 	}
 
 	__host__ __device__ inline float
-		modify(float originalDistance, float modifierDistance)
+		modify(float originalDistance, float modifierDistance, float k)
 	{
-		return fmaxf(originalDistance, -modifierDistance);
+		float h = glm::clamp(0.5 + 0.5*(modifierDistance - originalDistance) / k, 0.0, 1.0);
+		return glm::mix(modifierDistance, originalDistance, h) - k * h * (1.0 - h);
 	}
 };
 

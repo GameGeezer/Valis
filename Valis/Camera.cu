@@ -105,3 +105,9 @@ Camera::getView()
 {
 	return &view;
 }
+
+glm::vec3
+Camera::getPosition()
+{
+	return position;
+}

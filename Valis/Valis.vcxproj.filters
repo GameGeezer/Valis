@@ -5,9 +5,6 @@
     <CudaCompile Include="Player.cu">
       <Filter>game</Filter>
     </CudaCompile>
-    <CudaCompile Include="SDFExtractor.cu">
-      <Filter>game</Filter>
-    </CudaCompile>
     <CudaCompile Include="Descriptor.cu">
       <Filter>framework\src\graphics\opengl\private</Filter>
     </CudaCompile>
@@ -52,9 +49,6 @@
     </CudaCompile>
     <CudaCompile Include="VBO.cu">
       <Filter>framework\src\graphics\opengl\private</Filter>
-    </CudaCompile>
-    <CudaCompile Include="SDFRelativeExtractor.cu">
-      <Filter>game</Filter>
     </CudaCompile>
     <CudaCompile Include="TestRelativeScreen.cu" />
     <CudaCompile Include="SDFHilbertExtractor.cu">
@@ -184,7 +178,6 @@
     <ClInclude Include="GLLibraries.h">
       <Filter>framework</Filter>
     </ClInclude>
-    <ClInclude Include="TestScreen.cuh" />
     <ClInclude Include="Screen.cuh">
       <Filter>framework\src\window\public</Filter>
     </ClInclude>
@@ -235,9 +228,6 @@
     </ClInclude>
     <ClInclude Include="AABB.cuh">
       <Filter>framework\src\math</Filter>
-    </ClInclude>
-    <ClInclude Include="SDFExtractor.cuh">
-      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="RenderPoint.cuh">
       <Filter>game</Filter>
@@ -308,9 +298,6 @@
     <ClInclude Include="CompactRenderPointCluster.cuh">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="SDFRelativeExtractor.cuh">
-      <Filter>game</Filter>
-    </ClInclude>
     <ClInclude Include="TestRelativeScreen.cuh" />
     <ClInclude Include="BlendSDModification.cuh">
       <Filter>framework\src\distanceFields\modifications\public</Filter>
@@ -333,9 +320,11 @@
     <ClInclude Include="Texture1D.cuh">
       <Filter>framework\src\graphics\opengl\public</Filter>
     </ClInclude>
+    <ClInclude Include="SDCube.cuh">
+      <Filter>framework\src\distanceFields\primitives\public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TestScreen.cu" />
     <ClCompile Include="Game.cu">
       <Filter>framework\src\window\private</Filter>
     </ClCompile>

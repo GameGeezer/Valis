@@ -9,7 +9,6 @@
 
 #include "Application.cuh"
 #include "Game.cuh"
-#include "TestScreen.cuh"
 #include "TestRelativeScreen.cuh"
 
 #include "Color.cuh"
@@ -131,7 +130,7 @@ int main()
 {
 	Screen* screen = new TestRelativeScreen();
 	Game* game = new Game(*screen);
-	Application* application = new Application(*game, "Test!", 640, 480);
+	Application* application = new Application(*game, "Test!", 900, 700);
 
 	application->start();
 	/*

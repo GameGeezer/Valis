@@ -15,7 +15,9 @@ class Player;
 class SDFHilbertExtractor;
 class IBO;
 class SDFDevice;
+class SDFHost;
 class Texture1D;
+class SDModification;
 
 typedef ThreeCompact10BitUInts CompactLocation;
 
@@ -46,12 +48,15 @@ private:
 	Player* player;
 	SDFHilbertExtractor* extractor;
 	SDFDevice* testSDFDevice;
+	SDFHost* testSDF;
+	SDModification* place;
 	CudaGLBufferMapping<CompactMortonPoint>* mapping;
 	CudaGLBufferMapping<uint32_t>* pboMapping;
 	PBO* pbo;
 	IBO* ibo;
 	Texture1D* pboTexture;
 	int pointCount;
+	float testOffset = 0.0f;
 };
 
 

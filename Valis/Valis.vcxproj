@@ -9,6 +9,14 @@
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="optimized|Win32">
+      <Configuration>optimized</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="optimized|x64">
+      <Configuration>optimized</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
@@ -29,7 +37,19 @@
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='optimized|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='optimized|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
@@ -56,7 +76,13 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='optimized|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='optimized|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -71,7 +97,17 @@
     <IncludePath>C:\Programming\Libraries\glew-1.13.0\include;C:\Programming\Libraries\glfw-3.1.2.bin.WIN32\glfw-3.1.2.bin.WIN32\include;C:\Programming\Libraries\glm-0.9.7.2\glm;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Programming\Libraries\glew-1.13.0\lib\Release\Win32;C:\Programming\Libraries\glfw-3.1.2.bin.WIN32\glfw-3.1.2.bin.WIN32\lib-vc2013;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='optimized|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Programming\Libraries\glew-1.13.0\include;C:\Programming\Libraries\glfw-3.1.2.bin.WIN32\glfw-3.1.2.bin.WIN32\include;C:\Programming\Libraries\glm-0.9.7.2\glm;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Programming\Libraries\glew-1.13.0\lib\Release\Win32;C:\Programming\Libraries\glfw-3.1.2.bin.WIN32\glfw-3.1.2.bin.WIN32\lib-vc2013;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Programming\Libraries\glew-1.13.0\include;C:\Programming\Libraries\glfw-3.1.2.bin.WIN64\include;C:\Programming\Libraries\glm-0.9.7.2\glm;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Programming\Libraries\glew-1.13.0\lib\Release\x64;C:\Programming\Libraries\glfw-3.1.2.bin.WIN64\lib-vc2013;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='optimized|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>C:\Programming\Libraries\glew-1.13.0\include;C:\Programming\Libraries\glfw-3.1.2.bin.WIN64\include;C:\Programming\Libraries\glm-0.9.7.2\glm;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Programming\Libraries\glew-1.13.0\lib\Release\x64;C:\Programming\Libraries\glfw-3.1.2.bin.WIN64\lib-vc2013;$(LibraryPath)</LibraryPath>
@@ -81,6 +117,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -100,7 +137,53 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
       <CodeGeneration>compute_30,sm_30;%(CodeGeneration)</CodeGeneration>
     </CudaCompile>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='optimized|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>cudart.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;opengl32.lib;glu32.lib;glew32.lib;glfw3.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\wpger_000\Downloads\glfw-3.1.2.bin.WIN32.zip\glfw-3.1.2.bin.WIN32\lib-vc2013;C:\Programming\Libraries\glew-1.13.0\bin\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>echo copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"
+copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
+    <CudaCompile>
+      <Optimization>O2</Optimization>
+      <FastMath>false</FastMath>
+      <GPUDebugInfo>false</GPUDebugInfo>
+      <InterleaveSourceInPTX>false</InterleaveSourceInPTX>
+      <CodeGeneration>compute_30,sm_30;%(CodeGeneration)</CodeGeneration>
+    </CudaCompile>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;WIN64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>cudart.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;opengl32.lib;glu32.lib;glew32.lib;glfw3.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Programming\Libraries\glfw-3.1.2.bin.WIN64\lib-vc2013;C:\Programming\Libraries\glew-1.13.0\bin\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>echo copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"
+copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
+    <CudaCompile>
+      <TargetMachinePlatform>64</TargetMachinePlatform>
+    </CudaCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='optimized|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
@@ -175,10 +258,8 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <CudaCompile Include="PlaceSDPrimitive.cu" />
     <CudaCompile Include="Player.cu" />
     <CudaCompile Include="SDFDevice.cu" />
-    <CudaCompile Include="SDFExtractor.cu" />
     <CudaCompile Include="SDFHilbertExtractor.cu" />
     <CudaCompile Include="SDFHost.cu" />
-    <CudaCompile Include="SDFRelativeExtractor.cu" />
     <CudaCompile Include="SDSphere.cu" />
     <CudaCompile Include="SDTorus.cu" />
     <CudaCompile Include="TestRelativeScreen.cu" />
@@ -197,6 +278,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Color.cuh" />
     <ClInclude Include="CompactMortonPoint.cuh" />
     <ClInclude Include="Morton30.cuh" />
+    <ClInclude Include="SDCube.cuh" />
     <ClInclude Include="Texture1D.cuh" />
     <ClInclude Include="ThreeCompact10BitUInts.cuh" />
     <ClInclude Include="CompactRenderPoint.cuh" />
@@ -227,16 +309,13 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClInclude Include="RenderPoint.cuh" />
     <ClInclude Include="Screen.cuh" />
     <ClInclude Include="SDFDevice.cuh" />
-    <ClInclude Include="SDFExtractor.cuh" />
     <ClInclude Include="SDFHilbertExtractor.cuh" />
     <ClInclude Include="SDFHost.cuh" />
-    <ClInclude Include="SDFRelativeExtractor.cuh" />
     <ClInclude Include="SDModification.cuh" />
     <ClInclude Include="SDSphere.cuh" />
     <ClInclude Include="SDTorus.cuh" />
     <ClInclude Include="ShaderProgram.cuh" />
     <ClInclude Include="TestRelativeScreen.cuh" />
-    <ClInclude Include="TestScreen.cuh" />
     <ClInclude Include="Texture2D.cuh" />
     <ClInclude Include="VAO.cuh" />
     <ClInclude Include="VBO.cuh" />
@@ -248,7 +327,6 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClCompile Include="KDLeafNodeCollection.cu" />
     <ClCompile Include="KeyboardCallback.cu" />
     <ClCompile Include="ShaderProgram.cu" />
-    <ClCompile Include="TestScreen.cu" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BasicShader.frag" />

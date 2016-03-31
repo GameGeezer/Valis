@@ -1,7 +1,11 @@
 #ifndef VALIS_GALAXY_CUH
 #define VALIS_GALAXY_CUH
 
-class VBO;
+#include <glm/mat4x4.hpp>
+
+class IBO;
+class PBO;
+class ShaderProgram;
 
 class Galaxy
 {
@@ -11,8 +15,13 @@ public:
 
 	~Galaxy();
 
+	void
+		render(ShaderProgram& shader, glm::mat4& viewProjection);
+
 private:
-	VBO* pointsVBO;
+	IBO* points;
+	PBO* pointOffsets;
+	size_t starCount;
 };
 
 #endif

@@ -44,6 +44,9 @@ public:
 	__host__ glm::mat4*
 	getView();
 
+	__host__  glm::vec3
+	getPosition();
+
 private:
 	__host__ void
 	updateProjection();

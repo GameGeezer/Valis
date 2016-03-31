@@ -39,6 +39,6 @@ private:
 	dim3 extractInMortonOrderBlockDim, extractInMortonOrderThreadDim;
 	uint32_t gridDimension, parseDimension, mortonSortedPointBlockSize, mortonSortedPointThreadSize;
 
-	uint32_t* device_sizeBucket;
+	uint32_t* device_worldMortonSizeBucket, *device_compactMortonSizeBucket;
 };
 #endif

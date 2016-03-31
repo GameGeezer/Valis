@@ -10,6 +10,8 @@ uniform float offsetBufferSize;
 
 attribute uint in_CompactData;
 
+varying vec3 pass_Normal;
+
 uint compactBy3(in uint value)
 {
 	value &= 0x09249249;
@@ -23,6 +25,24 @@ uint compactBy3(in uint value)
 	value &= 0x000003ff;
 
 	return value;
+}
+
+float findNormalDirection(in uint value)
+{
+	float normal;
+	normal = 1.0f - 0.25f * float(value);
+	/*
+	normal += float(value == 0) * 1.0f;
+	normal += float(value == 1) * 1.0f;
+	normal += float(value == 2) * 1.0f;
+	normal += float(value == 3) * 1.0f;
+	normal += float(value == 4) * 1.0f;
+	normal += float(value == 5) * 1.0f;
+	normal += float(value == 6) * 1.0f;
+	normal += float(value == 7) * 1.0f;
+	normal += float(value == 8) * -1.0f;
+	*/
+	return normal;
 }
 
 void main()
@@ -48,10 +68,11 @@ void main()
 	float y = ((float(raw_y)) / gridResolution);
 	float z = ((float(raw_z)) / gridResolution);
 
-	float nx = float(raw_nx);
-	float ny = float(raw_ny);
-	float nz = float(raw_nz);
+	float nx = findNormalDirection(raw_nx);
+	float ny = findNormalDirection(raw_ny);
+	float nz = findNormalDirection(raw_nz);
 
 	gl_Position = projectionMatrix * vec4(x, y, z, 1);
+	pass_Normal = vec3(nx, ny, nz);
 	gl_PointSize  = 0.61803398f;
 }

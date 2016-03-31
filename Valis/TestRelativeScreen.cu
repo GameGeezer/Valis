@@ -11,8 +11,6 @@
 
 #include "GLLibraries.h"
 
-#include "SDFRelativeExtractor.cuh"
-
 #include <thrust/device_vector.h>
 #include <thrust/host_vector.h>
 
@@ -29,6 +27,7 @@
 #include "SDFDevice.cuh"
 #include "PlaceSDPrimitive.cuh"
 #include "SDSphere.cuh"
+#include "SDCube.cuh"
 
 #include "BufferedObjectUsage.cuh"
 
@@ -65,32 +64,26 @@ TestRelativeScreen::onCreate()
 	// Define an SDF to parse
 	SDSphere sdSphere(0.25f, glm::vec3(1, 0.5f, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
 	SDTorus sdTorus(0.31f, 0.1f, glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 90);
+	SDCube sdCube(glm::vec3(0.1f, 0.1f, 0.1f), glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
 	//SDTorus sdTorus2(0.33f, 0.07f, glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
-	SDModification* place = new PlaceSDPrimitive();
-	SDFHost* testSDF = new SDFHost(&sdSphere, 30);
+	place = new PlaceSDPrimitive();
+	testSDF = new SDFHost(&sdCube, 30);
 	testSDF->modify(&sdTorus, place);
 	testSDFDevice = testSDF->copyToDevice();
 
 	// Create the extractor
-	extractor = new SDFHilbertExtractor(256, 128);
+	extractor = new SDFHilbertExtractor(128, 128);
 
-	ibo = new IBO(10000000, BufferedObjectUsage::DYNAMIC_DRAW);
+	ibo = new IBO(1000000, BufferedObjectUsage::DYNAMIC_DRAW);
 	pbo = new PBO(100000);
 	pboMapping = new CudaGLBufferMapping<uint32_t>(*pbo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
 	mapping = new CudaGLBufferMapping<CompactMortonPoint>(*ibo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
 
-	pboTexture = new Texture1D(4000);
+	pboTexture = new Texture1D(10000);
 
-	glActiveTexture(GL_TEXTURE0);
-	// This code is using the immediate mode texture object 0. Add an own texture object if needed.
-	glBindTexture(GL_TEXTURE_1D, 0); // Just use the immediate mode texture.
-	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // Don't sample the border color.
-	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 	//glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE); // Not a texture. default is modulate.
-	pointCount = extractor->extract(*testSDFDevice, *mapping, *pboMapping, 8);
+	
 	glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 }
 
@@ -115,11 +108,18 @@ TestRelativeScreen::onResume()
 void
 TestRelativeScreen::onUpdate(int delta)
 {
+	player->update(delta);
+
+	testOffset += 0.01f;
+	SDTorus sdTorus2(0.33f, 0.07f, glm::vec3(1, 1, 1), glm::vec3(testOffset, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
+	testSDF->modify(&sdTorus2, place);
+	testSDFDevice = testSDF->copyToDevice();
+
+	testSDF->popEdit();
+
+	pointCount = extractor->extract(*(player->deviceEditSDF), *mapping, *pboMapping, 8);
 
 	
-
-
-	player->update(delta);
 	glm::mat4 invViewProjection;
 	player->camera->constructInverseViewProjection(invViewProjection);
 

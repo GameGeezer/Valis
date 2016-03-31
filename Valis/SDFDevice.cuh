@@ -10,8 +10,10 @@
 #include "SDModification.cuh"
 #include "SDSphere.cuh"
 #include "SDTorus.cuh"
+#include "SDCube.cuh"
 #include "GLMUtil.cuh"
 #include "CudaHelper.cuh"
+#include "BlendSDModification.cuh"
 
 class SDFDevice
 {
@@ -62,6 +64,12 @@ public:
 				float distance2 = distanceFromTorus(glm::vec4(position, 1), torusCast->transform, torusCast->dimensions);
 				return distance2;
 			}
+			case 2:
+			{
+				SDCube *cubeCast = ((SDCube*)primitive);
+
+				return distanceFromCube(glm::vec4(position, 1), cubeCast->transform, cubeCast->corner);
+			}
 		}
 
 		return 0.0f;
@@ -98,16 +106,33 @@ public:
 		return GLMUtil::length(q) - dimensions.y;
 	}
 
+	__host__ __device__ inline float
+	distanceFromCube(glm::vec4 point, glm::mat4 transform, glm::vec3 corner)
+	{
+		point = transform * point;
+		glm::vec3 d = glm::vec3(abs(point.x), abs(point.y), abs(point.z)) - corner;
+		return fminf(fmaxf(d.x, fmaxf(d.y, d.z)), 0.0) + GLMUtil::length(glm::vec3(fmaxf(d.x, 0), fmaxf(d.y, 0), fmaxf(d.z, 0)));
+	}
+
 	__device__ float
 	selectModificationFunction(SDModification* modification, float distance1, float distance2)
 	{
 		switch (modification->functionId)
 		{
 			case 0:
+			{
 				//PlaceSDPrimitive *placeCast = ((PlaceSDPrimitive*)modification);
 				return placeModification(distance1, distance2);
+			}
 			case 1:
+			{
 				return carveModification(distance1, distance2);
+			}
+			case 2:
+			{
+				BlendSDModification *blendCast = ((BlendSDModification*)modification);
+				return blendModification(distance1, distance2, blendCast->smoothness);
+			}
 		}
 		return 0;
 	}
@@ -122,6 +147,13 @@ public:
 		carveModification(float originalDistance, float modifierDistance)
 	{
 		return fmaxf(originalDistance, -modifierDistance);
+	}
+
+	__device__ float
+	blendModification(float originalDistance, float modifierDistance, float k)
+	{
+		float h = glm::clamp(0.5 + 0.5*(modifierDistance - originalDistance) / k, 0.0, 1.0);
+		return glm::mix(modifierDistance, originalDistance, h) - k * h * (1.0 - h);
 	}
 
 	size_t modificationCount;

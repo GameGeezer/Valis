@@ -17,8 +17,6 @@ public:
 	__host__ virtual inline SDModification*
 	copyToDevice() = 0;
 
-	__host__ __device__ virtual inline float
-	modify(float originalDistance, float modifierDistance) = 0;
 };
 
 #endif
