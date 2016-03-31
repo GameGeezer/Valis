@@ -394,6 +394,36 @@ c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\type_vec2.inl
 C:\Programming\Libraries\glm-0.9.7.2\glm\glm\vec3.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/type_vec3.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\type_vec3.inl
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\chrono
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\limits
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\ymath.h
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\cfloat
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\float.h
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtwrn.h
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\climits
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\cwchar
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\wchar.h
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\swprintf.inl
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xstddef
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\initializer_list
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\ratio
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdint.h
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\type_traits
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xrefwrap
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\utility
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\iosfwd
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\cstdio
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\cstring
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdbg.h
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\thr/xtimec.h
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\thr/xthrcommon.h
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\KeyboardListener.cuh
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\MouseClickListener.cuh
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\GLLibraries.h
@@ -406,20 +436,6 @@ C:\Program Files (x86)\Windows Kits\8.1\Include\um\GL/gl.h
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\MouseMoveListener.cuh
 C:\Programming\Libraries\glm-0.9.7.2\glm\glm\glm.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/_fixes.hpp
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\climits
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\cfloat
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\float.h
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtwrn.h
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\limits
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\ymath.h
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\cwchar
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\wchar.h
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\swprintf.inl
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xstddef
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\initializer_list
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\cassert
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\assert.h
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
@@ -498,13 +514,9 @@ C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\istream
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\ostream
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\ios
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xlocnum
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\cstdio
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\streambuf
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xiosbase
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xlocale
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\cstring
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdexcept
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\exception
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\eh.h
@@ -515,12 +527,6 @@ C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xstring
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xmemory0
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\new
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xutility
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\utility
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\iosfwd
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdbg.h
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\type_traits
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xrefwrap
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xatomic0.h
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\intrin.h
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
@@ -554,12 +560,6 @@ C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\cerrno
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\errno.h
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\share.h
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\chrono
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\ratio
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdint.h
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\thr/xtimec.h
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\thr/xthrcommon.h
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\thread
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\functional
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xfunctional

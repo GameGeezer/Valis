@@ -74,8 +74,8 @@ TestRelativeScreen::onCreate()
 	// Create the extractor
 	extractor = new SDFHilbertExtractor(128, 128);
 
-	ibo = new IBO(1000000, BufferedObjectUsage::DYNAMIC_DRAW);
-	pbo = new PBO(100000);
+	ibo = new IBO(300000, BufferedObjectUsage::DYNAMIC_DRAW);
+	pbo = new PBO(4000);
 	pboMapping = new CudaGLBufferMapping<uint32_t>(*pbo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
 	mapping = new CudaGLBufferMapping<CompactMortonPoint>(*ibo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
 
@@ -109,13 +109,6 @@ void
 TestRelativeScreen::onUpdate(int delta)
 {
 	player->update(delta);
-
-	testOffset += 0.01f;
-	SDTorus sdTorus2(0.33f, 0.07f, glm::vec3(1, 1, 1), glm::vec3(testOffset, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
-	testSDF->modify(&sdTorus2, place);
-	testSDFDevice = testSDF->copyToDevice();
-
-	testSDF->popEdit();
 
 	pointCount = extractor->extract(*(player->deviceEditSDF), *mapping, *pboMapping, 8);
 

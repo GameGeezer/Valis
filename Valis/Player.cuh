@@ -3,6 +3,7 @@
 
 #include <glm\vec2.hpp>
 #include <glm\vec3.hpp>
+#include <chrono>
 
 #include "KeyboardListener.cuh"
 #include "MouseClickListener.cuh"
@@ -15,6 +16,8 @@ class PlaceSDPrimitive;
 class CarveSDPrimitive;
 class BlendSDModification;
 class SDModification;
+
+using namespace std::chrono;
 
 class Player : public KeyboardListener, public MouseClickListener, public MouseMoveListener
 {
@@ -47,7 +50,7 @@ public:
 
 private:
 	glm::vec2 lastMousePosition, lastMouseClickPosition;
-	bool isLeftMousePressed = false, isWPressed = false, isAPressed = false, isSPressed = false, isDPressed = false, isKPressed = false, isLPressed = false, isOPressed = false, isPPressed = false;
+	bool isLeftMousePressed = false, isRightMousePressed = false, isWPressed = false, isAPressed = false, isSPressed = false, isDPressed = false, isKPressed = false, isLPressed = false, isOPressed = false, isPPressed = false;
 
 	glm::vec3 scale;
 	
@@ -56,6 +59,8 @@ private:
 	CarveSDPrimitive* carve;
 	BlendSDModification* blend;
 	SDModification * currentMod;
+	milliseconds lastPlaceTime;
+	int brushType = 1;
 };
 
 #endif

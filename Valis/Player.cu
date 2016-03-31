@@ -30,6 +30,8 @@ Player::Player(Camera& camera) : camera(&camera), scale(glm::vec3(1, 1, 1))
 	SDCube sdCube(glm::vec3(0.1f, 0.1f, 0.1f), glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
 	hostEditSDF = new SDFHost(&sdCube, 30);
 	deviceEditSDF = hostEditSDF->copyToDevice();
+
+	lastPlaceTime = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
 }
 
 void
@@ -54,10 +56,26 @@ Player::update(int delta)
 	if (isPPressed)
 		scale += 0.05f;
 
+	
+
 	glm::vec4 position = glm::inverse(*(camera->getView())) * glm::vec4(0, 0, -0.5f, 1);
 
-	SDCube sdCube(glm::vec3(0.1f, 0.1f, 0.1f), scale, glm::vec3(position.x, position.y, position.z), glm::vec3(0, 1, 0), 0);
-	hostEditSDF->modify(&sdCube, currentMod);
+	if (brushType == 1)
+	{
+		SDSphere sdSphere(0.1f, scale, glm::vec3(position.x, position.y, position.z), glm::vec3(0, 1, 0), 0);
+		hostEditSDF->modify(&sdSphere, currentMod);
+	}
+	if (brushType == 2)
+	{
+		SDTorus sdTorus(0.1f, 0.025f, scale, glm::vec3(position.x, position.y, position.z), glm::vec3(0, 1, 0), 0);
+		hostEditSDF->modify(&sdTorus, currentMod);
+	}
+	if (brushType == 3)
+	{
+		SDCube sdCube(glm::vec3(0.1f, 0.1f, 0.1f), scale, glm::vec3(position.x, position.y, position.z), glm::vec3(0, 1, 0), 0);
+		hostEditSDF->modify(&sdCube, currentMod);
+	}
+	
 	deviceEditSDF = hostEditSDF->copyToDevice();
 	hostEditSDF->popEdit();
 }
@@ -114,8 +132,17 @@ Player::onKeyPress(int keyCode)
 	if (keyCode == GLFW_KEY_P)
 		isPPressed = true;
 
+	if (keyCode == GLFW_KEY_1)
+		brushType = 1;
+	if (keyCode == GLFW_KEY_2)
+		brushType = 2;
+	if (keyCode == GLFW_KEY_3)
+		brushType = 3;
+
 	if (keyCode == GLFW_KEY_Z)
 		hostEditSDF->popEdit();
+
+
 }
 
 void
@@ -131,6 +158,11 @@ Player::onMouseRelease(MouseButton button, float posX, float posY)
 	{
 		isLeftMousePressed = false;
 	}
+	if (button == MouseButton::RIGHT)
+	{
+		isRightMousePressed = false;
+	}
+
 	
 }
 
@@ -145,14 +177,35 @@ Player::onMousePress(MouseButton button, float posX, float posY)
 		isLeftMousePressed = true;
 	}
 
-	else if (button == MouseButton::RIGHT)
+	if (button == MouseButton::RIGHT)
 	{
-		glm::vec4 position = glm::inverse(*(camera->getView())) * glm::vec4(0, 0, -0.5f, 1);
+		milliseconds currentFrame = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
+		milliseconds delta = currentFrame - lastPlaceTime;
 
-		SDCube sdCube(glm::vec3(0.1f, 0.1f, 0.1f), scale, glm::vec3(position.x, position.y, position.z), glm::vec3(0, 1, 0), 0);
-		hostEditSDF->modify(&sdCube, currentMod);
+		if (delta.count() > 100)
+		{
+			lastPlaceTime = currentFrame;
+
+			glm::vec4 position = glm::inverse(*(camera->getView())) * glm::vec4(0, 0, -0.5f, 1);
+
+			if (brushType == 1)
+			{
+				SDSphere sdSphere(0.1f, scale, glm::vec3(position.x, position.y, position.z), glm::vec3(0, 1, 0), 0);
+				hostEditSDF->modify(&sdSphere, currentMod);
+			}
+			if (brushType == 2)
+			{
+				SDTorus sdTorus(0.1f, 0.025f, scale, glm::vec3(position.x, position.y, position.z), glm::vec3(0, 1, 0), 0);
+				hostEditSDF->modify(&sdTorus, currentMod);
+			}
+			if (brushType == 3)
+			{
+				SDCube sdCube(glm::vec3(0.1f, 0.1f, 0.1f), scale, glm::vec3(position.x, position.y, position.z), glm::vec3(0, 1, 0), 0);
+				hostEditSDF->modify(&sdCube, currentMod);
+			}
+
+		}
 	}
-	
 }
 
 void

@@ -981,6 +981,10 @@ c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\ShaderProgr
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\Camera.cuh
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\Player.cuh
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\chrono
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\ratio
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\thr/xtimec.h
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\thr/xthrcommon.h
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\KeyboardListener.cuh
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\MouseClickListener.cuh
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\MouseMoveListener.cuh
