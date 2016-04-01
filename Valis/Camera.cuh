@@ -47,6 +47,9 @@ public:
 	__host__  glm::vec3
 	getPosition();
 
+	__host__  glm::vec3
+	getDirection();
+
 private:
 	__host__ void
 	updateProjection();

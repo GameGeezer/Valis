@@ -12,7 +12,7 @@ void main()
 	
     vec3 lightWeighting = ambientColor + diffuse * lambertCoef;
 
-    vec3 color = vec3(1,0.5f,0.25f) * lightWeighting;
+    vec3 color = vec3(30.0f / 255.0f, 197.0f / 255.0f, 3.0f /255.0f) * lightWeighting;
 	
     gl_FragColor = vec4(color, 1.0);
 }

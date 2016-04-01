@@ -394,7 +394,13 @@ c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\type_vec2.inl
 C:\Programming\Libraries\glm-0.9.7.2\glm\glm\vec3.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/type_vec3.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\type_vec3.inl
-C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\chrono
+C:\Programming\Libraries\glm-0.9.7.2\glm\glm\mat4x4.hpp
+c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/type_mat4x4.hpp
+c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\../fwd.hpp
+c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/type_float.hpp
+c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/type_mat.hpp
+c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\type_vec4.hpp
+c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\type_vec4.inl
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\limits
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\ymath.h
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\cfloat
@@ -409,6 +415,8 @@ C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\swprintf.inl
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xstddef
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\initializer_list
+c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\type_mat4x4.inl
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\chrono
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\ratio
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdint.h
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
@@ -439,12 +447,7 @@ c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/_fixes.hpp
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\cassert
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\assert.h
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
-c:\programming\libraries\glm-0.9.7.2\glm\glm\fwd.hpp
-c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/type_float.hpp
-c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/type_mat.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\vec4.hpp
-c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/type_vec4.hpp
-c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\type_vec4.inl
 c:\programming\libraries\glm-0.9.7.2\glm\glm\mat2x2.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/type_mat2x2.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\type_mat2x2.inl
@@ -469,9 +472,6 @@ c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\type_mat4x2.inl
 c:\programming\libraries\glm-0.9.7.2\glm\glm\mat4x3.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/type_mat4x3.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\type_mat4x3.inl
-c:\programming\libraries\glm-0.9.7.2\glm\glm\mat4x4.hpp
-c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/type_mat4x4.hpp
-c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\type_mat4x4.inl
 c:\programming\libraries\glm-0.9.7.2\glm\glm\trigonometric.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail/func_trigonometric.hpp
 c:\programming\libraries\glm-0.9.7.2\glm\glm\detail\func_trigonometric.inl

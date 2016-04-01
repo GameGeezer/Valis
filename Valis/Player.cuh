@@ -3,6 +3,7 @@
 
 #include <glm\vec2.hpp>
 #include <glm\vec3.hpp>
+#include <glm\mat4x4.hpp>
 #include <chrono>
 
 #include "KeyboardListener.cuh"
@@ -50,7 +51,7 @@ public:
 
 private:
 	glm::vec2 lastMousePosition, lastMouseClickPosition;
-	bool isLeftMousePressed = false, isRightMousePressed = false, isWPressed = false, isAPressed = false, isSPressed = false, isDPressed = false, isKPressed = false, isLPressed = false, isOPressed = false, isPPressed = false;
+	bool isLeftMousePressed = false, isRightMousePressed = false, isWPressed = false, isAPressed = false, isSPressed = false, isDPressed = false, isKPressed = false, isLPressed = false, isOPressed = false, isPPressed = false, isQPressed = false, isEPressed = false;
 
 	glm::vec3 scale;
 	
@@ -60,6 +61,9 @@ private:
 	BlendSDModification* blend;
 	SDModification * currentMod;
 	milliseconds lastPlaceTime;
+	glm::vec3 rotation;
+	glm::mat4 orientation;
+	float distanceFromCamera = 0.5f;
 	int brushType = 1;
 };
 

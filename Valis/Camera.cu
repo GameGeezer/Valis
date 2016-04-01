@@ -111,3 +111,9 @@ Camera::getPosition()
 {
 	return position;
 }
+
+glm::vec3
+Camera::getDirection()
+{
+	return direction;
+}
