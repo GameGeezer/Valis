@@ -34,6 +34,45 @@ ShaderProgram::ShaderProgram(const char *vertexShader, const char *fragmentShade
 	glDeleteShader(fragmentHandle);
 }
 
+ShaderProgram::ShaderProgram(const char *vertexShader, const char *fragmentShader, const char *tessControlShader, const char *tessEvalShader, map<int, char *>& attributes)
+{
+	handle = glCreateProgram();
+
+	GLuint vertexHandle = compileShader(handle, vertexShader, GL_VERTEX_SHADER);
+	GLuint fragmentHandle = compileShader(handle, fragmentShader, GL_FRAGMENT_SHADER);
+	GLuint tessControlHandle = compileShader(handle, tessControlShader, GL_TESS_CONTROL_SHADER);
+	GLuint tessEvalHandle = compileShader(handle, tessEvalShader, GL_TESS_EVALUATION_SHADER);
+
+	glAttachShader(handle, vertexHandle);
+	glAttachShader(handle, fragmentHandle);
+	glAttachShader(handle, tessControlHandle);
+	glAttachShader(handle, tessEvalHandle);
+
+	for (auto iter = attributes.begin(); iter != attributes.end(); ++iter)
+	{
+		glBindAttribLocation(handle, iter->first, iter->second);
+	}
+
+	glLinkProgram(handle);
+
+	GLint params = -1;
+	glGetProgramiv(handle, GL_LINK_STATUS, &params);
+	if (params == GL_FALSE)
+	{
+		glDeleteProgram(handle);
+		handle = -1;
+	}
+
+	glDetachShader(handle, vertexHandle);
+	glDetachShader(handle, fragmentHandle);
+	glDetachShader(handle, tessControlHandle);
+	glDetachShader(handle, tessEvalHandle);
+	glDeleteShader(vertexHandle);
+	glDeleteShader(fragmentHandle);
+	glDeleteShader(tessControlHandle);
+	glDeleteShader(tessEvalHandle);
+}
+
 ShaderProgram::~ShaderProgram()
 {
 	glDeleteProgram(handle);
@@ -99,6 +138,10 @@ ShaderProgram::compileShader(GLuint handle, const char *shader, GLuint shaderTyp
 		case GL_VERTEX_SHADER:
 			break;
 		case GL_FRAGMENT_SHADER:
+			break;
+		case GL_TESS_CONTROL_SHADER:
+			break;
+		case GL_TESS_EVALUATION_SHADER:
 			break;
 		}
 	}

@@ -20,6 +20,12 @@ public:
 
 	}
 
+	__host__ __device__
+		SDCylinder(glm::vec3 dimensions, glm::vec3 scale, glm::mat4 lookat) : DistancePrimitive(3, scale, lookat), dimensions(dimensions)
+	{
+
+	}
+
 	__host__ inline DistancePrimitive*
 		copyToDevice()
 	{

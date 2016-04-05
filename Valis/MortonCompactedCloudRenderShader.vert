@@ -10,7 +10,8 @@ uniform float offsetBufferSize;
 
 attribute uint in_CompactData;
 
-varying vec3 pass_Normal;
+out vec3 pass_Normal;
+out vec3 pass_Position;
 
 uint compactBy3(in uint value)
 {
@@ -72,7 +73,8 @@ void main()
 	float ny = findNormalDirection(raw_ny);
 	float nz = findNormalDirection(raw_nz);
 
-	gl_Position = projectionMatrix * vec4(x, y, z, 1);
+	//gl_Position = projectionMatrix * vec4(x, y, z, 1);
+	pass_Position = ( vec4(x, y, z, 1)).xyz;
 	pass_Normal = vec3(nx, ny, nz);
 	gl_PointSize  = 0.61803398f;
 }

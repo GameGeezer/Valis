@@ -18,6 +18,12 @@ public:
 
 	}
 
+	__host__ __device__
+	SDSphere(float radius, glm::vec3 scale, glm::mat4 lookat) : DistancePrimitive(0, scale, lookat), radius(radius)
+	{
+
+	}
+
 	__host__ inline DistancePrimitive*
 	copyToDevice()
 	{

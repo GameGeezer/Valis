@@ -1,0 +1,15 @@
+#version 450
+
+layout (triangles, equal_spacing, point_mode) in;
+
+uniform mat4 projectionMatrix;
+
+in vec3 pass_TessPosition[];
+
+void main()
+{
+        gl_Position = projectionMatrix * vec4((gl_TessCoord.x * pass_TessPosition[0]) +
+                  (gl_TessCoord.y * pass_TessPosition[1]) +
+                  (gl_TessCoord.z * pass_TessPosition[2]), 1);
+
+}

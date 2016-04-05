@@ -20,6 +20,12 @@ public:
 
 	}
 
+	__host__ __device__
+		SDTorus(float outer, float radius, glm::vec3 scale, glm::mat4 lookat) : DistancePrimitive(1, scale, lookat), dimensions(glm::vec2(outer, radius))
+	{
+
+	}
+
 	__host__ inline DistancePrimitive*
 	copyToDevice()
 	{

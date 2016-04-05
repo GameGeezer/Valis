@@ -14,6 +14,8 @@ public:
 
 	ShaderProgram(const char *vertexShader, const char *fragmentShader, map<int, char *>& attributes);
 
+	ShaderProgram(const char *vertexShader, const char *fragmentShader, const char *tessControlShader, const char *tessEvalShader, map<int, char *>& attributes);
+
 	~ShaderProgram();
 
 	void

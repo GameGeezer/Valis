@@ -82,7 +82,7 @@ extractPointsInMortonOrder(ExtractedPoint *d_output, SDFDevice *sdf, uint32_t *v
 		return;
 	}
 
-	uint32_t index = Morton30::encode(x, y, z);
+	
 	
 	float divisionsAsFloat = ((float)gridDimension);
 
@@ -94,8 +94,14 @@ extractPointsInMortonOrder(ExtractedPoint *d_output, SDFDevice *sdf, uint32_t *v
 	// How far the cell is from the sdf
 	float distance = sdf->distanceFromPoint(glm::vec3(normalizeX, normalizeY, normalizeZ));
 
-	// Decide whether to generate a point
+	uint32_t index = Morton30::encode(x, y, z);
+
 	float cellDimension = 1.0f / divisionsAsFloat;
+
+	NumericBoolean shouldGeneratePoint = numericLessThan_float(distance, cellDimension) * numericGreaterThan_float(distance, 0);
+
+	// Decide whether to generate a point
+	
 
 	
 	NumericBoolean bottomLeftBack = vertexPlacement[findIndex(x, y, z, parseDimension)];
@@ -118,8 +124,6 @@ extractPointsInMortonOrder(ExtractedPoint *d_output, SDFDevice *sdf, uint32_t *v
 	
 	glm::ivec3 normalVec = bottomLeftBackVec + bottomRightBackVec + topLeftBackVec + bottomLeftForwardVec + topRightBackVec + bottomRightForwardVec + topLeftForwardVec + topRightForwardVec;
 	normalVec += glm::ivec3(4, 4, 4);
-
-	NumericBoolean shouldGeneratePoint = numericLessThan_float(distance, cellDimension) * numericGreaterThan_float(distance, 0);
 
 	d_output[index].normals.pack(normalVec.x, normalVec.y, normalVec.z);
 	d_output[index].normals.compactData *= shouldGeneratePoint;

@@ -49,10 +49,20 @@ TestRelativeScreen::onCreate()
 	buffer2 << myfile2.rdbuf();
 	string fragShader = buffer2.str();
 
+	ifstream myfile3("TesselatePointCloud.tesscon");
+	std::stringstream buffer3;
+	buffer3 << myfile3.rdbuf();
+	string tessConShader = buffer3.str();
+
+	ifstream myfile4("TesselatePointCloud.tesseval");
+	std::stringstream buffer4;
+	buffer4 << myfile4.rdbuf();
+	string tessEvalShader = buffer4.str();
+
 	// Create the shader
 	map<int, char *> attributes;
 	//attributes.insert(pair<int, char*>(0, "in_CompactData"));
-	shader = new ShaderProgram(vertShader.c_str(), fragShader.c_str(), attributes);
+	shader = new ShaderProgram(vertShader.c_str(), fragShader.c_str(), tessConShader.c_str(), tessEvalShader.c_str(), attributes);
 
 	// Create the camera
 	Camera* camera = new Camera(640, 680, 0.1f, 100.0f, 45.0f);
@@ -72,7 +82,7 @@ TestRelativeScreen::onCreate()
 	testSDFDevice = testSDF->copyToDevice();
 
 	// Create the extractor
-	extractor = new SDFHilbertExtractor(128, 128);
+	extractor = new SDFHilbertExtractor(256, 256);
 
 	ibo = new IBO(1000000, BufferedObjectUsage::DYNAMIC_DRAW);
 	pbo = new PBO(16000);
@@ -142,7 +152,7 @@ TestRelativeScreen::onUpdate(int delta)
 	shader->setUnifromMatrix4f(projectionLocation, viewProjection);
 
 	GLint resolutionLocation = shader->getUniformLocation("gridResolution");
-	shader->setUniformf(resolutionLocation, 128);
+	shader->setUniformf(resolutionLocation, 256);
 
 	GLint offstSizeLocation = shader->getUniformLocation("offsetBufferSize");
 	shader->setUniformf(offstSizeLocation, (pointCount + 63) / 64);
@@ -155,7 +165,7 @@ TestRelativeScreen::onUpdate(int delta)
 
 	glVertexAttribIPointer(compactDataAttribute, 1, GL_UNSIGNED_INT, 0, (void*)(sizeof(uint32_t) * 0));
 
-	glDrawArrays(GL_POINTS, 0, pointCount);
+	glDrawArrays(GL_PATCHES, 0, pointCount);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	ibo->unbind();
 

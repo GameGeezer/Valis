@@ -578,7 +578,6 @@ C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\fstream
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\sstream
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\string
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\iterator
-c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDFRelativeExtractor.cuh
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/device_vector.h
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/detail/config.h
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/detail/config/config.h
@@ -978,14 +977,14 @@ C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cu
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/detail/device_vector.inl
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/host_vector.h
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/detail/host_vector.inl
-c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\RenderPoint.cuh
-C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h
-c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\CompactRenderPoint.cuh
-C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\ShaderProgram.cuh
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\Camera.cuh
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\Player.cuh
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\chrono
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\ratio
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\thr/xtimec.h
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\thr/xthrcommon.h
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\KeyboardListener.cuh
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\MouseClickListener.cuh
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\MouseMoveListener.cuh
@@ -1009,6 +1008,12 @@ C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\GLMUtil.cuh
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDTorus.cuh
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDCube.cuh
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDCylinder.cuh
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\BlendSDModification.cuh
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\PlaceSDPrimitive.cuh
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h

@@ -15,9 +15,16 @@ class DistancePrimitive
 public:
 	const int functionId;
 	glm::mat4 transform;
+
 	DistancePrimitive(int functionId, glm::vec3 scale, glm::vec3 translation, glm::vec3 rotationAxis, float angle) : functionId(functionId)
 	{
 		transform = glm::inverse(glm::translate(glm::mat4(1.0f), translation) * glm::rotate(glm::mat4(1.0f), angle, rotationAxis) * glm::scale(glm::mat4(1.0f),  scale));
+	}
+
+
+	DistancePrimitive(int functionId, glm::vec3 scale, glm::mat4 lookat) : functionId(functionId)
+	{
+		transform = glm::inverse(glm::inverse(lookat) * glm::scale(glm::mat4(1.0f), scale));
 	}
 
 	__host__ virtual inline DistancePrimitive*

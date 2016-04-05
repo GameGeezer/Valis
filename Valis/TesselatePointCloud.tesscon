@@ -1,0 +1,18 @@
+#version 450
+
+layout(vertices = 3) out;
+
+in vec3 pass_Position[];
+
+out vec3 pass_TessPosition[];
+
+void main()
+{
+    pass_TessPosition[gl_InvocationID] = pass_Position[gl_InvocationID];
+    if (gl_InvocationID == 0) {
+        gl_TessLevelInner[0] = 5.0;
+        gl_TessLevelOuter[0] = 8.0;
+        gl_TessLevelOuter[1] = 8.0;
+        gl_TessLevelOuter[2] = 8.0;
+    }
+}

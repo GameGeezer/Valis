@@ -369,5 +369,11 @@
     <None Include="MortonCompactedCloudRenderShader.frag">
       <Filter>framework\res\shaders</Filter>
     </None>
+    <None Include="TesselatePointCloud.tesscon">
+      <Filter>framework\res\shaders</Filter>
+    </None>
+    <None Include="TesselatePointCloud.tesseval">
+      <Filter>framework\res\shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -63,34 +63,28 @@ Player::update(int delta)
 	if (isEPressed)
 		distanceFromCamera += 0.05;
 
-	
-
 	glm::vec3 position = glm::vec3(glm::inverse(*(camera->getView())) * glm::vec4(0, 0, -distanceFromCamera, 1));
 	//rotation = glm::vec3(camera->getDirection().x, camera->getDirection().y, camera->getDirection().z);
 	orientation = glm::lookAt(position, position + camera->getDirection(), glm::vec3(0, 1, 0));
 
 	if (brushType == 1)
 	{
-		SDSphere sdSphere(0.1f, scale, glm::vec3(position.x, position.y, position.z), rotation, 1);
-		sdSphere.transform = orientation;
+		SDSphere sdSphere(0.1f, scale, orientation);
 		hostEditSDF->modify(&sdSphere, currentMod);
 	}
 	else if (brushType == 2)
 	{
-		SDTorus sdTorus(0.1f, 0.025f, scale, glm::vec3(position.x, position.y, position.z), rotation, 1);
-		sdTorus.transform = orientation;
+		SDTorus sdTorus(0.1f, 0.025f, scale, orientation);
 		hostEditSDF->modify(&sdTorus, currentMod);
 	}
 	else if(brushType == 3)
 	{
-		SDCube sdCube(glm::vec3(0.1f, 0.1f, 0.1f), scale, glm::vec3(position.x, position.y, position.z), rotation, 1);
-		sdCube.transform = orientation;
+		SDCube sdCube(glm::vec3(0.1f, 0.1f, 0.1f), scale, orientation);
 		hostEditSDF->modify(&sdCube, currentMod);
 	}
 	else if (brushType == 4)
 	{
-		SDCylinder sdCylinder(glm::vec3(0.05f, 0.05f, 0.05f), scale, glm::vec3(position.x, position.y, position.z), rotation, 1);
-		sdCylinder.transform = orientation;
+		SDCylinder sdCylinder(glm::vec3(0.05f, 0.05f, 0.05f), scale, orientation);
 		hostEditSDF->modify(&sdCylinder, currentMod);
 	}
 	
@@ -221,26 +215,22 @@ Player::onMousePress(MouseButton button, float posX, float posY)
 
 			if (brushType == 1)
 			{
-				SDSphere sdSphere(0.1f, scale, glm::vec3(position.x, position.y, position.z), rotation, 1);
-				sdSphere.transform = orientation;
+				SDSphere sdSphere(0.1f, scale, orientation);
 				hostEditSDF->modify(&sdSphere, currentMod);
 			}
 			else if(brushType == 2)
 			{
-				SDTorus sdTorus(0.1f, 0.025f, scale, glm::vec3(position.x, position.y, position.z), rotation, 1);
-				sdTorus.transform = orientation;
+				SDTorus sdTorus(0.1f, 0.025f, scale, orientation);
 				hostEditSDF->modify(&sdTorus, currentMod);
 			}
 			else if(brushType == 3)
 			{
-				SDCube sdCube(glm::vec3(0.1f, 0.1f, 0.1f), scale, glm::vec3(position.x, position.y, position.z), rotation, 1);
-				sdCube.transform = orientation;
+				SDCube sdCube(glm::vec3(0.1f, 0.1f, 0.1f), scale, orientation);
 				hostEditSDF->modify(&sdCube, currentMod);
 			}
 			else if (brushType == 4)
 			{
-				SDCylinder sdCylinder(glm::vec3(0.05f, 0.05f, 0.05f), scale, glm::vec3(position.x, position.y, position.z), rotation, 1);
-				sdCylinder.transform = orientation;
+				SDCylinder sdCylinder(glm::vec3(0.05f, 0.05f, 0.05f), scale, orientation);
 				hostEditSDF->modify(&sdCylinder, currentMod);
 			}
 

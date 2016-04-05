@@ -144,6 +144,9 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>None</DebugInformationFormat>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -157,7 +160,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <CudaCompile>
       <Optimization>O2</Optimization>
-      <FastMath>false</FastMath>
+      <FastMath>true</FastMath>
       <GPUDebugInfo>false</GPUDebugInfo>
       <InterleaveSourceInPTX>false</InterleaveSourceInPTX>
       <CodeGeneration>compute_30,sm_30;%(CodeGeneration)</CodeGeneration>
@@ -337,6 +340,8 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <None Include="MortonCompactedCloudRenderShader.vert" />
     <None Include="PointCloudRenderShader.frag" />
     <None Include="PointCloudRenderShader.vert" />
+    <None Include="TesselatePointCloud.tesscon" />
+    <None Include="TesselatePointCloud.tesseval" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -20,6 +20,12 @@ public:
 
 	}
 
+	__host__ __device__
+		SDCube(glm::vec3 corner, glm::vec3 scale, glm::mat4 lookat) : DistancePrimitive(2, scale, lookat), corner(corner)
+	{
+
+	}
+
 	__host__ inline DistancePrimitive*
 		copyToDevice()
 	{
