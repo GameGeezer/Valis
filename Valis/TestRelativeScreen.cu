@@ -84,10 +84,12 @@ TestRelativeScreen::onCreate()
 	// Create the extractor
 	extractor = new SDFHilbertExtractor(256, 256);
 
-	ibo = new IBO(1000000, BufferedObjectUsage::DYNAMIC_DRAW);
+	ibo = new IBO(10000000, BufferedObjectUsage::DYNAMIC_DRAW);
+	vbo = new VBO(1000000, BufferedObjectUsage::DYNAMIC_DRAW);
 	pbo = new PBO(16000);
-	pboMapping = new CudaGLBufferMapping<uint32_t>(*pbo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
-	mapping = new CudaGLBufferMapping<CompactMortonPoint>(*ibo, cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
+	iboMapping = new CudaGLBufferMapping<uint32_t>(ibo->getHandle(), cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
+	pboMapping = new CudaGLBufferMapping<uint32_t>(pbo->getHandle(), cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
+	mapping = new CudaGLBufferMapping<CompactMortonPoint>(vbo->getHandle(), cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
 
 	pboTexture = new Texture1D(16000);
 
@@ -120,7 +122,7 @@ TestRelativeScreen::onUpdate(int delta)
 {
 	player->update(delta);
 
-	pointCount = extractor->extract(*(player->deviceEditSDF), *mapping, *pboMapping, 8);
+	pointCount = extractor->extract(*(player->deviceEditSDF), *mapping, *pboMapping, *iboMapping, 8);
 
 	
 	glm::mat4 invViewProjection;
@@ -160,15 +162,16 @@ TestRelativeScreen::onUpdate(int delta)
 	GLint compactDataAttribute = shader->getAttributeLocation("in_CompactData");
 
 	ibo->bind();
+	vbo->bind();
 	glEnableVertexAttribArray(compactDataAttribute);
 	glEnableClientState(GL_VERTEX_ARRAY);
 
 	glVertexAttribIPointer(compactDataAttribute, 1, GL_UNSIGNED_INT, 0, (void*)(sizeof(uint32_t) * 0));
 
-	glDrawArrays(GL_PATCHES, 0, pointCount);
+	glDrawElements(GL_PATCHES, pointCount, GL_UNSIGNED_INT, (void*) 0);
 	glDisableClientState(GL_VERTEX_ARRAY);
+	vbo->unbind();
 	ibo->unbind();
-
 	shader->unbind();
 }
 

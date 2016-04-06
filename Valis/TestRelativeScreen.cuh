@@ -13,11 +13,12 @@ class ShaderProgram;
 class Camera;
 class Player;
 class SDFHilbertExtractor;
-class IBO;
 class SDFDevice;
 class SDFHost;
 class Texture1D;
 class SDModification;
+class VBO;
+class IBO;
 
 typedef ThreeCompact10BitUInts CompactLocation;
 
@@ -52,7 +53,9 @@ private:
 	SDModification* place;
 	CudaGLBufferMapping<CompactMortonPoint>* mapping;
 	CudaGLBufferMapping<uint32_t>* pboMapping;
+	CudaGLBufferMapping<uint32_t>* iboMapping;
 	PBO* pbo;
+	VBO* vbo;
 	IBO* ibo;
 	Texture1D* pboTexture;
 	int pointCount;

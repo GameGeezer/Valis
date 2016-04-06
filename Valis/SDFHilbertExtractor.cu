@@ -132,11 +132,12 @@ extractPointsInMortonOrder(ExtractedPoint *d_output, SDFDevice *sdf, uint32_t *v
 }
 
 __global__ void
-clusterPoints(CompactMortonPoint* renderPointBuffer, WorldPositionMorton* offsetBuffer, ExtractedPoint* sortedPoints, size_t overlapSize, uint32_t* compactMortonStart, uint32_t* worldMortonStart, uint32_t compactMortonBufSize, uint32_t worldMortonBufSize, ExtractedPoint* sortedPointsEnd)
+clusterPoints(CompactMortonPoint* renderPointBuffer, WorldPositionMorton* offsetBuffer, uint32_t* indexBuffer, ExtractedPoint* sortedPoints, size_t overlapSize, uint32_t* compactMortonStart, uint32_t* worldMortonStart, uint32_t* indexStart, uint32_t compactMortonBufSize, uint32_t worldMortonBufSize, ExtractedPoint* sortedPointsEnd, uint32_t indexBufferSize)
 {
 	uint32_t x = blockIdx.x * blockDim.x + threadIdx.x;
 
 	uint32_t renderPointBufferWriteIndex = (x * 64) + *compactMortonStart;
+	uint32_t indexBufferWriteIndex = (x * 189) + *indexStart;
 	uint32_t startingIndex = renderPointBufferWriteIndex - (overlapSize * x);
 	uint32_t worldMortonIndex = *worldMortonStart + x;
 
@@ -158,9 +159,6 @@ clusterPoints(CompactMortonPoint* renderPointBuffer, WorldPositionMorton* offset
 		return;
 	}
 
-	
-
-
 	uint32_t baseMorton = sortedPoints[startingIndex].morton;
 
 	for (uint32_t i = 0; i < 64; ++i)
@@ -180,9 +178,32 @@ clusterPoints(CompactMortonPoint* renderPointBuffer, WorldPositionMorton* offset
 		renderPointBuffer[renderPointBufferWriteIndex + i].compactData = renderPointBuffer[renderPointBufferWriteIndex + i].compactData * isWithinBounds + baseMorton * numericNegate_uint32_t(isWithinBounds);
 	}
 
+	for (uint32_t i = 0; i < 189; ++i)
+	{
+		indexBuffer[indexBufferWriteIndex + i] = renderPointBufferWriteIndex + ((i / 3) + (i % 3));
+	}
+
 	offsetBuffer[worldMortonIndex] = baseMorton;
 }
 
+__global__ void
+countIndices(uint32_t* bufferBegin, size_t bufferLength, uint32_t* out_size)
+{
+	uint32_t x = (blockIdx.x * blockDim.x + threadIdx.x);
+	// One higher than index x is being checked
+	if (x >= (bufferLength - 1))
+	{
+		return;
+	}
+
+	bool lowerHasValue = bufferBegin[x] != 0;
+	bool upperHasValue = bufferBegin[x + 1] != 0;
+
+	if (lowerHasValue && !upperHasValue)
+	{
+		*out_size = x; // out_bufferDataEnd = &(bufferBegin[x]);
+	}
+}
 
 __global__ void
 countCompactMortons(CompactMortonPoint* bufferBegin, size_t bufferLength, uint32_t* out_size)
@@ -261,12 +282,14 @@ SDFHilbertExtractor::SDFHilbertExtractor(uint32_t gridDimension, uint32_t parseD
 	areVerticiesOutsideIsoBuffer(new thrust::device_vector< uint32_t >((parseDimension + 2) * (parseDimension + 2) * (parseDimension + 2)))
 {
 	mortonSortedPointBlockSize = (mortonSortedPointsBuffer->size() + 255) / 256;
+
 	cudaMalloc((void**)&device_compactMortonSizeBucket, sizeof(uint32_t));
 	cudaMalloc((void**)&device_worldMortonSizeBucket, sizeof(uint32_t));
+	cudaMalloc((void**)&device_indexSizeBucket, sizeof(uint32_t));
 }
 
 size_t
-SDFHilbertExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactMortonPoint>& mapping, CudaGLBufferMapping<WorldPositionMorton>& pbo, uint32_t overlapSize)
+SDFHilbertExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactMortonPoint>& mapping, CudaGLBufferMapping<WorldPositionMorton>& pbo, CudaGLBufferMapping<uint32_t>& ibo, uint32_t overlapSize)
 {
 	mapping.map();
 	size_t bufferLength = mapping.getSizeInBytes() / sizeof(CompactMortonPoint);
@@ -284,6 +307,14 @@ SDFHilbertExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactMortonPo
 	uint32_t worldPositionBlockSize = ((pboBufferLength + 255) / 256), worldPositionThreadSize = 256;
 	thrust::fill(pboBufferPointerDevice, pboBufferPointerDevice + pboBufferLength, 0);
 
+	ibo.map();
+	size_t iboBufferLength = ibo.getSizeInBytes() / sizeof(uint32_t);
+	uint32_t* iboBufferPointerRaw = thrust::raw_pointer_cast(ibo.getDeviceOutput());
+	uint32_t* iboBufferPointerEndRaw = thrust::raw_pointer_cast(ibo.getDeviceOutput()) + pboBufferLength;
+	thrust::device_ptr<WorldPositionMorton> iboBufferPointerDevice = thrust::device_pointer_cast(ibo.getDeviceOutput());
+	uint32_t iboBlockSize = ((iboBufferLength + 255) / 256), iboThreadSize = 256;
+	thrust::fill(iboBufferPointerDevice, iboBufferPointerDevice + iboBufferLength, 0);
+
 	ExtractedPoint* mortenSortedPointsRaw = thrust::raw_pointer_cast(mortonSortedPointsBuffer->data());
 	ExtractedPoint* mortenSortedPointsEndRaw = thrust::raw_pointer_cast(mortonSortedPointsBuffer->data()) + mortonSortedPointsBuffer->size();
 	uint32_t* isVertexOusideIsoBufferRaw = thrust::raw_pointer_cast(areVerticiesOutsideIsoBuffer->data());
@@ -293,7 +324,7 @@ SDFHilbertExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactMortonPo
 
 	cudaMemset(device_compactMortonSizeBucket, 0, sizeof(uint32_t));
 	cudaMemset(device_worldMortonSizeBucket, 0, sizeof(uint32_t));
-
+	cudaMemset(device_indexSizeBucket, 0, sizeof(uint32_t));
 
 	for (int i = 0; i < gridDimension; i += parseDimension)
 	{
@@ -306,10 +337,11 @@ SDFHilbertExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactMortonPo
 				//int numberCreated = thrust::count_if(mortonSortedPointsBuffer->begin(), mortonSortedPointsBuffer->end(), is_extracted_not_zero());
 				thrust::fill(mortonSortedPointsCompactBuffer->begin(), mortonSortedPointsCompactBuffer->end(), ExtractedPoint());
 				thrust::copy_if(thrust::device, mortonSortedPointsBuffer->begin(), mortonSortedPointsBuffer->end(), mortonSortedPointsCompactBuffer->begin(), is_extracted_not_zero());
-				clusterPoints << < mortonSortedPointBlockSize, mortonSortedPointThreadSize >> >(bufferPointerRaw, pboBufferPointerRaw, mortonSortedBegin, overlapSize, device_compactMortonSizeBucket, device_worldMortonSizeBucket, bufferLength, pboBufferLength, mortonSortedEnd);
+				clusterPoints << < mortonSortedPointBlockSize, mortonSortedPointThreadSize >> >(bufferPointerRaw, pboBufferPointerRaw, iboBufferPointerRaw, mortonSortedBegin, overlapSize, device_compactMortonSizeBucket, device_worldMortonSizeBucket, device_indexSizeBucket, bufferLength, pboBufferLength, mortonSortedEnd, iboBufferLength);
 
 				countCompactMortons << <compactMortonBlockSize, compactMortonThreadSize >> >(bufferPointerRaw, bufferLength, device_compactMortonSizeBucket);
 				countWorldMortons << <worldPositionBlockSize, worldPositionThreadSize >> >(pboBufferPointerRaw, pboBufferLength, device_worldMortonSizeBucket);
+				countIndices << <iboBlockSize, iboThreadSize >> >(iboBufferPointerRaw, iboBufferLength, device_indexSizeBucket);
 				//uint32_t size32 = 0;
 				//cudaMemcpy(&size32, device_compactMortonSizeBucket, sizeof(uint32_t), cudaMemcpyDeviceToHost);
 				//cudaMemcpy(&size32, device_worldMortonSizeBucket, sizeof(uint32_t), cudaMemcpyDeviceToHost);
@@ -324,7 +356,8 @@ SDFHilbertExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactMortonPo
 
 	mapping.unmap();
 	pbo.unmap();
+	ibo.unmap();
 
 
-	return size;
+	return size * 3;
 }
