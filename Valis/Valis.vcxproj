@@ -262,6 +262,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <CudaCompile Include="PlaceSDPrimitive.cu" />
     <CudaCompile Include="Player.cu" />
     <CudaCompile Include="SDFDevice.cu" />
+    <CudaCompile Include="SDFExtractor.cu" />
     <CudaCompile Include="SDFHilbertExtractor.cu" />
     <CudaCompile Include="SDFHost.cu" />
     <CudaCompile Include="SDSphere.cu" />
@@ -286,6 +287,8 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClInclude Include="SDCappedCylinder.cuh" />
     <ClInclude Include="SDCube.cuh" />
     <ClInclude Include="SDCylinder.cuh" />
+    <ClInclude Include="SDFExtractor.cuh" />
+    <ClInclude Include="SignedDistanceField.cuh" />
     <ClInclude Include="Texture1D.cuh" />
     <ClInclude Include="ThreeCompact10BitUInts.cuh" />
     <ClInclude Include="CompactRenderPoint.cuh" />

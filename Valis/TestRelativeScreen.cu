@@ -32,6 +32,7 @@
 #include "BufferedObjectUsage.cuh"
 
 #include "Texture1D.cuh"
+#include "Nova.cuh"
 
 void
 TestRelativeScreen::onCreate()
@@ -87,12 +88,9 @@ TestRelativeScreen::onCreate()
 	ibo = new IBO(10000000, BufferedObjectUsage::DYNAMIC_DRAW);
 	vbo = new VBO(1000000, BufferedObjectUsage::DYNAMIC_DRAW);
 	pbo = new PBO(16000);
-	iboMapping = new CudaGLBufferMapping<uint32_t>(ibo->getHandle(), cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
-	pboMapping = new CudaGLBufferMapping<uint32_t>(pbo->getHandle(), cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
-	mapping = new CudaGLBufferMapping<CompactMortonPoint>(vbo->getHandle(), cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone);
 
 	pboTexture = new Texture1D(16000);
-
+	testNova = new Nova(*vbo, *pbo, *ibo);
 
 	//glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE); // Not a texture. default is modulate.
 	
@@ -122,7 +120,7 @@ TestRelativeScreen::onUpdate(int delta)
 {
 	player->update(delta);
 
-	pointCount = extractor->extract(*(player->deviceEditSDF), *mapping, *pboMapping, *iboMapping, 8);
+	pointCount = extractor->extract(*(player->deviceEditSDF), *testNova, 0);
 
 	glm::mat4 viewProjection;
 	player->camera->constructViewProjection(viewProjection);

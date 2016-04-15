@@ -860,29 +860,6 @@ C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/system/cu
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/detail/device_vector.inl
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/host_vector.h
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\thrust/detail/host_vector.inl
-c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\CudaGLBufferMapping.cuh
-c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\CudaHelper.cuh
-C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
-c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\PBO.cuh
-c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\GLLibraries.h
-C:\Programming\Libraries\glew-1.13.0\include\GL/glew.h
-C:\Program Files (x86)\Windows Kits\8.1\Include\um\GL/glu.h
-C:\Program Files (x86)\Windows Kits\8.1\Include\shared\winapifamily.h
-C:\Program Files (x86)\Windows Kits\8.1\Include\um\GL/gl.h
-C:\Programming\Libraries\glfw-3.1.2.bin.WIN32\glfw-3.1.2.bin.WIN32\include\GLFW/glfw3.h
-C:\Program Files (x86)\Windows Kits\8.1\Include\um\GL/gl.h
-c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\VBO.cuh
-c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\BufferedObjectUsage.cuh
-c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\IBO.cuh
-C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_gl_interop.h
-c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\builtin_types.h
-c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\device_types.h
-c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\driver_types.h
-c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\surface_types.h
-c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\texture_types.h
-c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\vector_types.h
-c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\host_defines.h
-C:\Program Files (x86)\Windows Kits\8.1\Include\um\GL/gl.h
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\ThreeCompact10BitUInts.cuh
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\CompactMortonPoint.cuh
@@ -1085,6 +1062,7 @@ c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\thrust\system\cu
 c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\thrust\system\cuda\detail\cub\device/device_select.cuh
 c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\thrust\system\cuda\detail\cub\host/spinlock.cuh
 C:\Program Files (x86)\Windows Kits\8.1\Include\um\windows.h
+C:\Program Files (x86)\Windows Kits\8.1\Include\shared\winapifamily.h
 C:\Program Files (x86)\Windows Kits\8.1\Include\shared\sdkddkver.h
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\excpt.h
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\crtdefs.h
@@ -1454,6 +1432,8 @@ c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDSphere.cu
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\GLMUtil.cuh
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\CudaHelper.cuh
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDTorus.cuh
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDCube.cuh
@@ -1464,3 +1444,24 @@ c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\BlendSDModi
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_runtime.h
 c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\Morton30.cuh
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\device_launch_parameters.h
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\Nova.cuh
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\CudaGLBufferMapping.cuh
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\PBO.cuh
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\GLLibraries.h
+C:\Programming\Libraries\glew-1.13.0\include\GL/glew.h
+C:\Program Files (x86)\Windows Kits\8.1\Include\um\GL/glu.h
+C:\Program Files (x86)\Windows Kits\8.1\Include\um\GL/gl.h
+C:\Programming\Libraries\glfw-3.1.2.bin.WIN32\glfw-3.1.2.bin.WIN32\include\GLFW/glfw3.h
+C:\Program Files (x86)\Windows Kits\8.1\Include\um\GL/gl.h
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\VBO.cuh
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\BufferedObjectUsage.cuh
+c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\IBO.cuh
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include\cuda_gl_interop.h
+c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\builtin_types.h
+c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\device_types.h
+c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\driver_types.h
+c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\surface_types.h
+c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\texture_types.h
+c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\vector_types.h
+c:\program files\nvidia gpu computing toolkit\cuda\v7.5\include\host_defines.h
+C:\Program Files (x86)\Windows Kits\8.1\Include\um\GL/gl.h

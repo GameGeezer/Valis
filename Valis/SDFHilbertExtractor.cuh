@@ -6,11 +6,11 @@
 #include <thrust/device_vector.h>
 #include <thrust/host_vector.h>
 
-#include "CudaGLBufferMapping.cuh"
 #include "ThreeCompact10BitUInts.cuh"
 #include "CompactMortonPoint.cuh"
 
 class SDFDevice;
+class Nova;
 
 typedef uint32_t WorldPositionMorton;
 typedef ThreeCompact10BitUInts CompactNormals;
@@ -30,7 +30,7 @@ public:
 	~SDFHilbertExtractor();
 
 	size_t
-		extract(SDFDevice& sdf, CudaGLBufferMapping<CompactMortonPoint>& mapping, CudaGLBufferMapping<WorldPositionMorton>& pbo, CudaGLBufferMapping<uint32_t>& ibo, uint32_t overlapSize);
+		extract(SDFDevice& sdf, Nova &nova, uint32_t overlapSize);
 
 private:
 	thrust::device_vector< uint32_t >* areVerticiesOutsideIsoBuffer;

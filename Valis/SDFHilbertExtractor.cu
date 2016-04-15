@@ -11,6 +11,8 @@
 #include "SDFDevice.cuh"
 #include "Morton30.cuh"
 
+#include "Nova.cuh"
+
 __device__ __inline__ uint32_t
 findIndex(uint32_t localX, uint32_t localY, uint32_t localZ, uint32_t parseDimension)
 {
@@ -244,23 +246,6 @@ struct is_extracted_not_zero
 	}
 };
 
-struct is_morton_point_not_zero
-{
-	__host__ __device__
-		bool operator()(const CompactMortonPoint& point)
-	{
-		return point.compactData != 0;
-	}
-};
-
-struct is_uint32_t_not_zero
-{
-	__host__ __device__
-		bool operator()(const uint32_t& point)
-	{
-		return point != 0;
-	}
-};
 
 SDFHilbertExtractor::SDFHilbertExtractor(uint32_t gridDimension, uint32_t parseDimension) :
 	gridDimension(gridDimension),
@@ -280,28 +265,10 @@ SDFHilbertExtractor::SDFHilbertExtractor(uint32_t gridDimension, uint32_t parseD
 }
 
 size_t
-SDFHilbertExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactMortonPoint>& mapping, CudaGLBufferMapping<WorldPositionMorton>& pbo, CudaGLBufferMapping<uint32_t>& ibo, uint32_t overlapSize)
+SDFHilbertExtractor::extract(SDFDevice& sdf, Nova &nova, uint32_t overlapSize)
 {
-	mapping.map();
-	size_t bufferLength = mapping.getSizeInBytes() / sizeof(CompactMortonPoint);
-	CompactMortonPoint* bufferPointerRaw = thrust::raw_pointer_cast(mapping.getDeviceOutput());
-	thrust::device_ptr<CompactMortonPoint> bufferPointerDevice = thrust::device_pointer_cast(mapping.getDeviceOutput());
-	uint32_t compactMortonBlockSize = ((bufferLength + 255) / 256), compactMortonThreadSize = 256;
-	thrust::fill(bufferPointerDevice, bufferPointerDevice + bufferLength, CompactMortonPoint());
-
-	pbo.map();
-	size_t pboBufferLength = pbo.getSizeInBytes() / sizeof(WorldPositionMorton);
-	WorldPositionMorton* pboBufferPointerRaw = thrust::raw_pointer_cast(pbo.getDeviceOutput());
-	thrust::device_ptr<WorldPositionMorton> pboBufferPointerDevice = thrust::device_pointer_cast(pbo.getDeviceOutput());
-	uint32_t worldPositionBlockSize = ((pboBufferLength + 255) / 256), worldPositionThreadSize = 256;
-	thrust::fill(pboBufferPointerDevice, pboBufferPointerDevice + pboBufferLength, 0);
-
-	ibo.map();
-	size_t iboBufferLength = ibo.getSizeInBytes() / sizeof(uint32_t);
-	uint32_t* iboBufferPointerRaw = thrust::raw_pointer_cast(ibo.getDeviceOutput());
-	thrust::device_ptr<WorldPositionMorton> iboBufferPointerDevice = thrust::device_pointer_cast(ibo.getDeviceOutput());
-	uint32_t iboBlockSize = ((iboBufferLength + 255) / 256), iboThreadSize = 256;
-	thrust::fill(iboBufferPointerDevice, iboBufferPointerDevice + iboBufferLength, 0);
+	nova.startEdit();
+	nova.clean();
 
 	ExtractedPoint* mortenSortedPointsRaw = thrust::raw_pointer_cast(mortonSortedPointsBuffer->data());
 	ExtractedPoint* mortenSortedPointsEndRaw = thrust::raw_pointer_cast(mortonSortedPointsBuffer->data()) + mortonSortedPointsBuffer->size();
@@ -320,28 +287,25 @@ SDFHilbertExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactMortonPo
 		{
 			for (int k = 0; k < gridDimension; k += parseDimension)
 			{
+				
 				areVerticesOutsideIsosurface << <extractInMortonOrderBlockDim, extractInMortonOrderThreadDim >> > (isVertexOusideIsoBufferRaw, &sdf, gridDimension, parseDimension, i, j, k);
-				extractPointsInMortonOrder << <extractInMortonOrderBlockDim, extractInMortonOrderThreadDim >> >(mortenSortedPointsRaw, &sdf, isVertexOusideIsoBufferRaw, gridDimension, parseDimension, i, j, k);
-				//int numberCreated = thrust::count_if(mortonSortedPointsBuffer->begin(), mortonSortedPointsBuffer->end(), is_extracted_not_zero());
+				extractPointsInMortonOrder << <extractInMortonOrderBlockDim, extractInMortonOrderThreadDim >> >(mortenSortedPointsRaw, &sdf, isVertexOusideIsoBufferRaw, gridDimension, parseDimension, i, j, k); 
 				thrust::fill(mortonSortedPointsCompactBuffer->begin(), mortonSortedPointsCompactBuffer->end(), ExtractedPoint());
 				thrust::copy_if(thrust::device, mortonSortedPointsBuffer->begin(), mortonSortedPointsBuffer->end(), mortonSortedPointsCompactBuffer->begin(), is_extracted_not_zero());
-				clusterPoints << < mortonSortedPointBlockSize, mortonSortedPointThreadSize >> >(bufferPointerRaw, pboBufferPointerRaw, iboBufferPointerRaw, mortonSortedBegin, overlapSize, device_compactMortonSizeBucket, device_worldMortonSizeBucket, device_indexSizeBucket, bufferLength, pboBufferLength, mortonSortedEnd, iboBufferLength);
-
-				countCompactMortons << <compactMortonBlockSize, compactMortonThreadSize >> >(bufferPointerRaw, bufferLength, device_compactMortonSizeBucket);
-				countWorldMortons << <worldPositionBlockSize, worldPositionThreadSize >> >(pboBufferPointerRaw, pboBufferLength, device_worldMortonSizeBucket);
-				countIndices << <iboBlockSize, iboThreadSize >> >(iboBufferPointerRaw, iboBufferLength, device_indexSizeBucket);
+				clusterPoints << < mortonSortedPointBlockSize, mortonSortedPointThreadSize >> >(nova.getRawVBO(), nova.getRawPBO(), nova.getRawIBO(), mortonSortedBegin, overlapSize, device_compactMortonSizeBucket, device_worldMortonSizeBucket, device_indexSizeBucket, nova.getLengthVBO(), nova.getLengthPBO(), mortonSortedEnd, nova.getLengthIBO());
+				
+				countCompactMortons << <nova.getBlockSizeVBO(), NOVA_PARSE_BLOCK_SIZE >> >(nova.getRawVBO(), nova.getLengthVBO(), device_compactMortonSizeBucket);
+				countWorldMortons << <nova.getBlockSizePBO(), NOVA_PARSE_BLOCK_SIZE >> >(nova.getRawPBO(), nova.getLengthPBO(), device_worldMortonSizeBucket);
+				countIndices << <nova.getBlockSizeIBO(), NOVA_PARSE_BLOCK_SIZE >> >(nova.getRawIBO(), nova.getLengthIBO(), device_indexSizeBucket);
 			}
 		}
 	}
 
 	uint32_t size = 0;
-	countCompactMortons << <compactMortonBlockSize, compactMortonThreadSize >> >(bufferPointerRaw, bufferLength, device_compactMortonSizeBucket);
-	//int numberCreated = thrust::count_if(bufferPointerDevice, bufferPointerDevice + bufferLength, is_morton_point_not_zero());
+	countCompactMortons << <nova.getBlockSizeVBO(), 256 >> >(nova.getRawVBO(), nova.getLengthVBO(), device_compactMortonSizeBucket);
 	cudaMemcpy(&size, device_compactMortonSizeBucket, sizeof(uint32_t), cudaMemcpyDeviceToHost);
 
-	mapping.unmap();
-	pbo.unmap();
-	ibo.unmap();
+	nova.endEdit();
 
 	return size * 3;
 }
