@@ -32,7 +32,7 @@ public:
 
 	}
 
-	__device__ float
+	__device__ __inline__ float
 	distanceFromPoint(glm::vec3 position)
 	{
 		float distance = selectDistanceFunction(primitives[0], position);
@@ -46,7 +46,7 @@ public:
 		return distance;
 	}
 
-	__device__ float
+	__device__ __inline__ float
 	selectDistanceFunction(DistancePrimitive* primitive, glm::vec3 position)
 	{
 		switch (primitive->functionId)
@@ -90,7 +90,7 @@ public:
 	}
 	*/
 
-	__host__ __device__ inline float
+	__host__ __device__ __inline__ float
 	distanceFromSphere(glm::vec4 point, glm::mat4 transform, float radius)
 	{
 		point = transform * point;
@@ -105,7 +105,7 @@ public:
 		return GLMUtil::length(q) - dimensions.y;
 	}
 	*/
-	__host__ __device__ inline float
+	__host__ __device__ __inline__ float
 		distanceFromTorus(glm::vec4 point, glm::mat4 transform, glm::vec2 dimensions)
 	{
 		point = transform * point;
@@ -113,7 +113,7 @@ public:
 		return GLMUtil::length(q) - dimensions.y;
 	}
 
-	__host__ __device__ inline float
+	__host__ __device__ __inline__ float
 	distanceFromCube(glm::vec4 point, glm::mat4 transform, glm::vec3 corner)
 	{
 		point = transform * point;
@@ -121,14 +121,14 @@ public:
 		return fminf(fmaxf(d.x, fmaxf(d.y, d.z)), 0.0) + GLMUtil::length(glm::vec3(fmaxf(d.x, 0), fmaxf(d.y, 0), fmaxf(d.z, 0)));
 	}
 
-	__host__ __device__ inline float
+	__host__ __device__ __inline__ float
 		distanceFromCylinder(glm::vec4 point, glm::mat4 transform, glm::vec3 dimensions)
 	{
 		point = transform * point;
 		return glm::length(glm::vec2(point.x, point.z) - glm::vec2(dimensions.x, dimensions.y)) - dimensions.z;
 	}
 
-	__device__ float
+	__device__ __inline__ float
 	selectModificationFunction(SDModification* modification, float distance1, float distance2)
 	{
 		switch (modification->functionId)
@@ -151,19 +151,19 @@ public:
 		return 0;
 	}
 
-	__device__ inline float
+	__device__ __inline__ float
 	placeModification(float originalDistance, float modifierDistance)
 	{
 		return fminf(originalDistance, modifierDistance);
 	}
 
-	__device__ inline float
+	__device__ __inline__ float
 		carveModification(float originalDistance, float modifierDistance)
 	{
 		return fmaxf(originalDistance, -modifierDistance);
 	}
 
-	__device__ float
+	__device__ __inline__ float
 	blendModification(float originalDistance, float modifierDistance, float k)
 	{
 		float h = glm::clamp(0.5 + 0.5*(modifierDistance - originalDistance) / k, 0.0, 1.0);

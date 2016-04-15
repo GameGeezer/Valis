@@ -257,6 +257,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <CudaCompile Include="kernel.cu" />
     <CudaCompile Include="MouseClickCallback.cu" />
     <CudaCompile Include="MouseMoveCallback.cu" />
+    <CudaCompile Include="Nova.cu" />
     <CudaCompile Include="PBO.cu" />
     <CudaCompile Include="PlaceSDPrimitive.cu" />
     <CudaCompile Include="Player.cu" />
@@ -281,6 +282,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Color.cuh" />
     <ClInclude Include="CompactMortonPoint.cuh" />
     <ClInclude Include="Morton30.cuh" />
+    <ClInclude Include="Nova.cuh" />
     <ClInclude Include="SDCappedCylinder.cuh" />
     <ClInclude Include="SDCube.cuh" />
     <ClInclude Include="SDCylinder.cuh" />

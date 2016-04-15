@@ -1,14 +1,13 @@
 #include "Galaxy.cuh"
 
-#include <stdint.h>
-
 #include "IBO.cuh"
+#include "VBO.cuh"
 #include "PBO.cuh"
 #include "ShaderProgram.cuh"
 
 using namespace glm;
 
-Galaxy::Galaxy()
+Galaxy::Galaxy(uint32_t resolution)
 {
 
 }
@@ -35,13 +34,17 @@ Galaxy::render(ShaderProgram& shader, glm::mat4& viewProjection)
 
 	GLint compactDataAttribute = shader.getAttributeLocation("in_CompactData");
 
+	indices->bind();
 	points->bind();
+
 	glEnableVertexAttribArray(compactDataAttribute);
 	glEnableClientState(GL_VERTEX_ARRAY);
 
 	glVertexAttribIPointer(compactDataAttribute, 1, GL_UNSIGNED_INT, 0, (void*)(sizeof(uint32_t) * 0));
 
-	glDrawArrays(GL_POINTS, 0, starCount);
+	glDrawElements(GL_PATCHES, starCount, GL_UNSIGNED_INT, (void*)0);
+
 	glDisableClientState(GL_VERTEX_ARRAY);
 	points->unbind();
+	indices->unbind();
 }

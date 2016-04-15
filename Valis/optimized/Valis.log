@@ -1,4 +1,4 @@
-﻿Build started 4/5/2016 11:10:11 PM.
+﻿Build started 4/15/2016 12:49:10 PM.
      1>Project "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\Valis.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /nologo /W3 /WX- /O2 /Ob2 /Ot /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"optimized\\" /Fd"optimized\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Application.cu Camera.cu Game.cu KDLeafNodeCollection.cu KeyboardCallback.cu ShaderProgram.cu
@@ -28,6 +28,7 @@
          optimized\kernel.cu.obj
          optimized\MouseClickCallback.cu.obj
          optimized\MouseMoveCallback.cu.obj
+         optimized\Nova.cu.obj
          optimized\PBO.cu.obj
          optimized\PlaceSDPrimitive.cu.obj
          optimized\Player.cu.obj
@@ -60,4 +61,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:02.59
+Time Elapsed 00:00:02.63

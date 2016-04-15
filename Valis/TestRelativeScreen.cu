@@ -124,10 +124,6 @@ TestRelativeScreen::onUpdate(int delta)
 
 	pointCount = extractor->extract(*(player->deviceEditSDF), *mapping, *pboMapping, *iboMapping, 8);
 
-	
-	glm::mat4 invViewProjection;
-	player->camera->constructInverseViewProjection(invViewProjection);
-
 	glm::mat4 viewProjection;
 	player->camera->constructViewProjection(viewProjection);
 
@@ -169,6 +165,7 @@ TestRelativeScreen::onUpdate(int delta)
 	glVertexAttribIPointer(compactDataAttribute, 1, GL_UNSIGNED_INT, 0, (void*)(sizeof(uint32_t) * 0));
 
 	glDrawElements(GL_PATCHES, pointCount, GL_UNSIGNED_INT, (void*) 0);
+
 	glDisableClientState(GL_VERTEX_ARRAY);
 	vbo->unbind();
 	ibo->unbind();

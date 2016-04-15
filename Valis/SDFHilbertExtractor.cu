@@ -11,7 +11,6 @@
 #include "SDFDevice.cuh"
 #include "Morton30.cuh"
 
-
 __device__ __inline__ uint32_t
 findIndex(uint32_t localX, uint32_t localY, uint32_t localZ, uint32_t parseDimension)
 {
@@ -25,35 +24,29 @@ areVerticesOutsideIsosurface(uint32_t *d_output, SDFDevice *sdf, uint32_t gridDi
 	uint32_t y = blockIdx.y * blockDim.y + threadIdx.y;
 	uint32_t z = blockIdx.z * blockDim.z + threadIdx.z;
 
-	// Check to see if x, y, or z exceeds the bounds of the local grid
-	if (x >= parseDimension || y >= parseDimension || z >= parseDimension)
-	{
-		return;
-	}
-
 	uint32_t offsetX = x + dimensionOffsetX;
 	uint32_t offsetY = y + dimensionOffsetY;
 	uint32_t offsetZ = z + dimensionOffsetZ;
 
+	// Check to see if x, y, or z exceeds the bounds of the local grid
 	// Check to see if x, y, ot z exceed the bounds of the entire grid
-	if (offsetX >= gridDimension || offsetY >= gridDimension || offsetZ >= gridDimension)
+	if (x >= parseDimension || y >= parseDimension || z >= parseDimension || offsetX >= gridDimension || offsetY >= gridDimension || offsetZ >= gridDimension)
 	{
 		return;
 	}
 
-	uint64_t index = findIndex(x, y, z, parseDimension);
+	uint32_t index = findIndex(x, y, z, parseDimension);
 
 	float divisionsAsFloat = ((float)gridDimension);
-	float halfCellDimension = 0.5f / divisionsAsFloat;
 	// normalized x, y, and z
-	float normalizeX = (((float)offsetX) / divisionsAsFloat) - halfCellDimension;
-	float normalizeY = (((float)offsetY) / divisionsAsFloat) - halfCellDimension;
-	float normalizeZ = (((float)offsetZ) / divisionsAsFloat) - halfCellDimension;
+	float normalizeX = (((float)offsetX) - 0.5f) / divisionsAsFloat;
+	float normalizeY = (((float)offsetY) - 0.5f) / divisionsAsFloat;
+	float normalizeZ = (((float)offsetZ) - 0.5f) / divisionsAsFloat;
 
 	// How far the cell is from the sdf
 	float distance = sdf->distanceFromPoint(glm::vec3(normalizeX, normalizeY, normalizeZ));
 
-	NumericBoolean isDistancePositive = numericGreaterThan_float(distance, 0);
+	NumericBoolean isDistancePositive = numericGreaterThan_uint32_t(distance, 0);
 
 	d_output[index] = isDistancePositive;
 }
@@ -66,23 +59,16 @@ extractPointsInMortonOrder(ExtractedPoint *d_output, SDFDevice *sdf, uint32_t *v
 	uint32_t y = blockIdx.y * blockDim.y + threadIdx.y;
 	uint32_t z = blockIdx.z * blockDim.z + threadIdx.z;
 
-	// Check to see if x, y, or z exceeds the bounds of the local grid
-	if (x >= parseDimension || y >= parseDimension || z >= parseDimension)
-	{
-		return;
-	}
-
 	uint32_t offsetX = x + dimensionOffsetX;
 	uint32_t offsetY = y + dimensionOffsetY;
 	uint32_t offsetZ = z + dimensionOffsetZ;
 
+	// Check to see if x, y, or z exceeds the bounds of the local grid
 	// Check to see if x, y, ot z exceed the bounds of the entire grid
-	if (offsetX >= gridDimension || offsetY >= gridDimension || offsetZ >= gridDimension)
+	if (x >= parseDimension || y >= parseDimension || z >= parseDimension || offsetX >= gridDimension || offsetY >= gridDimension || offsetZ >= gridDimension)
 	{
 		return;
 	}
-
-	
 	
 	float divisionsAsFloat = ((float)gridDimension);
 
@@ -99,10 +85,6 @@ extractPointsInMortonOrder(ExtractedPoint *d_output, SDFDevice *sdf, uint32_t *v
 	float cellDimension = 1.0f / divisionsAsFloat;
 
 	NumericBoolean shouldGeneratePoint = numericLessThan_float(distance, cellDimension) * numericGreaterThan_float(distance, 0);
-
-	// Decide whether to generate a point
-	
-
 	
 	NumericBoolean bottomLeftBack = vertexPlacement[findIndex(x, y, z, parseDimension)];
 	NumericBoolean bottomRightBack = vertexPlacement[findIndex(x + 1, y, z, parseDimension)];
@@ -137,25 +119,12 @@ clusterPoints(CompactMortonPoint* renderPointBuffer, WorldPositionMorton* offset
 	uint32_t x = blockIdx.x * blockDim.x + threadIdx.x;
 
 	uint32_t renderPointBufferWriteIndex = (x * 64) + *compactMortonStart;
-	uint32_t indexBufferWriteIndex = (x * 189) + *indexStart;
+	uint32_t indexBufferWriteIndex = (x * 192) + *indexStart;
 	uint32_t startingIndex = renderPointBufferWriteIndex - (overlapSize * x);
 	uint32_t worldMortonIndex = *worldMortonStart + x;
 
-	if (worldMortonIndex >= worldMortonBufSize)
+	if ((worldMortonIndex >= worldMortonBufSize) || ((sortedPoints + startingIndex + 64) >= sortedPointsEnd) || (renderPointBufferWriteIndex >= compactMortonBufSize))
 	{
-		int d = x + 5;
-		return;
-	}
-
-	if ( ((sortedPoints + startingIndex + 64) >= sortedPointsEnd) )
-	{
-		int d = x + 5;
-		return;
-	}
-	
-	if (renderPointBufferWriteIndex >= compactMortonBufSize)
-	{
-		int d = x + 5;
 		return;
 	}
 
@@ -163,8 +132,8 @@ clusterPoints(CompactMortonPoint* renderPointBuffer, WorldPositionMorton* offset
 
 	for (uint32_t i = 0; i < 64; ++i)
 	{
-		uint64_t upperMorton = sortedPoints[startingIndex + i].morton;
-		uint64_t highestDifferent = Morton30::highestOrderBitDifferent(baseMorton, upperMorton);
+		uint32_t upperMorton = sortedPoints[startingIndex + i].morton;
+		uint32_t highestDifferent = Morton30::highestOrderBitDifferent(baseMorton, upperMorton);
 		// Make sure the highest bit different is less than x is 64
 		NumericBoolean isWithinBounds = numericLessThan_uint32_t(highestDifferent, 0x40000);
 		// Subtract the base morton from the upper morton so relative offset can be stored
@@ -178,11 +147,33 @@ clusterPoints(CompactMortonPoint* renderPointBuffer, WorldPositionMorton* offset
 		renderPointBuffer[renderPointBufferWriteIndex + i].compactData = renderPointBuffer[renderPointBufferWriteIndex + i].compactData * isWithinBounds + baseMorton * numericNegate_uint32_t(isWithinBounds);
 	}
 
-	for (uint32_t i = 0; i < 189; ++i)
+	uint32_t previousMorton = sortedPoints[startingIndex].morton;
+	uint32_t triangleCount = 0;
+	uint32_t lastIndex = 0;
+	for (uint32_t i = 0; i < 192; ++i)
 	{
-		indexBuffer[indexBufferWriteIndex + i] = renderPointBufferWriteIndex + ((i / 3) + (i % 3));
-	}
+		uint32_t iRemainder = (i % 3);
+		uint32_t indexOffset = ((i / 3) + iRemainder);
+		uint32_t newMorton = sortedPoints[startingIndex + indexOffset].morton;
+		uint32_t highestDifferent = Morton30::highestOrderBitDifferent(previousMorton, newMorton);
 
+		NumericBoolean isLegal = numericLessThan_uint32_t(highestDifferent, 0x8);
+		// If the index is legal we can add it to the triangle as an index
+		indexBuffer[indexBufferWriteIndex + lastIndex + triangleCount] = renderPointBufferWriteIndex + indexOffset;
+		triangleCount += isLegal;
+		// Have we built a triangle?
+		NumericBoolean triangleBuilt = numericGreaterThan_uint32_t(triangleCount, 2);
+		
+		// If the triangle has been built or is illegal reset the counter
+		triangleCount = isLegal * numericNegate_uint32_t(triangleBuilt) * triangleCount;
+		// If the triangle has been built move to the next three indicie indexes
+		lastIndex += 3 * triangleBuilt;
+		// Skip This index set if illegal (2 - iRemainder is the num left in the cluster 012 123 234 345 ect. is a cluster)
+		i += numericNegate_uint32_t(isLegal) * (2 - iRemainder);
+		uint32_t newIndexOffset = ((i / 3) + (i % 3));
+		previousMorton = sortedPoints[startingIndex + newIndexOffset].morton;
+	}
+	
 	offsetBuffer[worldMortonIndex] = baseMorton;
 }
 
@@ -201,7 +192,7 @@ countIndices(uint32_t* bufferBegin, size_t bufferLength, uint32_t* out_size)
 
 	if (lowerHasValue && !upperHasValue)
 	{
-		*out_size = x; // out_bufferDataEnd = &(bufferBegin[x]);
+		*out_size = x;
 	}
 }
 
@@ -220,7 +211,7 @@ countCompactMortons(CompactMortonPoint* bufferBegin, size_t bufferLength, uint32
 
 	if (lowerHasValue && !upperHasValue)
 	{
-		*out_size = x; // out_bufferDataEnd = &(bufferBegin[x]);
+		*out_size = x;
 	}
 }
 
@@ -239,7 +230,7 @@ countWorldMortons(WorldPositionMorton* bufferBegin, size_t bufferLength, uint32_
 
 	if (lowerHasValue && !upperHasValue)
 	{
-		*out_size = x; // out_bufferDataEnd = &(bufferBegin[x]);
+		*out_size = x;
 	}
 }
 
@@ -294,7 +285,6 @@ SDFHilbertExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactMortonPo
 	mapping.map();
 	size_t bufferLength = mapping.getSizeInBytes() / sizeof(CompactMortonPoint);
 	CompactMortonPoint* bufferPointerRaw = thrust::raw_pointer_cast(mapping.getDeviceOutput());
-	CompactMortonPoint* bufferPointerEndRaw = thrust::raw_pointer_cast(mapping.getDeviceOutput()) + bufferLength;
 	thrust::device_ptr<CompactMortonPoint> bufferPointerDevice = thrust::device_pointer_cast(mapping.getDeviceOutput());
 	uint32_t compactMortonBlockSize = ((bufferLength + 255) / 256), compactMortonThreadSize = 256;
 	thrust::fill(bufferPointerDevice, bufferPointerDevice + bufferLength, CompactMortonPoint());
@@ -302,7 +292,6 @@ SDFHilbertExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactMortonPo
 	pbo.map();
 	size_t pboBufferLength = pbo.getSizeInBytes() / sizeof(WorldPositionMorton);
 	WorldPositionMorton* pboBufferPointerRaw = thrust::raw_pointer_cast(pbo.getDeviceOutput());
-	WorldPositionMorton* pboBufferPointerEndRaw = thrust::raw_pointer_cast(pbo.getDeviceOutput()) + pboBufferLength;
 	thrust::device_ptr<WorldPositionMorton> pboBufferPointerDevice = thrust::device_pointer_cast(pbo.getDeviceOutput());
 	uint32_t worldPositionBlockSize = ((pboBufferLength + 255) / 256), worldPositionThreadSize = 256;
 	thrust::fill(pboBufferPointerDevice, pboBufferPointerDevice + pboBufferLength, 0);
@@ -310,7 +299,6 @@ SDFHilbertExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactMortonPo
 	ibo.map();
 	size_t iboBufferLength = ibo.getSizeInBytes() / sizeof(uint32_t);
 	uint32_t* iboBufferPointerRaw = thrust::raw_pointer_cast(ibo.getDeviceOutput());
-	uint32_t* iboBufferPointerEndRaw = thrust::raw_pointer_cast(ibo.getDeviceOutput()) + pboBufferLength;
 	thrust::device_ptr<WorldPositionMorton> iboBufferPointerDevice = thrust::device_pointer_cast(ibo.getDeviceOutput());
 	uint32_t iboBlockSize = ((iboBufferLength + 255) / 256), iboThreadSize = 256;
 	thrust::fill(iboBufferPointerDevice, iboBufferPointerDevice + iboBufferLength, 0);
@@ -332,7 +320,7 @@ SDFHilbertExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactMortonPo
 		{
 			for (int k = 0; k < gridDimension; k += parseDimension)
 			{
-				//areVerticesOutsideIsosurface << <extractInMortonOrderBlockDim, extractInMortonOrderThreadDim >> > (isVertexOusideIsoBufferRaw, &sdf, gridDimension, parseDimension, i, j, k);
+				areVerticesOutsideIsosurface << <extractInMortonOrderBlockDim, extractInMortonOrderThreadDim >> > (isVertexOusideIsoBufferRaw, &sdf, gridDimension, parseDimension, i, j, k);
 				extractPointsInMortonOrder << <extractInMortonOrderBlockDim, extractInMortonOrderThreadDim >> >(mortenSortedPointsRaw, &sdf, isVertexOusideIsoBufferRaw, gridDimension, parseDimension, i, j, k);
 				//int numberCreated = thrust::count_if(mortonSortedPointsBuffer->begin(), mortonSortedPointsBuffer->end(), is_extracted_not_zero());
 				thrust::fill(mortonSortedPointsCompactBuffer->begin(), mortonSortedPointsCompactBuffer->end(), ExtractedPoint());
@@ -342,9 +330,6 @@ SDFHilbertExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactMortonPo
 				countCompactMortons << <compactMortonBlockSize, compactMortonThreadSize >> >(bufferPointerRaw, bufferLength, device_compactMortonSizeBucket);
 				countWorldMortons << <worldPositionBlockSize, worldPositionThreadSize >> >(pboBufferPointerRaw, pboBufferLength, device_worldMortonSizeBucket);
 				countIndices << <iboBlockSize, iboThreadSize >> >(iboBufferPointerRaw, iboBufferLength, device_indexSizeBucket);
-				//uint32_t size32 = 0;
-				//cudaMemcpy(&size32, device_compactMortonSizeBucket, sizeof(uint32_t), cudaMemcpyDeviceToHost);
-				//cudaMemcpy(&size32, device_worldMortonSizeBucket, sizeof(uint32_t), cudaMemcpyDeviceToHost);
 			}
 		}
 	}
@@ -357,7 +342,6 @@ SDFHilbertExtractor::extract(SDFDevice& sdf, CudaGLBufferMapping<CompactMortonPo
 	mapping.unmap();
 	pbo.unmap();
 	ibo.unmap();
-
 
 	return size * 3;
 }

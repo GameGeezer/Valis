@@ -57,6 +57,9 @@
     <CudaCompile Include="Texture1D.cu">
       <Filter>framework\src\graphics\opengl\private</Filter>
     </CudaCompile>
+    <CudaCompile Include="Nova.cu">
+      <Filter>framework\src\scene\private</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="framework">
@@ -328,6 +331,9 @@
     </ClInclude>
     <ClInclude Include="SDCappedCylinder.cuh">
       <Filter>framework\src\distanceFields\primitives\public</Filter>
+    </ClInclude>
+    <ClInclude Include="Nova.cuh">
+      <Filter>framework\src\scene\public</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -30,19 +30,19 @@ uint compactBy3(in uint value)
 
 float findNormalDirection(in uint value)
 {
-	float normal;
-	normal = 1.0f - 0.25f * float(value);
-	/*
+	float normal = 0.0f;
+	//normal = 1.0f - 0.25f * float(value);
+	
 	normal += float(value == 0) * 1.0f;
-	normal += float(value == 1) * 1.0f;
-	normal += float(value == 2) * 1.0f;
-	normal += float(value == 3) * 1.0f;
-	normal += float(value == 4) * 1.0f;
-	normal += float(value == 5) * 1.0f;
-	normal += float(value == 6) * 1.0f;
-	normal += float(value == 7) * 1.0f;
+	normal += float(value == 1) * 0.75f;
+	normal += float(value == 2) * 0.5f;
+	normal += float(value == 3) * 0.25f;
+	normal += float(value == 4) * 0.0f;
+	normal += float(value == 5) * -0.25f;
+	normal += float(value == 6) * -0.5f;
+	normal += float(value == 7) * -0.75f;
 	normal += float(value == 8) * -1.0f;
-	*/
+	
 	return normal;
 }
 
@@ -57,9 +57,9 @@ void main()
 
 	uint location = compactOffsetLocation + maskedPosition;
 
-	uint raw_x = compactBy3(location); //in_CompactData & 0x3F;
-	uint raw_y = compactBy3(location >> 1); //(in_CompactData & 0xFC0) >> 6;
-	uint raw_z = compactBy3(location >> 2); //(in_CompactData & 0x3F000) >> 12;
+	uint raw_x = compactBy3(location);
+	uint raw_y = compactBy3(location >> 1);
+	uint raw_z = compactBy3(location >> 2);
 
 	uint raw_nx = in_CompactData & 0x1C0000 >> 18;
 	uint raw_ny = (in_CompactData & 0xE00000) >> 21;
@@ -74,7 +74,7 @@ void main()
 	float nz = findNormalDirection(raw_nz);
 
 	//gl_Position = projectionMatrix * vec4(x, y, z, 1);
-	pass_Position = ( vec4(x, y, z, 1)).xyz;
-	pass_Normal = vec3(nx, ny, nz);
+	pass_Position = vec3(x, y, z);
+	pass_Normal = normalize(vec3(nx, ny, nz));
 	gl_PointSize  = 0.61803398f;
 }
