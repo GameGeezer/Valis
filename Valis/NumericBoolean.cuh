@@ -74,6 +74,12 @@ NumericBoolean numericNotEqual_uint32_t(uint32_t left, uint32_t right)
 }
 
 __host__ __device__ __inline__
+NumericBoolean numericEqual_uint32_t(uint32_t left, uint32_t right)
+{
+	return ((NumericBoolean)(left == right));
+}
+
+__host__ __device__ __inline__
 NumericBoolean numericLessThan_uint64_t(uint64_t left, uint64_t right)
 {
 	return ((NumericBoolean)(left < right));

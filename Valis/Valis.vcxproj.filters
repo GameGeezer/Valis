@@ -63,6 +63,12 @@
     <CudaCompile Include="SDFExtractor.cu">
       <Filter>game</Filter>
     </CudaCompile>
+    <CudaCompile Include="ByteArray.cu">
+      <Filter>framework\src\cuda\private</Filter>
+    </CudaCompile>
+    <CudaCompile Include="SignedDistanceField.cu">
+      <Filter>framework\src\distanceFields\private</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="framework">
@@ -178,6 +184,12 @@
     </Filter>
     <Filter Include="framework\src\scene\private">
       <UniqueIdentifier>{c0f8cee4-9099-4c2e-be33-6b521b8101eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\cuda\public">
+      <UniqueIdentifier>{16a0c03e-3ded-4717-a183-d7bffff9ec45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\src\cuda\private">
+      <UniqueIdentifier>{29203fb1-d059-4a1e-b2f7-4cde49c0ee03}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -343,6 +355,9 @@
     </ClInclude>
     <ClInclude Include="SignedDistanceField.cuh">
       <Filter>framework\src\distanceFields\public</Filter>
+    </ClInclude>
+    <ClInclude Include="ByteArray.cuh">
+      <Filter>framework\src\cuda\public</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -5,7 +5,17 @@
 
 #include <thrust/device_vector.h>
 
+#include "ThreeCompact10BitUInts.cuh"
+
 class Nova;
+
+typedef ThreeCompact10BitUInts CompactNormals;
+
+struct ExtractedPoint
+{
+	uint32_t morton;
+	CompactNormals normals;
+};
 
 class SDFExtractor
 {

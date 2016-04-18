@@ -147,6 +147,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <SuppressStartupBanner>false</SuppressStartupBanner>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -160,7 +161,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <CudaCompile>
       <Optimization>O2</Optimization>
-      <FastMath>true</FastMath>
+      <FastMath>false</FastMath>
       <GPUDebugInfo>false</GPUDebugInfo>
       <InterleaveSourceInPTX>false</InterleaveSourceInPTX>
       <CodeGeneration>compute_30,sm_30;%(CodeGeneration)</CodeGeneration>
@@ -250,6 +251,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <CudaCompile Include="ByteArray.cu" />
     <CudaCompile Include="CarveSDPrimitive.cu" />
     <CudaCompile Include="Descriptor.cu" />
     <CudaCompile Include="Galaxy.cu" />
@@ -267,6 +269,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <CudaCompile Include="SDFHost.cu" />
     <CudaCompile Include="SDSphere.cu" />
     <CudaCompile Include="SDTorus.cu" />
+    <CudaCompile Include="SignedDistanceField.cu" />
     <CudaCompile Include="TestRelativeScreen.cu" />
     <CudaCompile Include="Texture1D.cu" />
     <CudaCompile Include="Texture2D.cu" />
@@ -278,6 +281,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Application.cuh" />
     <ClInclude Include="BlendSDModification.cuh" />
     <ClInclude Include="BufferedObjectUsage.cuh" />
+    <ClInclude Include="ByteArray.cuh" />
     <ClInclude Include="Camera.cuh" />
     <ClInclude Include="CarveSDPrimitive.cuh" />
     <ClInclude Include="Color.cuh" />

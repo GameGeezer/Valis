@@ -12,6 +12,10 @@
 class VBO;
 class PBO;
 class IBO;
+class SignedDistanceField;
+class DistancePrimitive;
+class SDModification;
+class ByteArrayChunk;
 
 class Nova
 {
@@ -28,15 +32,24 @@ public:
 
 	uint32_t vboBufferLength, iboBufferLength, pboBufferLength, parseVBOBlockSize, parseIBOBlockSize, parsePBOBlockSize;
 
-	Nova(VBO &vbo, PBO &pbo, IBO &ibo);
+	Nova(VBO &vbo, PBO &pbo, IBO &ibo, uint32_t gridResolution);
 
 	~Nova();
 
 	void
-	startEdit();
+	place(DistancePrimitive& primitive, uint32_t material);
 
 	void
-	endEdit();
+	revertEdits();
+
+	void
+	finalizeEdits();
+
+	void
+	map();
+
+	void
+	unmap();
 
 	void
 	clean();
@@ -77,11 +90,16 @@ public:
 	uint32_t
 	getBlockSizeIBO();
 
+	ByteArrayChunk*
+	getMaterialDevicePointer();
+
 private:
 
 	VBO &vbo;
 	PBO &pbo;
 	IBO &ibo;
+
+	SignedDistanceField &baseField, &editedField;
 
 	CudaGLBufferMapping<CompactMortonPoint> &compactVerticesVBO;
 	CudaGLBufferMapping<uint32_t> &vertexOffsetsPBO;

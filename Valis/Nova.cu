@@ -4,10 +4,15 @@
 #include "PBO.cuh"
 #include "IBO.cuh"
 
-Nova::Nova(VBO &vbo, PBO &pbo, IBO &ibo) :
+#include "SignedDistanceField.cuh"
+#include "ByteArray.cuh"
+
+Nova::Nova(VBO &vbo, PBO &pbo, IBO &ibo, uint32_t gridResolution) :
 	vbo(vbo),
 	pbo(pbo),
 	ibo(ibo),
+	baseField(*(new SignedDistanceField(gridResolution))),
+	editedField(*(new SignedDistanceField(gridResolution))),
 	indicesIBO(*(new CudaGLBufferMapping<uint32_t>(ibo.getHandle(), cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone))),
 	vertexOffsetsPBO(*(new CudaGLBufferMapping<uint32_t>(pbo.getHandle(), cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone))),
 	compactVerticesVBO(*(new CudaGLBufferMapping<CompactMortonPoint>(vbo.getHandle(), cudaGraphicsMapFlags::cudaGraphicsMapFlagsNone)))
@@ -37,7 +42,25 @@ Nova::Nova(VBO &vbo, PBO &pbo, IBO &ibo) :
 }
 
 void
-Nova::startEdit()
+Nova::place(DistancePrimitive& primitive, uint32_t material)
+{
+	editedField.place(primitive, material);
+}
+
+void
+Nova::revertEdits()
+{
+	baseField.copyInto(editedField);
+}
+
+void
+Nova::finalizeEdits()
+{
+	editedField.copyInto(baseField);
+}
+
+void
+Nova::map()
 {
 	compactVerticesVBO.map();
 	vertexOffsetsPBO.map();
@@ -45,7 +68,7 @@ Nova::startEdit()
 }
 
 void
-Nova::endEdit()
+Nova::unmap()
 {
 	compactVerticesVBO.unmap();
 	vertexOffsetsPBO.unmap();
@@ -130,4 +153,10 @@ uint32_t
 Nova::getBlockSizeIBO()
 {
 	return parseIBOBlockSize;
+}
+
+ByteArrayChunk*
+Nova::getMaterialDevicePointer()
+{
+	return editedField.getMaterialDevicePointer();
 }

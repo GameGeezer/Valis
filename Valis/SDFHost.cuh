@@ -28,9 +28,6 @@ public:
 	__host__ void
 	popEdit();
 
-	//void
-	//normalize();
-
 private:
 	SDFDevice* deviceSDF;
 	AABB bounds;

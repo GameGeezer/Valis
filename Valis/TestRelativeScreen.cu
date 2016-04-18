@@ -33,6 +33,7 @@
 
 #include "Texture1D.cuh"
 #include "Nova.cuh"
+#include "ByteArray.cuh"
 
 void
 TestRelativeScreen::onCreate()
@@ -83,14 +84,15 @@ TestRelativeScreen::onCreate()
 	testSDFDevice = testSDF->copyToDevice();
 
 	// Create the extractor
-	extractor = new SDFHilbertExtractor(256, 256);
+	extractor = new SDFHilbertExtractor(128, 128);
 
 	ibo = new IBO(10000000, BufferedObjectUsage::DYNAMIC_DRAW);
 	vbo = new VBO(1000000, BufferedObjectUsage::DYNAMIC_DRAW);
 	pbo = new PBO(16000);
 
 	pboTexture = new Texture1D(16000);
-	testNova = new Nova(*vbo, *pbo, *ibo);
+	testNova = new Nova(*vbo, *pbo, *ibo, 128);
+	//testNova->place(sdSphere, 4);
 
 	//glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE); // Not a texture. default is modulate.
 	
@@ -148,7 +150,7 @@ TestRelativeScreen::onUpdate(int delta)
 	shader->setUnifromMatrix4f(projectionLocation, viewProjection);
 
 	GLint resolutionLocation = shader->getUniformLocation("gridResolution");
-	shader->setUniformf(resolutionLocation, 256);
+	shader->setUniformf(resolutionLocation, 128);
 
 	GLint offstSizeLocation = shader->getUniformLocation("offsetBufferSize");
 	shader->setUniformf(offstSizeLocation, (pointCount + 63) / 64);

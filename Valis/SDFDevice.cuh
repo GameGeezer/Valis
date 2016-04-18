@@ -96,6 +96,7 @@ public:
 		point = transform * point;
 		return GLMUtil::length(glm::vec3(point)) - radius;
 	}
+
 	/*
 	__device__ inline float
 	distanceFromTorus(glm::vec3 position, glm::vec2 dimensions, glm::vec3 point)
