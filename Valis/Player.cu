@@ -16,6 +16,12 @@
 #include "BlendSDModification.cuh"
 #include "SDModification.cuh"
 
+#include "VBO.cuh"
+#include "IBO.cuh"
+#include "PBO.cuh"
+
+#include "Nova.cuh"
+
 Player::Player(Camera& camera) : camera(&camera), scale(glm::vec3(1, 1, 1))
 {
 	Application::KEYBOARD->addListener(*this);
@@ -30,6 +36,15 @@ Player::Player(Camera& camera) : camera(&camera), scale(glm::vec3(1, 1, 1))
 	SDCube sdCube(glm::vec3(0.1f, 0.1f, 0.1f), glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
 	hostEditSDF = new SDFHost(&sdCube, 30);
 	deviceEditSDF = hostEditSDF->copyToDevice();
+
+	SDSphere sdSphere(0.25f, glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
+
+	ibo = new IBO(10000000, BufferedObjectUsage::DYNAMIC_DRAW);
+	vbo = new VBO(1000000, BufferedObjectUsage::DYNAMIC_DRAW);
+	pbo = new PBO(160000);
+
+	testNova = new Nova(*vbo, *pbo, *ibo, 256);
+	testNova->place(sdSphere, 4);
 
 	lastPlaceTime = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
 	rotation = glm::vec3(0, 1, 0);
@@ -70,7 +85,8 @@ Player::update(int delta)
 	if (brushType == 1)
 	{
 		SDSphere sdSphere(0.1f, scale, orientation);
-		hostEditSDF->modify(&sdSphere, currentMod);
+		testNova->place(sdSphere, 4);
+		//hostEditSDF->modify(&sdSphere, currentMod);
 	}
 	else if (brushType == 2)
 	{
@@ -87,9 +103,9 @@ Player::update(int delta)
 		SDCylinder sdCylinder(glm::vec3(0.05f, 0.05f, 0.05f), scale, orientation);
 		hostEditSDF->modify(&sdCylinder, currentMod);
 	}
-	
-	deviceEditSDF = hostEditSDF->copyToDevice();
-	hostEditSDF->popEdit();
+	//testNova->revertEdits();
+	//deviceEditSDF = hostEditSDF->copyToDevice();
+	//hostEditSDF->popEdit();
 }
 
 void

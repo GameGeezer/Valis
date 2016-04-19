@@ -48,13 +48,15 @@ placeSphereMaterialDistanceField(ByteArrayChunk *d_output, SDSphere *primitive, 
 	NumericBoolean isOutside = numericGreaterThan_float(distance, 0);
 	NumericBoolean isInside = numericNegate_uint32_t(isOutside);
 
-	NumericBoolean shouldGeneratePoint = numericLessThan_float(distance, cellDimension) * isOutside;
-	NumericBoolean shouldNotGeneratePoint = numericNegate_uint32_t(shouldGeneratePoint);
 
 	uint32_t indexCurrentValue = byteArray_getValueAtIndex(d_output, index);
-	numericEqual_uint32_t(indexCurrentValue, SDF_INSIDE_SURFACE);
+	NumericBoolean insideWholeShape = numericEqual_uint32_t(indexCurrentValue, SDF_INSIDE_SURFACE);
+	NumericBoolean notInsideWholeShape = numericNegate_uint32_t(insideWholeShape);
+
+	NumericBoolean shouldGeneratePoint = numericLessThan_float(distance, cellDimension) * isOutside;
+	NumericBoolean shouldNotGeneratePoint = numericNegate_uint32_t(shouldGeneratePoint);
 	// TODO don't write if inside the surface
-	uint32_t valueToWrite = (SDF_INSIDE_SURFACE * isInside + SDF_OUTSIDE_SURFACE * isOutside) * shouldNotGeneratePoint + material * shouldGeneratePoint;
+	uint32_t valueToWrite = (indexCurrentValue * isOutside * notInsideWholeShape + SDF_INSIDE_SURFACE * isInside * insideWholeShape) * shouldNotGeneratePoint + material * shouldGeneratePoint;
 
 	byteArray_setValueAtIndex(d_output, index, valueToWrite);
 }

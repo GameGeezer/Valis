@@ -44,16 +44,22 @@ byteArray_setValueAtIndex(ByteArrayChunk* data, uint32_t index, uint32_t value)
 	value &= 0xF;
 	// mod 8, this is a faster alternative that works for powers of 2
 	uint32_t byteIndex = index & 7;
+	uint32_t writeIndex = index / 8;
 
 	NumericBoolean writeFirst = numericLessThan_uint32_t(byteIndex, 4);
 	NumericBoolean writeSecond = numericNegate_uint32_t(writeFirst);
 
 	byteIndex = byteIndex * writeFirst + (byteIndex - 4) * writeSecond;
 
-	uint32_t valueToOr = value << (4 * byteIndex);
+	uint32_t distanceToShift = 4 * byteIndex;
+	uint32_t valueToOr = value << distanceToShift;
+	uint32_t andMask = ~(0xF << distanceToShift);
 
-	atomicOr(&(data[index].first), valueToOr * writeFirst);
-	atomicOr(&(data[index].second), valueToOr * writeSecond);
+	atomicAnd(&(data[writeIndex].first), (andMask * writeFirst) + (0xFFFF * writeSecond));
+	atomicAnd(&(data[writeIndex].second), (andMask * writeSecond) + (0xFFFF * writeFirst));
+
+	atomicOr(&(data[writeIndex].first), valueToOr * writeFirst);
+	atomicOr(&(data[writeIndex].second), valueToOr * writeSecond);
 }
 
 __device__ __inline__ uint32_t
@@ -61,15 +67,20 @@ byteArray_getValueAtIndex(ByteArrayChunk* data, uint32_t index)
 {
 	// mod 8, this is a faster alternative that works for powers of 2
 	uint32_t byteIndex = index & 7;
+	uint32_t writeIndex = index / 8;
 
 	NumericBoolean findInFirst = numericLessThan_uint32_t(byteIndex, 4);
 	NumericBoolean findInSecond = numericNegate_uint32_t(findInFirst);
 
 	byteIndex = byteIndex * findInFirst + (byteIndex - 4) * findInSecond;
 
-	uint32_t valueToAnd = 0xF << (4 * byteIndex);
+	uint32_t distanceToShift = 4 * byteIndex;
+	uint32_t valueToAnd = 0xF << distanceToShift;
 
-	return (data[index].first & valueToAnd) * findInFirst + (data[index].second & valueToAnd) * findInSecond;
+	uint32_t firstValue = (data[writeIndex].first & valueToAnd) >> distanceToShift;
+	uint32_t secondValue = (data[writeIndex].second & valueToAnd) >> distanceToShift;
+
+	return firstValue * findInFirst + secondValue * findInSecond;
 }
 
 #endif

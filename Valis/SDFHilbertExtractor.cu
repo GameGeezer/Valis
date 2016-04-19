@@ -19,7 +19,7 @@
 __device__ __inline__ uint32_t
 findIndex(uint32_t localX, uint32_t localY, uint32_t localZ, uint32_t parseDimension)
 {
-	uint32_t index = localX + localY * parseDimension + localZ * parseDimension * parseDimension;
+	return localX + localY * parseDimension + localZ * parseDimension * parseDimension;
 }
 
 __global__ void
@@ -140,9 +140,9 @@ sdfExtractPointsInMortonOrder(ExtractedPoint *d_output, ByteArrayChunk *sdfData,
 
 	NumericBoolean shouldGeneratePoint = numericNotEqual_uint32_t(material, SDF_INSIDE_SURFACE) * numericNotEqual_uint32_t(material, SDF_OUTSIDE_SURFACE);
 
-	uint32_t index = x + y * parseDimension + z * parseDimension * parseDimension;
+	uint32_t index = Morton30::encode(x, y, z);
 
-	//d_output[index].normals.pack(normalVec.x, normalVec.y, normalVec.z);
+	d_output[index].normals.pack(1, 0, 0);
 	d_output[index].normals.compactData *= shouldGeneratePoint;
 	d_output[index].morton = Morton30::encode(offsetX, offsetY, offsetZ);
 	d_output[index].morton *= shouldGeneratePoint;
@@ -181,6 +181,24 @@ clusterPoints(CompactMortonPoint* renderPointBuffer, WorldPositionMorton* offset
 		renderPointBuffer[renderPointBufferWriteIndex  + i].pack(mortonOffset, normalX, normalY, normalZ);
 		renderPointBuffer[renderPointBufferWriteIndex + i].compactData = renderPointBuffer[renderPointBufferWriteIndex + i].compactData * isWithinBounds + baseMorton * numericNegate_uint32_t(isWithinBounds);
 	}
+	
+	offsetBuffer[worldMortonIndex] = baseMorton;
+}
+
+__global__ void
+generateIndices(CompactMortonPoint* renderPointBuffer, WorldPositionMorton* offsetBuffer, uint32_t* indexBuffer, ExtractedPoint* sortedPoints, size_t overlapSize, uint32_t* compactMortonStart, uint32_t* worldMortonStart, uint32_t* indexStart, uint32_t compactMortonBufSize, uint32_t worldMortonBufSize, ExtractedPoint* sortedPointsEnd, uint32_t indexBufferSize)
+{
+	uint32_t x = blockIdx.x * blockDim.x + threadIdx.x;
+
+	uint32_t renderPointBufferWriteIndex = (x * 64) + *compactMortonStart;
+	uint32_t indexBufferWriteIndex = (x * 192) + *indexStart;
+	uint32_t startingIndex = renderPointBufferWriteIndex - (overlapSize * x);
+	uint32_t worldMortonIndex = *worldMortonStart + x;
+
+	if ((worldMortonIndex >= worldMortonBufSize) || ((sortedPoints + startingIndex + 64) >= sortedPointsEnd) || (renderPointBufferWriteIndex >= compactMortonBufSize))
+	{
+		return;
+	}
 
 	uint32_t previousMorton = sortedPoints[startingIndex].morton;
 	uint32_t triangleCount = 0;
@@ -198,7 +216,7 @@ clusterPoints(CompactMortonPoint* renderPointBuffer, WorldPositionMorton* offset
 		triangleCount += isLegal;
 		// Have we built a triangle?
 		NumericBoolean triangleBuilt = numericGreaterThan_uint32_t(triangleCount, 2);
-		
+
 		// If the triangle has been built or is illegal reset the counter
 		triangleCount = isLegal * numericNegate_uint32_t(triangleBuilt) * triangleCount;
 		// If the triangle has been built move to the next three indicie indexes
@@ -208,8 +226,6 @@ clusterPoints(CompactMortonPoint* renderPointBuffer, WorldPositionMorton* offset
 		uint32_t newIndexOffset = ((i / 3) + (i % 3));
 		previousMorton = sortedPoints[startingIndex + newIndexOffset].morton;
 	}
-	
-	offsetBuffer[worldMortonIndex] = baseMorton;
 }
 
 __global__ void
@@ -326,7 +342,9 @@ SDFHilbertExtractor::extract(SDFDevice& sdf, Nova &nova, uint32_t overlapSize)
 				sdfExtractPointsInMortonOrder << <extractInMortonOrderBlockDim, extractInMortonOrderThreadDim >> >(mortenSortedPointsRaw, nova.getMaterialDevicePointer(), gridDimension, parseDimension, i, j, k);
 				thrust::fill(mortonSortedPointsCompactBuffer->begin(), mortonSortedPointsCompactBuffer->end(), ExtractedPoint());
 				thrust::copy_if(thrust::device, mortonSortedPointsBuffer->begin(), mortonSortedPointsBuffer->end(), mortonSortedPointsCompactBuffer->begin(), is_extracted_not_zero());
+				
 				clusterPoints << < mortonSortedPointBlockSize, mortonSortedPointThreadSize >> >(nova.getRawVBO(), nova.getRawPBO(), nova.getRawIBO(), mortonSortedBegin, overlapSize, device_compactMortonSizeBucket, device_worldMortonSizeBucket, device_indexSizeBucket, nova.getLengthVBO(), nova.getLengthPBO(), mortonSortedEnd, nova.getLengthIBO());
+				generateIndices << < mortonSortedPointBlockSize, mortonSortedPointThreadSize >> >(nova.getRawVBO(), nova.getRawPBO(), nova.getRawIBO(), mortonSortedBegin, overlapSize, device_compactMortonSizeBucket, device_worldMortonSizeBucket, device_indexSizeBucket, nova.getLengthVBO(), nova.getLengthPBO(), mortonSortedEnd, nova.getLengthIBO());
 				
 				countCompactMortons << <nova.getBlockSizeVBO(), NOVA_PARSE_BLOCK_SIZE >> >(nova.getRawVBO(), nova.getLengthVBO(), device_compactMortonSizeBucket);
 				countWorldMortons << <nova.getBlockSizePBO(), NOVA_PARSE_BLOCK_SIZE >> >(nova.getRawPBO(), nova.getLengthPBO(), device_worldMortonSizeBucket);

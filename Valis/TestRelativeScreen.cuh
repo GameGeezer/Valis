@@ -52,11 +52,9 @@ private:
 	SDFDevice* testSDFDevice;
 	SDFHost* testSDF;
 	SDModification* place;
-	PBO* pbo;
-	VBO* vbo;
-	IBO* ibo;
+
 	Texture1D* pboTexture;
-	Nova* testNova;
+	
 	int pointCount;
 	float testOffset = 0.0f;
 };

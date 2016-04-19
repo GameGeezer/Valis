@@ -74,7 +74,7 @@ TestRelativeScreen::onCreate()
 	player = new Player(*camera);
 
 	// Define an SDF to parse
-	SDSphere sdSphere(0.25f, glm::vec3(1, 0.5f, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
+	SDSphere sdSphere(0.25f, glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
 	SDTorus sdTorus(0.31f, 0.1f, glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 90);
 	SDCube sdCube(glm::vec3(0.1f, 0.1f, 0.1f), glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
 	//SDTorus sdTorus2(0.33f, 0.07f, glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
@@ -84,15 +84,10 @@ TestRelativeScreen::onCreate()
 	testSDFDevice = testSDF->copyToDevice();
 
 	// Create the extractor
-	extractor = new SDFHilbertExtractor(128, 128);
-
-	ibo = new IBO(10000000, BufferedObjectUsage::DYNAMIC_DRAW);
-	vbo = new VBO(1000000, BufferedObjectUsage::DYNAMIC_DRAW);
-	pbo = new PBO(16000);
+	extractor = new SDFHilbertExtractor(256, 256);
 
 	pboTexture = new Texture1D(16000);
-	testNova = new Nova(*vbo, *pbo, *ibo, 128);
-	//testNova->place(sdSphere, 4);
+
 
 	//glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE); // Not a texture. default is modulate.
 	
@@ -122,13 +117,13 @@ TestRelativeScreen::onUpdate(int delta)
 {
 	player->update(delta);
 
-	pointCount = extractor->extract(*(player->deviceEditSDF), *testNova, 0);
+	pointCount = extractor->extract(*(player->deviceEditSDF), *(player->testNova), 0);
 
 	glm::mat4 viewProjection;
 	player->camera->constructViewProjection(viewProjection);
 
 	glActiveTexture(GL_TEXTURE0);
-	pbo->bind();
+	player->pbo->bind();
 	pboTexture->bind();
 	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -150,15 +145,15 @@ TestRelativeScreen::onUpdate(int delta)
 	shader->setUnifromMatrix4f(projectionLocation, viewProjection);
 
 	GLint resolutionLocation = shader->getUniformLocation("gridResolution");
-	shader->setUniformf(resolutionLocation, 128);
+	shader->setUniformf(resolutionLocation, 256);
 
 	GLint offstSizeLocation = shader->getUniformLocation("offsetBufferSize");
 	shader->setUniformf(offstSizeLocation, (pointCount + 63) / 64);
 
 	GLint compactDataAttribute = shader->getAttributeLocation("in_CompactData");
 
-	ibo->bind();
-	vbo->bind();
+	player->ibo->bind();
+	player->vbo->bind();
 	glEnableVertexAttribArray(compactDataAttribute);
 	glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -167,8 +162,8 @@ TestRelativeScreen::onUpdate(int delta)
 	glDrawElements(GL_PATCHES, pointCount, GL_UNSIGNED_INT, (void*) 0);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
-	vbo->unbind();
-	ibo->unbind();
+	player->vbo->unbind();
+	player->ibo->unbind();
 	shader->unbind();
 }
 

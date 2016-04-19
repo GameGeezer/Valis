@@ -18,6 +18,11 @@ class CarveSDPrimitive;
 class BlendSDModification;
 class SDModification;
 
+class Nova;
+class VBO;
+class IBO;
+class PBO;
+
 using namespace std::chrono;
 
 class Player : public KeyboardListener, public MouseClickListener, public MouseMoveListener
@@ -25,6 +30,11 @@ class Player : public KeyboardListener, public MouseClickListener, public MouseM
 public:
 	Camera* camera;
 	SDFDevice* deviceEditSDF;
+
+	Nova* testNova;
+	PBO* pbo;
+	VBO* vbo;
+	IBO* ibo;
 
 	Player(Camera& camera);
 
@@ -65,6 +75,7 @@ private:
 	glm::mat4 orientation;
 	float distanceFromCamera = 0.5f;
 	int brushType = 1;
+
 };
 
 #endif

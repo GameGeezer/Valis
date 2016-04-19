@@ -1,46 +1,6 @@
-﻿Build started 4/17/2016 12:17:47 PM.
+﻿Build started 4/19/2016 1:22:02 AM.
      1>Project "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\Valis.vcxproj" on node 2 (Build target(s)).
-     1>CudaBuild:
-         Compiling CUDA source file ByteArray.cu...
-         cmd.exe /C "C:\Users\wpger_000\AppData\Local\Temp\tmp7f0bd4d62665481ea1e9cf131167d82b.cmd"
-         "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_30,code=\"sm_30,compute_30\" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"     --keep-dir optimized -maxrregcount=0  --machine 32 --compile -cudart static     -DWIN32 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /O2 /Zi  /MDd " -o optimized\ByteArray.cu.obj "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\ByteArray.cu"
-         
-         C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_30,code=\"sm_30,compute_30\" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"     --keep-dir optimized -maxrregcount=0  --machine 32 --compile -cudart static     -DWIN32 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /O2 /Zi  /MDd " -o optimized\ByteArray.cu.obj "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\ByteArray.cu" 
-         ByteArray.cu
-       CudaBuild:
-         Compiling CUDA source file SignedDistanceField.cu...
-         cmd.exe /C "C:\Users\wpger_000\AppData\Local\Temp\tmp7dd5a7e5fbb54c8696953ce570680af8.cmd"
-         "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_30,code=\"sm_30,compute_30\" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"     --keep-dir optimized -maxrregcount=0  --machine 32 --compile -cudart static     -DWIN32 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /O2 /Zi  /MDd " -o optimized\SignedDistanceField.cu.obj "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\SignedDistanceField.cu"
-         
-         C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_30,code=\"sm_30,compute_30\" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"     --keep-dir optimized -maxrregcount=0  --machine 32 --compile -cudart static     -DWIN32 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /O2 /Zi  /MDd " -o optimized\SignedDistanceField.cu.obj "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\SignedDistanceField.cu" 
-     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/SignedDistanceField.cu(52): warning : variable "valueToWrite" was declared but never referenced
-     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/SignedDistanceField.cu(52): warning : variable "valueToWrite" was declared but never referenced
-     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/SignedDistanceField.cu(52): warning : variable "valueToWrite" was declared but never referenced
-     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/SignedDistanceField.cu(52): warning : variable "valueToWrite" was declared but never referenced
-         SignedDistanceField.cu
-       CudaBuild:
-         Compiling CUDA source file TestRelativeScreen.cu...
-         cmd.exe /C "C:\Users\wpger_000\AppData\Local\Temp\tmpa3aecf1c42f64bf9a40a527d3d87de60.cmd"
-         "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_30,code=\"sm_30,compute_30\" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"     --keep-dir optimized -maxrregcount=0  --machine 32 --compile -cudart static     -DWIN32 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /O2 /Zi  /MDd " -o optimized\TestRelativeScreen.cu.obj "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\TestRelativeScreen.cu"
-         
-         C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_30,code=\"sm_30,compute_30\" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"     --keep-dir optimized -maxrregcount=0  --machine 32 --compile -cudart static     -DWIN32 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /O2 /Zi  /MDd " -o optimized\TestRelativeScreen.cu.obj "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\TestRelativeScreen.cu" 
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDSphere.cuh(47): warning : calling a __host__ function from a __host__ __device__ function is not allowed
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDTorus.cuh(51): warning : calling a __host__ function from a __host__ __device__ function is not allowed
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDCube.cuh(50): warning : calling a __host__ function from a __host__ __device__ function is not allowed
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDCylinder.cuh(50): warning : calling a __host__ function from a __host__ __device__ function is not allowed
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\DistancePrimitive.cuh(22): warning : calling a __host__ function("DistancePrimitive::DistancePrimitive") from a __host__ __device__ function("DistancePrimitive::DistancePrimitive [subobject]") is not allowed
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDModification.cuh(15): warning : calling a __host__ function("SDModification::SDModification") from a __host__ __device__ function("SDModification::SDModification [subobject]") is not allowed
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDSphere.cuh(47): warning : calling a __host__ function from a __host__ __device__ function is not allowed
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDTorus.cuh(51): warning : calling a __host__ function from a __host__ __device__ function is not allowed
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDCube.cuh(50): warning : calling a __host__ function from a __host__ __device__ function is not allowed
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDCylinder.cuh(50): warning : calling a __host__ function from a __host__ __device__ function is not allowed
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\DistancePrimitive.cuh(22): warning : calling a __host__ function("DistancePrimitive::DistancePrimitive") from a __host__ __device__ function("DistancePrimitive::DistancePrimitive [subobject]") is not allowed
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDModification.cuh(15): warning : calling a __host__ function("SDModification::SDModification") from a __host__ __device__ function("SDModification::SDModification [subobject]") is not allowed
-         TestRelativeScreen.cu
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\BlendSDModification.cuh(36): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\BlendSDModification.cuh(37): warning C4244: 'return' : conversion from 'double' to 'float', possible loss of data
-     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/TestRelativeScreen.cu(155): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-       ClCompile:
+     1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /W3 /WX- /O2 /Ob2 /Ot /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"optimized\\" /Fd"optimized\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Application.cu Camera.cu Game.cu KDLeafNodeCollection.cu KeyboardCallback.cu ShaderProgram.cu
          Microsoft (R) C/C++ Optimizing Compiler Version 18.00.40629 for x86
          Copyright (C) Microsoft Corporation.  All rights reserved.
@@ -109,4 +69,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:29.94
+Time Elapsed 00:00:02.85
