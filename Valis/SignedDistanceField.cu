@@ -55,8 +55,11 @@ placeSphereMaterialDistanceField(ByteArrayChunk *d_output, SDSphere *primitive, 
 
 	NumericBoolean shouldGeneratePoint = numericLessThan_float(distance, cellDimension) * isOutside;
 	NumericBoolean shouldNotGeneratePoint = numericNegate_uint32_t(shouldGeneratePoint);
+
 	// TODO don't write if inside the surface
-	uint32_t valueToWrite = (indexCurrentValue * isOutside * notInsideWholeShape + SDF_INSIDE_SURFACE * isInside * insideWholeShape) * shouldNotGeneratePoint + material * shouldGeneratePoint;
+	uint32_t ifPointIsLegal = material * notInsideWholeShape + SDF_INSIDE_SURFACE * insideWholeShape;
+	uint32_t ifPointIsIllegal = indexCurrentValue * isOutside + SDF_INSIDE_SURFACE * isInside;
+	uint32_t valueToWrite = ifPointIsIllegal * shouldNotGeneratePoint + ifPointIsLegal *  shouldGeneratePoint;
 
 	byteArray_setValueAtIndex(d_output, index, valueToWrite);
 }
@@ -83,7 +86,7 @@ void
 SignedDistanceField::copyInto(SignedDistanceField& other)
 {
 	materialGrid.copyInto(other.materialGrid);
-	normalGrid.copyInto(other.normalGrid);
+	//normalGrid.copyInto(other.normalGrid);
 }
 
 ByteArrayChunk*

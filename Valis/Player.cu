@@ -39,7 +39,7 @@ Player::Player(Camera& camera) : camera(&camera), scale(glm::vec3(1, 1, 1))
 
 	SDSphere sdSphere(0.25f, glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
 
-	ibo = new IBO(10000000, BufferedObjectUsage::DYNAMIC_DRAW);
+	ibo = new IBO(3000000, BufferedObjectUsage::DYNAMIC_DRAW);
 	vbo = new VBO(1000000, BufferedObjectUsage::DYNAMIC_DRAW);
 	pbo = new PBO(160000);
 
