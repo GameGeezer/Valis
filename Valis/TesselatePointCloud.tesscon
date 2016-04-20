@@ -4,40 +4,25 @@ layout(vertices = 3) out;
 
 in vec3 pass_Position[];
 in vec3 pass_Normal[];
+in uint pass_Spare[];
 
 out vec3 pass_TessPosition[];
 out vec3 pass_TessNormal[];
+out uint pass_TessSpare[];
 
 void main()
 {
-	//bool is0Xlow = pass_Position[gl_InvocationID][0].x < pass_Position[gl_InvocationID][1].x || pass_Position[gl_InvocationID][0].x < pass_Position[gl_InvocationID][2].x;
-	//bool is0Ylow = pass_Position[gl_InvocationID][0].x < pass_Position[gl_InvocationID][1].x || pass_Position[gl_InvocationID][0].x < pass_Position[gl_InvocationID][2].x;
-	//bool is0Zlow = pass_Position[gl_InvocationID][0].z < pass_Position[gl_InvocationID][1].z || pass_Position[gl_InvocationID][0].z < pass_Position[gl_InvocationID][2].z;
+	
 
-	//bool is1Xlow = pass_Position[gl_InvocationID][1].x < pass_Position[gl_InvocationID][0].x || pass_Position[gl_InvocationID][1].x < pass_Position[gl_InvocationID][2].x;
-	//bool is1Ylow = pass_Position[gl_InvocationID][1].y < pass_Position[gl_InvocationID][0].y || pass_Position[gl_InvocationID][1].y < pass_Position[gl_InvocationID][2].y;
-	//bool is1Zlow = pass_Position[gl_InvocationID][1].z < pass_Position[gl_InvocationID][0].z || pass_Position[gl_InvocationID][1].z < pass_Position[gl_InvocationID][2].z;
-
-	//bool is2Xlow = pass_Position[gl_InvocationID][2].x < pass_Position[gl_InvocationID][0].x || pass_Position[gl_InvocationID][2].x < pass_Position[gl_InvocationID][1].x;
-	//bool is2Ylow = pass_Position[gl_InvocationID][2].y < pass_Position[gl_InvocationID][0].y || pass_Position[gl_InvocationID][2].y < pass_Position[gl_InvocationID][1].y;
-	//bool is2Zlow = pass_Position[gl_InvocationID][2].z < pass_Position[gl_InvocationID][0].z || pass_Position[gl_InvocationID][2].z < pass_Position[gl_InvocationID][1].z;
-
-
-    pass_TessPosition[gl_InvocationID][0] = pass_Position[gl_InvocationID][0];
-	//pass_TessPosition[gl_InvocationID][0].x = pass_Position[gl_InvocationID][0].x + (-0.01f * ((int(is0Xlow) * 2) - 1));
-
-	pass_TessPosition[gl_InvocationID][1] = pass_Position[gl_InvocationID][1];
-	//pass_TessPosition[gl_InvocationID][1].x = pass_Position[gl_InvocationID][1].x + (-0.01f * ((int(is1Xlow) * 2) - 1));
-
-	pass_TessPosition[gl_InvocationID][2] = pass_Position[gl_InvocationID][2];
-	//pass_TessPosition[gl_InvocationID][2].x = pass_Position[gl_InvocationID][2].x + (-0.01f * ((int(is2Xlow) * 2) - 1));
-
+    pass_TessPosition[gl_InvocationID] = pass_Position[gl_InvocationID];
 	pass_TessNormal[gl_InvocationID] = pass_Normal[gl_InvocationID];
+	pass_TessSpare[gl_InvocationID] = pass_Spare[gl_InvocationID];
 
     if (gl_InvocationID == 0) {
         gl_TessLevelInner[0] = 8.0;
-        gl_TessLevelOuter[0] = 16.0;
-        gl_TessLevelOuter[1] = 16.0;
-        gl_TessLevelOuter[2] = 16.0;
+		gl_TessLevelInner[1] = 8.0;
+        gl_TessLevelOuter[0] = 8.0;
+        gl_TessLevelOuter[1] = 8.0;
+        gl_TessLevelOuter[2] = 8.0;
     }
 }

@@ -1,33 +1,6 @@
-﻿Build started 4/19/2016 2:16:59 AM.
+﻿Build started 4/20/2016 12:04:36 AM.
      1>Project "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\Valis.vcxproj" on node 2 (Build target(s)).
-     1>AddCudaCompileDeps:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\cl.exe /E /nologo /showIncludes /TP /D__CUDACC__ /DWIN32 /D_DEBUG /D_CONSOLE /D_MBCS /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /I. /FIcuda_runtime.h /c "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\Player.cu" 
-       CudaBuild:
-         Compiling CUDA source file Player.cu...
-         cmd.exe /C "C:\Users\wpger_000\AppData\Local\Temp\tmp81c90756d1744646a63ffc4144c18a2a.cmd"
-         "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_30,code=\"sm_30,compute_30\" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"     --keep-dir optimized -maxrregcount=0  --machine 32 --compile -cudart static     -DWIN32 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /O2 /Zi  /MDd " -o optimized\Player.cu.obj "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\Player.cu"
-         
-         C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_30,code=\"sm_30,compute_30\" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"     --keep-dir optimized -maxrregcount=0  --machine 32 --compile -cudart static     -DWIN32 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /O2 /Zi  /MDd " -o optimized\Player.cu.obj "C:\Users\wpger_000\documents\visual studio 2013\Projects\Valis\Valis\Player.cu" 
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDSphere.cuh(47): warning : calling a __host__ function from a __host__ __device__ function is not allowed
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDTorus.cuh(51): warning : calling a __host__ function from a __host__ __device__ function is not allowed
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDCube.cuh(50): warning : calling a __host__ function from a __host__ __device__ function is not allowed
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDCylinder.cuh(50): warning : calling a __host__ function from a __host__ __device__ function is not allowed
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\DistancePrimitive.cuh(22): warning : calling a __host__ function("DistancePrimitive::DistancePrimitive") from a __host__ __device__ function("DistancePrimitive::DistancePrimitive [subobject]") is not allowed
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\DistancePrimitive.cuh(28): warning : calling a __host__ function("DistancePrimitive::DistancePrimitive") from a __host__ __device__ function("DistancePrimitive::DistancePrimitive [subobject]") is not allowed
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDModification.cuh(15): warning : calling a __host__ function("SDModification::SDModification") from a __host__ __device__ function("SDModification::SDModification [subobject]") is not allowed
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDSphere.cuh(47): warning : calling a __host__ function from a __host__ __device__ function is not allowed
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDTorus.cuh(51): warning : calling a __host__ function from a __host__ __device__ function is not allowed
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDCube.cuh(50): warning : calling a __host__ function from a __host__ __device__ function is not allowed
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDCylinder.cuh(50): warning : calling a __host__ function from a __host__ __device__ function is not allowed
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\DistancePrimitive.cuh(22): warning : calling a __host__ function("DistancePrimitive::DistancePrimitive") from a __host__ __device__ function("DistancePrimitive::DistancePrimitive [subobject]") is not allowed
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\DistancePrimitive.cuh(28): warning : calling a __host__ function("DistancePrimitive::DistancePrimitive") from a __host__ __device__ function("DistancePrimitive::DistancePrimitive [subobject]") is not allowed
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\SDModification.cuh(15): warning : calling a __host__ function("SDModification::SDModification") from a __host__ __device__ function("SDModification::SDModification [subobject]") is not allowed
-         Player.cu
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\BlendSDModification.cuh(36): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\wpger_000\documents\visual studio 2013\projects\valis\valis\BlendSDModification.cuh(37): warning C4244: 'return' : conversion from 'double' to 'float', possible loss of data
-     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/Player.cu(76): warning C4305: '-=' : truncation from 'double' to 'float'
-     1>C:/Users/wpger_000/documents/visual studio 2013/Projects/Valis/Valis/Player.cu(79): warning C4305: '+=' : truncation from 'double' to 'float'
-       ClCompile:
+     1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /W3 /WX- /O2 /Ob2 /Ot /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"optimized\\" /Fd"optimized\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Application.cu Camera.cu Game.cu KDLeafNodeCollection.cu KeyboardCallback.cu ShaderProgram.cu
          Microsoft (R) C/C++ Optimizing Compiler Version 18.00.40629 for x86
          Copyright (C) Microsoft Corporation.  All rights reserved.
@@ -96,4 +69,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:18.83
+Time Elapsed 00:00:03.76

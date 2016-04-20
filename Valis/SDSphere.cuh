@@ -35,6 +35,12 @@ public:
 		return deviceSphere;
 	}
 
+	__host__ void
+	deleteFromDevice(SDSphere* sphere)
+	{
+		assertCUDA(cudaFree(sphere));
+	}
+
 	__host__ __device__ inline float
 	distanceFromPoint(glm::vec4 point)
 	{

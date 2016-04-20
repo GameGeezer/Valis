@@ -53,13 +53,21 @@ byteArray_setValueAtIndex(ByteArrayChunk* data, uint32_t index, uint32_t value)
 
 	uint32_t distanceToShift = 4 * byteIndex;
 	uint32_t valueToOr = value << distanceToShift;
-	uint32_t andMask = ~(0xF << distanceToShift);
+	uint32_t andMask = 0xF << distanceToShift;
 
-	atomicAnd(&(data[writeIndex].first), (andMask * writeFirst) + (0xFFFF * writeSecond));
-	atomicAnd(&(data[writeIndex].second), (andMask * writeSecond) + (0xFFFF * writeFirst));
+	
+	uint32_t maskedFirst = (data[writeIndex].first & andMask) ^ valueToOr;
+	uint32_t maskedSecond = (data[writeIndex].second & andMask) ^ valueToOr;
 
-	atomicOr(&(data[writeIndex].first), valueToOr * writeFirst);
-	atomicOr(&(data[writeIndex].second), valueToOr * writeSecond);
+	atomicXor(&(data[writeIndex].first), maskedFirst * writeFirst);
+	atomicXor(&(data[writeIndex].second), maskedSecond * writeSecond);
+	
+
+	//atomicAnd(&(data[writeIndex].first), (andMask * writeFirst) + (0xFFFF * writeSecond));
+	//atomicAnd(&(data[writeIndex].second), (andMask * writeSecond) + (0xFFFF * writeFirst));
+
+	//atomicOr(&(data[writeIndex].first), valueToOr * writeFirst);
+	//atomicOr(&(data[writeIndex].second), valueToOr * writeSecond);
 }
 
 __device__ __inline__ uint32_t

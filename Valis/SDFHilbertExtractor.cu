@@ -142,6 +142,7 @@ sdfExtractPointsInMortonOrder(ExtractedPoint *d_output, ByteArrayChunk *sdfData,
 
 	uint32_t index = Morton30::encode(x, y, z);
 
+	d_output[index].spare = material;
 	d_output[index].normals.pack(1, 0, 0);
 	d_output[index].normals.compactData *= shouldGeneratePoint;
 	d_output[index].morton = Morton30::encode(offsetX, offsetY, offsetZ);
@@ -178,7 +179,7 @@ clusterPoints(CompactMortonPoint* renderPointBuffer, WorldPositionMorton* offset
 		uint32_t normalX, normalY, normalZ;
 		sortedPoints[startingIndex + i].normals.unpack(normalX, normalY, normalZ);
 
-		renderPointBuffer[renderPointBufferWriteIndex  + i].pack(mortonOffset, normalX, normalY, normalZ);
+		renderPointBuffer[renderPointBufferWriteIndex + i].pack(mortonOffset, normalX, normalY, normalZ, sortedPoints[startingIndex + i].spare);
 		renderPointBuffer[renderPointBufferWriteIndex + i].compactData = renderPointBuffer[renderPointBufferWriteIndex + i].compactData * isWithinBounds + baseMorton * numericNegate_uint32_t(isWithinBounds);
 	}
 	
@@ -314,7 +315,7 @@ SDFHilbertExtractor::SDFHilbertExtractor(uint32_t gridDimension, uint32_t parseD
 }
 
 size_t
-SDFHilbertExtractor::extract(SDFDevice& sdf, Nova &nova, uint32_t overlapSize)
+SDFHilbertExtractor::extract(Nova &nova, uint32_t overlapSize)
 {
 	nova.map();
 	nova.clean();

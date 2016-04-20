@@ -12,6 +12,7 @@ attribute uint in_CompactData;
 
 out vec3 pass_Normal;
 out vec3 pass_Position;
+out uint pass_Spare;
 
 uint compactBy3(in uint value)
 {
@@ -64,6 +65,7 @@ void main()
 	uint raw_nx = in_CompactData & 0x1C0000 >> 18;
 	uint raw_ny = (in_CompactData & 0xE00000) >> 21;
 	uint raw_nz = (in_CompactData & 0x7000000) >> 24;
+	uint raw_spare = (in_CompactData & 0xF8000000) >> 27;
 
 	float x = ((float(raw_x)) / gridResolution); //add the offset pased via texture
 	float y = ((float(raw_y)) / gridResolution);
@@ -76,5 +78,6 @@ void main()
 	//gl_Position = projectionMatrix * vec4(x, y, z, 1);
 	pass_Position = vec3(x, y, z);
 	pass_Normal = normalize(vec3(nx, ny, nz));
+	pass_Spare = raw_spare;
 	gl_PointSize  = 0.61803398f;
 }

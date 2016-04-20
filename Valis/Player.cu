@@ -28,15 +28,6 @@ Player::Player(Camera& camera) : camera(&camera), scale(glm::vec3(1, 1, 1))
 	Application::MOUSE_CLICK->addListener(*this);
 	Application::MOUSE_MOVE->addListener(*this);
 
-	place = new PlaceSDPrimitive();
-	carve = new CarveSDPrimitive();
-	blend = new BlendSDModification(0.5f);
-	currentMod = place;
-
-	SDCube sdCube(glm::vec3(0.1f, 0.1f, 0.1f), glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
-	hostEditSDF = new SDFHost(&sdCube, 30);
-	deviceEditSDF = hostEditSDF->copyToDevice();
-
 	SDSphere sdSphere(0.25f, glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
 
 	ibo = new IBO(3000000, BufferedObjectUsage::DYNAMIC_DRAW);
@@ -44,7 +35,7 @@ Player::Player(Camera& camera) : camera(&camera), scale(glm::vec3(1, 1, 1))
 	pbo = new PBO(160000);
 
 	testNova = new Nova(*vbo, *pbo, *ibo, 256);
-	testNova->place(sdSphere, 4);
+	testNova->place(sdSphere, 2);
 
 	lastPlaceTime = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
 	rotation = glm::vec3(0, 1, 0);
@@ -62,11 +53,6 @@ Player::update(int delta)
 	if (isSPressed)
 		camera->moveBackward(0.04f);
 
-	if (isKPressed)
-		blend->smoothness -= 0.02f;
-	if (isLPressed)
-		blend->smoothness += 0.02f;
-
 	if (isOPressed)
 		scale -= 0.05f;
 	if (isPPressed)
@@ -81,18 +67,19 @@ Player::update(int delta)
 	glm::vec3 position = glm::vec3(glm::inverse(*(camera->getView())) * glm::vec4(0, 0, -distanceFromCamera, 1));
 	//rotation = glm::vec3(camera->getDirection().x, camera->getDirection().y, camera->getDirection().z);
 	orientation = glm::lookAt(position, position + camera->getDirection(), glm::vec3(0, 1, 0));
-
+	
 	if (brushType == 1)
 	{
 		SDSphere sdSphere(0.1f, scale, orientation);
-		testNova->place(sdSphere, 4);
+		testNova->place(sdSphere, materialType);
 		//hostEditSDF->modify(&sdSphere, currentMod);
 	}
 	else if (brushType == 2)
 	{
 		SDTorus sdTorus(0.1f, 0.025f, scale, orientation);
-		hostEditSDF->modify(&sdTorus, currentMod);
+		testNova->place(sdTorus, materialType);
 	}
+	/*
 	else if(brushType == 3)
 	{
 		SDCube sdCube(glm::vec3(0.1f, 0.1f, 0.1f), scale, orientation);
@@ -103,6 +90,7 @@ Player::update(int delta)
 		SDCylinder sdCylinder(glm::vec3(0.05f, 0.05f, 0.05f), scale, orientation);
 		hostEditSDF->modify(&sdCylinder, currentMod);
 	}
+	*/
 	//testNova->revertEdits();
 	//deviceEditSDF = hostEditSDF->copyToDevice();
 	//hostEditSDF->popEdit();
@@ -148,13 +136,6 @@ Player::onKeyPress(int keyCode)
 	if (keyCode == GLFW_KEY_S)
 		isSPressed = true;
 
-	if (keyCode == GLFW_KEY_C)
-		currentMod = carve;
-	if (keyCode == GLFW_KEY_V)
-		currentMod = place;
-	if (keyCode == GLFW_KEY_B)
-		currentMod = blend;
-
 	if (keyCode == GLFW_KEY_K)
 		isKPressed = true;
 	if (keyCode == GLFW_KEY_L)
@@ -179,10 +160,6 @@ Player::onKeyPress(int keyCode)
 		brushType = 3;
 	if (keyCode == GLFW_KEY_4)
 		brushType = 4;
-
-	if (keyCode == GLFW_KEY_Z)
-		hostEditSDF->popEdit();
-
 
 }
 
@@ -229,6 +206,7 @@ Player::onMousePress(MouseButton button, float posX, float posY)
 
 			glm::vec4 position = glm::inverse(*(camera->getView())) * glm::vec4(0, 0, -distanceFromCamera, 1);
 
+			/*
 			if (brushType == 1)
 			{
 				SDSphere sdSphere(0.1f, scale, orientation);
@@ -249,7 +227,7 @@ Player::onMousePress(MouseButton button, float posX, float posY)
 				SDCylinder sdCylinder(glm::vec3(0.05f, 0.05f, 0.05f), scale, orientation);
 				hostEditSDF->modify(&sdCylinder, currentMod);
 			}
-
+			*/
 		}
 	}
 }

@@ -86,6 +86,11 @@ TestRelativeScreen::onCreate()
 	// Create the extractor
 	extractor = new SDFHilbertExtractor(256, 256);
 
+	CompactMortonPoint morton;
+	uint32_t m, n1, n2, n3, spare;
+	morton.pack(1, 2, 3, 4, 5);
+	morton.unpack(m, n1, n2, n3, spare);
+
 	pboTexture = new Texture1D(16000);
 
 
@@ -117,7 +122,7 @@ TestRelativeScreen::onUpdate(int delta)
 {
 	player->update(delta);
 
-	pointCount = extractor->extract(*(player->deviceEditSDF), *(player->testNova), 0);
+	pointCount = extractor->extract(*(player->testNova), 0);
 
 	glm::mat4 viewProjection;
 	player->camera->constructViewProjection(viewProjection);

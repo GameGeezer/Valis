@@ -11,13 +11,6 @@
 #include "MouseMoveListener.cuh"
 
 class Camera;
-class SDFDevice;
-class SDFHost;
-class PlaceSDPrimitive;
-class CarveSDPrimitive;
-class BlendSDModification;
-class SDModification;
-
 class Nova;
 class VBO;
 class IBO;
@@ -29,7 +22,6 @@ class Player : public KeyboardListener, public MouseClickListener, public MouseM
 {
 public:
 	Camera* camera;
-	SDFDevice* deviceEditSDF;
 
 	Nova* testNova;
 	PBO* pbo;
@@ -65,16 +57,12 @@ private:
 
 	glm::vec3 scale;
 	
-	SDFHost* hostEditSDF;
-	PlaceSDPrimitive* place;
-	CarveSDPrimitive* carve;
-	BlendSDModification* blend;
-	SDModification * currentMod;
 	milliseconds lastPlaceTime;
 	glm::vec3 rotation;
 	glm::mat4 orientation;
 	float distanceFromCamera = 0.5f;
 	int brushType = 1;
+	int materialType = 2;
 
 };
 

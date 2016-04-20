@@ -6,14 +6,18 @@ uniform mat4 projectionMatrix;
 
 in vec3 pass_TessPosition[];
 in vec3 pass_TessNormal[];
+in uint pass_TessSpare[];
 
 out vec3 pass_finalizedNormal;
+flat out uint pass_finalizedSpare;
 
 void main()
 {
 	pass_finalizedNormal = normalize(gl_TessCoord.x * pass_TessNormal[0]) +
                 (gl_TessCoord.y * pass_TessNormal[1]) +
                 (gl_TessCoord.z * pass_TessNormal[2]);
+
+	pass_finalizedSpare = pass_TessSpare[0];
 
     gl_Position = projectionMatrix * vec4((gl_TessCoord.x * pass_TessPosition[0]) +
                 (gl_TessCoord.y * pass_TessPosition[1]) +

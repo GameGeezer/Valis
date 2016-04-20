@@ -17,6 +17,7 @@ typedef ThreeCompact10BitUInts CompactNormals;
 
 struct ExtractedPoint
 {
+	uint32_t spare;
 	uint32_t morton;
 	CompactNormals normals;
 };
@@ -30,7 +31,7 @@ public:
 	~SDFHilbertExtractor();
 
 	size_t
-		extract(SDFDevice& sdf, Nova &nova, uint32_t overlapSize);
+		extract(Nova &nova, uint32_t overlapSize);
 
 private:
 	thrust::device_vector< uint32_t >* areVerticiesOutsideIsoBuffer;

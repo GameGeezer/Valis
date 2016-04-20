@@ -6,6 +6,7 @@
 #include "ByteArray.cuh"
 
 #include "SDSphere.cuh"
+#include "SDTorus.cuh"
 #include "SDModification.cuh"
 
 #include "NumericBoolean.cuh"
@@ -19,6 +20,35 @@ sdfDistanceFromSphere(glm::vec4 point, glm::mat4 transform, float radius)
 {
 	point = transform * point;
 	return GLMUtil::length(glm::vec3(point)) - radius;
+}
+
+__device__ __inline__ float
+sdfDistanceFromTorus(glm::vec4 point, glm::mat4 transform, glm::vec2 dimensions)
+{
+	point = transform * point;
+	glm::vec2 q = glm::vec2(GLMUtil::length(glm::vec2(point.x, point.y)) - dimensions.x, point.z);
+	return GLMUtil::length(q) - dimensions.y;
+}
+
+__device__ __inline__ float
+writeToArray(ByteArrayChunk *d_output, float distance, float cellDimension, uint32_t index, uint32_t material)
+{
+	NumericBoolean isOutside = numericGreaterThan_float(distance, 0);
+	NumericBoolean isInside = numericNegate_uint32_t(isOutside);
+
+	uint32_t indexCurrentValue = byteArray_getValueAtIndex(d_output, index);
+	NumericBoolean insideWholeShape = numericEqual_uint32_t(indexCurrentValue, SDF_INSIDE_SURFACE);
+	NumericBoolean notInsideWholeShape = numericNegate_uint32_t(insideWholeShape);
+
+	NumericBoolean shouldGeneratePoint = numericLessThan_float(distance, cellDimension) * isOutside;
+	NumericBoolean shouldNotGeneratePoint = numericNegate_uint32_t(shouldGeneratePoint);
+
+	// TODO don't write if inside the surface
+	uint32_t ifPointIsLegal = material * notInsideWholeShape + SDF_INSIDE_SURFACE * insideWholeShape;
+	uint32_t ifPointIsIllegal = indexCurrentValue * isOutside + SDF_INSIDE_SURFACE * isInside;
+	uint32_t valueToWrite = ifPointIsIllegal * shouldNotGeneratePoint + ifPointIsLegal *  shouldGeneratePoint;
+
+	byteArray_setValueAtIndex(d_output, index, valueToWrite);
 }
 
 __global__ void 
@@ -45,23 +75,34 @@ placeSphereMaterialDistanceField(ByteArrayChunk *d_output, SDSphere *primitive, 
 	// How far the cell is from the sdf
 	float distance = sdfDistanceFromSphere(glm::vec4(normalizeX, normalizeY, normalizeZ, 1), primitive->transform, primitive->radius);
 
-	NumericBoolean isOutside = numericGreaterThan_float(distance, 0);
-	NumericBoolean isInside = numericNegate_uint32_t(isOutside);
+	writeToArray(d_output, distance, cellDimension, index, material);
+}
 
+__global__ void
+placeTorusMaterialDistanceField(ByteArrayChunk *d_output, SDTorus *primitive, uint32_t material, uint32_t gridResolution)
+{
+	uint32_t x = blockIdx.x * blockDim.x + threadIdx.x;
+	uint32_t y = blockIdx.y * blockDim.y + threadIdx.y;
+	uint32_t z = blockIdx.z * blockDim.z + threadIdx.z;
 
-	uint32_t indexCurrentValue = byteArray_getValueAtIndex(d_output, index);
-	NumericBoolean insideWholeShape = numericEqual_uint32_t(indexCurrentValue, SDF_INSIDE_SURFACE);
-	NumericBoolean notInsideWholeShape = numericNegate_uint32_t(insideWholeShape);
+	if (x > gridResolution || y > gridResolution || z > gridResolution)
+	{
+		return;
+	}
 
-	NumericBoolean shouldGeneratePoint = numericLessThan_float(distance, cellDimension) * isOutside;
-	NumericBoolean shouldNotGeneratePoint = numericNegate_uint32_t(shouldGeneratePoint);
+	uint32_t index = x + y * gridResolution + z * gridResolution * gridResolution;
 
-	// TODO don't write if inside the surface
-	uint32_t ifPointIsLegal = material * notInsideWholeShape + SDF_INSIDE_SURFACE * insideWholeShape;
-	uint32_t ifPointIsIllegal = indexCurrentValue * isOutside + SDF_INSIDE_SURFACE * isInside;
-	uint32_t valueToWrite = ifPointIsIllegal * shouldNotGeneratePoint + ifPointIsLegal *  shouldGeneratePoint;
+	float cellDimension = 1.0f / ((float)gridResolution);
 
-	byteArray_setValueAtIndex(d_output, index, valueToWrite);
+	// normalized x, y, and z
+	float normalizeX = ((float)x) * cellDimension;
+	float normalizeY = ((float)y) * cellDimension;
+	float normalizeZ = ((float)z) * cellDimension;
+
+	// How far the cell is from the sdf
+	float distance = sdfDistanceFromTorus(glm::vec4(normalizeX, normalizeY, normalizeZ, 1), primitive->transform, primitive->dimensions);
+
+	writeToArray(d_output, distance, cellDimension, index, material);
 }
 
 SignedDistanceField::SignedDistanceField(uint32_t gridResolution) :
@@ -78,8 +119,18 @@ SignedDistanceField::SignedDistanceField(uint32_t gridResolution) :
 void
 SignedDistanceField::place(DistancePrimitive& primitive, uint32_t material)
 {
-	SDSphere* devicePrimitive = (SDSphere*)primitive.copyToDevice();
-	placeSphereMaterialDistanceField << <materialBlockSize, materialThreadSize >> >(materialGrid.getDevicePointer(), devicePrimitive, material, gridResolution);
+	if (SDSphere* v = dynamic_cast<SDSphere*>(&primitive))
+	{
+		SDSphere* devicePrimitive = (SDSphere*)primitive.copyToDevice();
+		placeSphereMaterialDistanceField << <materialBlockSize, materialThreadSize >> >(materialGrid.getDevicePointer(), devicePrimitive, material, gridResolution);
+		assertCUDA(cudaFree(devicePrimitive));
+	}
+	else if (SDTorus* v = dynamic_cast<SDTorus*>(&primitive))
+	{
+		SDTorus* devicePrimitive = (SDTorus*)primitive.copyToDevice();
+		placeTorusMaterialDistanceField << <materialBlockSize, materialThreadSize >> >(materialGrid.getDevicePointer(), devicePrimitive, material, gridResolution);
+		assertCUDA(cudaFree(devicePrimitive));
+	}
 }
 
 void

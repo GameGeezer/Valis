@@ -9,19 +9,20 @@ class CompactMortonPoint
 {
 public:
 	__device__ __host__ __inline__
-	void pack(uint32_t morton, uint32_t nx, uint32_t ny, uint32_t nz)
+	void pack(uint32_t morton, uint32_t nx, uint32_t ny, uint32_t nz, uint32_t spare)
 	{
-		compactData = (morton & 0x3FFFF) | (nx << 18) | (ny << 21) | (nz << 24);
+		compactData = (morton & 0x3FFFF) | (nx << 18) | (ny << 21) | (nz << 24) | (spare << 27);
 	}
 
 	__device__ __host__ __inline__
-	void unpack(uint32_t& out_morton, uint32_t& out_nx, uint32_t& out_ny, uint32_t& out_nz)
+	void unpack(uint32_t& out_morton, uint32_t& out_nx, uint32_t& out_ny, uint32_t& out_nz, uint32_t& out_spare)
 	{
 		out_morton = compactData & 0x3FFFF;
 
 		out_nx = (compactData & 0x1C0000) >> 18;
 		out_ny = (compactData & 0xE00000) >> 21;
 		out_nz = (compactData & 0x7000000) >> 24;
+		out_spare = (compactData & 0xF8000000) >> 27;
 	}
 
 	uint32_t compactData;

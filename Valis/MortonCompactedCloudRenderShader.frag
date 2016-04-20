@@ -1,10 +1,14 @@
 #version 450
 
 in vec3 pass_finalizedNormal;
+flat in uint pass_finalizedSpare;
 
 void main()
 {
+	float firstBrush = float(pass_finalizedSpare == 2);
+	uint secondBrush = uint(pass_finalizedSpare == 3);
 
+	vec3 colorChoice = vec3(30.0f / 255.0f, 197.0f / 255.0f, 3.0f /255.0f) * firstBrush + vec3(200.0f / 255.0f, 50.0f / 255.0f, 3.0f /255.0f) * secondBrush;
 	float lambertCoef = max(dot(pass_finalizedNormal, vec3(-1.0f, 0.0f, 0.0f)), 0.0);
         
     vec3 diffuse      = vec3(1, 1, 1);
@@ -12,7 +16,7 @@ void main()
 	
     vec3 lightWeighting = ambientColor + diffuse * lambertCoef;
 
-    vec3 color = vec3(30.0f / 255.0f, 197.0f / 255.0f, 3.0f /255.0f) * lightWeighting;
+    vec3 color = colorChoice * lightWeighting;
 	
     gl_FragColor = vec4(color, 1);
 }
