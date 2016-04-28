@@ -29,15 +29,15 @@ Player::Player(Camera& camera) : camera(&camera), scale(glm::vec3(1, 1, 1))
 	Application::MOUSE_MOVE->addListener(*this);
 
 	SDSphere sdSphere(0.25f, glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
-
-	ibo = new IBO(3000000, BufferedObjectUsage::DYNAMIC_DRAW);
-	vbo = new VBO(1000000, BufferedObjectUsage::DYNAMIC_DRAW);
+	SDCube sdCube(glm::vec3(0.1f, 0.1f, 0.1f), glm::vec3(1, 1, 1), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 0), 0);
+	ibo = new IBO(1000000, BufferedObjectUsage::DYNAMIC_DRAW);
+	vbo = new VBO(500000, BufferedObjectUsage::DYNAMIC_DRAW);
 	pbo = new PBO(160000);
 
-	testNova = new Nova(*vbo, *pbo, *ibo, 256);
-	testNova->place(sdSphere, 2);
+	testNova = new Nova(*vbo, *pbo, *ibo, 128);
+	testNova->place(sdCube, 3);
+	testNova->finalizeEdits();
 
-	lastPlaceTime = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
 	rotation = glm::vec3(0, 1, 0);
 }
 
@@ -65,35 +65,45 @@ Player::update(int delta)
 		distanceFromCamera += 0.05;
 
 	glm::vec3 position = glm::vec3(glm::inverse(*(camera->getView())) * glm::vec4(0, 0, -distanceFromCamera, 1));
-	//rotation = glm::vec3(camera->getDirection().x, camera->getDirection().y, camera->getDirection().z);
 	orientation = glm::lookAt(position, position + camera->getDirection(), glm::vec3(0, 1, 0));
-	
+
+	testNova->revertEdits();
+
 	if (brushType == 1)
 	{
 		SDSphere sdSphere(0.1f, scale, orientation);
 		testNova->place(sdSphere, materialType);
-		//hostEditSDF->modify(&sdSphere, currentMod);
 	}
 	else if (brushType == 2)
 	{
 		SDTorus sdTorus(0.1f, 0.025f, scale, orientation);
 		testNova->place(sdTorus, materialType);
 	}
-	/*
 	else if(brushType == 3)
 	{
 		SDCube sdCube(glm::vec3(0.1f, 0.1f, 0.1f), scale, orientation);
-		hostEditSDF->modify(&sdCube, currentMod);
+		testNova->place(sdCube, materialType);
 	}
 	else if (brushType == 4)
 	{
-		SDCylinder sdCylinder(glm::vec3(0.05f, 0.05f, 0.05f), scale, orientation);
-		hostEditSDF->modify(&sdCylinder, currentMod);
+		SDSphere sdSphere(0.1f, scale, orientation);
+		testNova->carve(sdSphere);
 	}
-	*/
-	//testNova->revertEdits();
-	//deviceEditSDF = hostEditSDF->copyToDevice();
-	//hostEditSDF->popEdit();
+	else if (brushType == 5)
+	{
+		SDTorus sdTorus(0.1f, 0.025f, scale, orientation);
+		testNova->carve(sdTorus);
+	}
+	else if (brushType == 6)
+	{
+		SDCube sdCube(glm::vec3(0.1f, 0.1f, 0.1f), scale, orientation);
+		testNova->carve(sdCube);
+	}
+
+	if (isRightMousePressed)
+	{
+		testNova->finalizeEdits();
+	}
 }
 
 void
@@ -151,6 +161,14 @@ Player::onKeyPress(int keyCode)
 	if (keyCode == GLFW_KEY_E)
 		isEPressed = true;
 
+	if (keyCode == GLFW_KEY_J)
+		materialType = 4;
+	if (keyCode == GLFW_KEY_L)
+		materialType = 3;
+	if (keyCode == GLFW_KEY_K)
+		materialType = 2;
+	if (keyCode == GLFW_KEY_L)
+		materialType = 3;
 
 	if (keyCode == GLFW_KEY_1)
 		brushType = 1;
@@ -160,6 +178,12 @@ Player::onKeyPress(int keyCode)
 		brushType = 3;
 	if (keyCode == GLFW_KEY_4)
 		brushType = 4;
+	if (keyCode == GLFW_KEY_5)
+		brushType = 5;
+	if (keyCode == GLFW_KEY_6)
+		brushType = 6;
+	if (keyCode == GLFW_KEY_7)
+		brushType = 7;
 
 }
 
@@ -197,38 +221,7 @@ Player::onMousePress(MouseButton button, float posX, float posY)
 
 	if (button == MouseButton::RIGHT)
 	{
-		milliseconds currentFrame = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
-		milliseconds delta = currentFrame - lastPlaceTime;
-
-		if (delta.count() > 100)
-		{
-			lastPlaceTime = currentFrame;
-
-			glm::vec4 position = glm::inverse(*(camera->getView())) * glm::vec4(0, 0, -distanceFromCamera, 1);
-
-			/*
-			if (brushType == 1)
-			{
-				SDSphere sdSphere(0.1f, scale, orientation);
-				hostEditSDF->modify(&sdSphere, currentMod);
-			}
-			else if(brushType == 2)
-			{
-				SDTorus sdTorus(0.1f, 0.025f, scale, orientation);
-				hostEditSDF->modify(&sdTorus, currentMod);
-			}
-			else if(brushType == 3)
-			{
-				SDCube sdCube(glm::vec3(0.1f, 0.1f, 0.1f), scale, orientation);
-				hostEditSDF->modify(&sdCube, currentMod);
-			}
-			else if (brushType == 4)
-			{
-				SDCylinder sdCylinder(glm::vec3(0.05f, 0.05f, 0.05f), scale, orientation);
-				hostEditSDF->modify(&sdCylinder, currentMod);
-			}
-			*/
-		}
+		isRightMousePressed = true;
 	}
 }
 

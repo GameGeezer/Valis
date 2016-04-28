@@ -6,9 +6,10 @@ flat in uint pass_finalizedSpare;
 void main()
 {
 	float firstBrush = float(pass_finalizedSpare == 2);
-	uint secondBrush = uint(pass_finalizedSpare == 3);
+	float secondBrush = float(pass_finalizedSpare == 3);
+	float thirdBrush = uint(pass_finalizedSpare == 4);
 
-	vec3 colorChoice = vec3(30.0f / 255.0f, 197.0f / 255.0f, 3.0f /255.0f) * firstBrush + vec3(200.0f / 255.0f, 50.0f / 255.0f, 3.0f /255.0f) * secondBrush;
+	vec3 colorChoice = vec3(255.0f / 255.0f, 255.0f / 255.0f,51.0f /255.0f) * firstBrush + vec3(30.0f / 255.0f, 150.0f / 255.0f, 250.0f /255.0f) * secondBrush + vec3(255.0f / 255.0f, 50.0f / 255.0f, 51.0f /255.0f) * thirdBrush;
 	float lambertCoef = max(dot(pass_finalizedNormal, vec3(-1.0f, 0.0f, 0.0f)), 0.0);
         
     vec3 diffuse      = vec3(1, 1, 1);
@@ -16,7 +17,7 @@ void main()
 	
     vec3 lightWeighting = ambientColor + diffuse * lambertCoef;
 
-    vec3 color = colorChoice * lightWeighting;
+    //vec3 color = colorChoice * lightWeighting;
 	
-    gl_FragColor = vec4(color, 1);
+    gl_FragColor = vec4(colorChoice, 1);
 }

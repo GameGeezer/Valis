@@ -161,7 +161,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <CudaCompile>
       <Optimization>O2</Optimization>
-      <FastMath>false</FastMath>
+      <FastMath>true</FastMath>
       <GPUDebugInfo>false</GPUDebugInfo>
       <InterleaveSourceInPTX>false</InterleaveSourceInPTX>
       <CodeGeneration>compute_30,sm_30;%(CodeGeneration)</CodeGeneration>

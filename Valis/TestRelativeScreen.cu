@@ -84,7 +84,7 @@ TestRelativeScreen::onCreate()
 	testSDFDevice = testSDF->copyToDevice();
 
 	// Create the extractor
-	extractor = new SDFHilbertExtractor(256, 256);
+	extractor = new SDFHilbertExtractor(128, 128);
 
 	CompactMortonPoint morton;
 	uint32_t m, n1, n2, n3, spare;
@@ -150,7 +150,7 @@ TestRelativeScreen::onUpdate(int delta)
 	shader->setUnifromMatrix4f(projectionLocation, viewProjection);
 
 	GLint resolutionLocation = shader->getUniformLocation("gridResolution");
-	shader->setUniformf(resolutionLocation, 256);
+	shader->setUniformf(resolutionLocation, 128);
 
 	GLint offstSizeLocation = shader->getUniformLocation("offsetBufferSize");
 	shader->setUniformf(offstSizeLocation, (pointCount + 63) / 64);

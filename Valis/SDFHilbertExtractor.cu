@@ -119,7 +119,7 @@ extractPointsInMortonOrder(ExtractedPoint *d_output, SDFDevice *sdf, uint32_t *v
 }
 
 __global__ void
-sdfExtractPointsInMortonOrder(ExtractedPoint *d_output, ByteArrayChunk *sdfData, uint32_t gridResolution, uint32_t parseDimension, uint32_t dimensionOffsetX, uint32_t dimensionOffsetY, uint32_t dimensionOffsetZ)
+sdfExtractPointsInMortonOrder(ExtractedPoint *d_output, ByteArrayChunk *materialGrid, ByteArrayChunk *surfaceGrid, uint32_t gridResolution, uint32_t parseDimension, uint32_t dimensionOffsetX, uint32_t dimensionOffsetY, uint32_t dimensionOffsetZ)
 {
 
 	uint32_t x = blockIdx.x * blockDim.x + threadIdx.x;
@@ -136,9 +136,9 @@ sdfExtractPointsInMortonOrder(ExtractedPoint *d_output, ByteArrayChunk *sdfData,
 	}
 
 	uint32_t materialIndex = offsetX + offsetY * gridResolution + offsetZ * gridResolution * gridResolution;
-	uint32_t material = byteArray_getValueAtIndex(sdfData, materialIndex);
+	uint32_t material = byteArray_getValueAtIndex(materialGrid, materialIndex);
 
-	NumericBoolean shouldGeneratePoint = numericNotEqual_uint32_t(material, SDF_INSIDE_SURFACE) * numericNotEqual_uint32_t(material, SDF_OUTSIDE_SURFACE);
+	NumericBoolean shouldGeneratePoint = numericEqual_uint32_t(byteArray_getValueAtIndex(surfaceGrid, materialIndex), SDF_ON_SURFACE);
 
 	uint32_t index = Morton30::encode(x, y, z);
 
@@ -155,7 +155,6 @@ clusterPoints(CompactMortonPoint* renderPointBuffer, WorldPositionMorton* offset
 	uint32_t x = blockIdx.x * blockDim.x + threadIdx.x;
 
 	uint32_t renderPointBufferWriteIndex = (x * 64) + *compactMortonStart;
-	uint32_t indexBufferWriteIndex = (x * 192) + *indexStart;
 	uint32_t startingIndex = renderPointBufferWriteIndex - (overlapSize * x);
 	uint32_t worldMortonIndex = *worldMortonStart + x;
 
@@ -194,9 +193,8 @@ generateIndices(CompactMortonPoint* renderPointBuffer, WorldPositionMorton* offs
 	uint32_t renderPointBufferWriteIndex = (x * 64) + *compactMortonStart;
 	uint32_t indexBufferWriteIndex = (x * 192) + *indexStart;
 	uint32_t startingIndex = renderPointBufferWriteIndex - (overlapSize * x);
-	uint32_t worldMortonIndex = *worldMortonStart + x;
 
-	if ((worldMortonIndex >= worldMortonBufSize) || ((sortedPoints + startingIndex + 64) >= sortedPointsEnd) || (renderPointBufferWriteIndex >= compactMortonBufSize))
+	if (((sortedPoints + startingIndex + 64) >= sortedPointsEnd) || (renderPointBufferWriteIndex >= compactMortonBufSize))
 	{
 		return;
 	}
@@ -338,18 +336,16 @@ SDFHilbertExtractor::extract(Nova &nova, uint32_t overlapSize)
 			for (int k = 0; k < gridDimension; k += parseDimension)
 			{
 				
-				//areVerticesOutsideIsosurface << <extractInMortonOrderBlockDim, extractInMortonOrderThreadDim >> > (isVertexOusideIsoBufferRaw, &sdf, gridDimension, parseDimension, i, j, k);
-				//extractPointsInMortonOrder << <extractInMortonOrderBlockDim, extractInMortonOrderThreadDim >> >(mortenSortedPointsRaw, &sdf, isVertexOusideIsoBufferRaw, gridDimension, parseDimension, i, j, k);
-				sdfExtractPointsInMortonOrder << <extractInMortonOrderBlockDim, extractInMortonOrderThreadDim >> >(mortenSortedPointsRaw, nova.getMaterialDevicePointer(), gridDimension, parseDimension, i, j, k);
+				sdfExtractPointsInMortonOrder << <extractInMortonOrderBlockDim, extractInMortonOrderThreadDim >> >(mortenSortedPointsRaw, nova.getMaterialDevicePointer(), nova.getSurfaceDevicePointer(), gridDimension, parseDimension, i, j, k);
 				thrust::fill(mortonSortedPointsCompactBuffer->begin(), mortonSortedPointsCompactBuffer->end(), ExtractedPoint());
 				thrust::copy_if(thrust::device, mortonSortedPointsBuffer->begin(), mortonSortedPointsBuffer->end(), mortonSortedPointsCompactBuffer->begin(), is_extracted_not_zero());
 				
 				clusterPoints << < mortonSortedPointBlockSize, mortonSortedPointThreadSize >> >(nova.getRawVBO(), nova.getRawPBO(), nova.getRawIBO(), mortonSortedBegin, overlapSize, device_compactMortonSizeBucket, device_worldMortonSizeBucket, device_indexSizeBucket, nova.getLengthVBO(), nova.getLengthPBO(), mortonSortedEnd, nova.getLengthIBO());
 				generateIndices << < mortonSortedPointBlockSize, mortonSortedPointThreadSize >> >(nova.getRawVBO(), nova.getRawPBO(), nova.getRawIBO(), mortonSortedBegin, overlapSize, device_compactMortonSizeBucket, device_worldMortonSizeBucket, device_indexSizeBucket, nova.getLengthVBO(), nova.getLengthPBO(), mortonSortedEnd, nova.getLengthIBO());
 				
-				countCompactMortons << <nova.getBlockSizeVBO(), NOVA_PARSE_BLOCK_SIZE >> >(nova.getRawVBO(), nova.getLengthVBO(), device_compactMortonSizeBucket);
-				countWorldMortons << <nova.getBlockSizePBO(), NOVA_PARSE_BLOCK_SIZE >> >(nova.getRawPBO(), nova.getLengthPBO(), device_worldMortonSizeBucket);
-				countIndices << <nova.getBlockSizeIBO(), NOVA_PARSE_BLOCK_SIZE >> >(nova.getRawIBO(), nova.getLengthIBO(), device_indexSizeBucket);
+				//countCompactMortons << <nova.getBlockSizeVBO(), NOVA_PARSE_BLOCK_SIZE >> >(nova.getRawVBO(), nova.getLengthVBO(), device_compactMortonSizeBucket);
+				//countWorldMortons << <nova.getBlockSizePBO(), NOVA_PARSE_BLOCK_SIZE >> >(nova.getRawPBO(), nova.getLengthPBO(), device_worldMortonSizeBucket);
+				//countIndices << <nova.getBlockSizeIBO(), NOVA_PARSE_BLOCK_SIZE >> >(nova.getRawIBO(), nova.getLengthIBO(), device_indexSizeBucket);
 			}
 		}
 	}

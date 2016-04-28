@@ -5,6 +5,32 @@
 
 #include "CudaHelper.cuh"
 
+__global__ void
+copyByteArrayInto(ByteArrayChunk *from, ByteArrayChunk *to, size_t size)
+{
+	uint32_t x = blockIdx.x * blockDim.x + threadIdx.x;
+
+	if (x >= size)
+	{
+		return;
+	}
+
+	to[x] = from[x];
+}
+
+__global__ void
+zeroByteArray(ByteArrayChunk *d_output, size_t size)
+{
+	uint32_t x = blockIdx.x * blockDim.x + threadIdx.x;
+
+	if (x >= size)
+	{
+		return;
+	}
+
+	d_output[x].first = 0;
+	d_output[x].second = 0;
+}
 
 ByteArray::ByteArray(size_t size) : 
 	size((size + 3) / 4)
@@ -17,8 +43,7 @@ ByteArray::ByteArray(size_t size) :
 void
 ByteArray::copyInto(ByteArray& other)
 {
-	//assertCUDA(cudaMemcpy(other.device_data, device_data, size, cudaMemcpyDeviceToDevice));
-	thrust::copy(device_data->begin(), device_data->end(), other.device_data->begin());
+	copyByteArrayInto <<< (size + 255) / 256, 256 >>> (rawDataPointer, other.rawDataPointer, size);
 }
 
 ByteArrayChunk*
@@ -30,7 +55,7 @@ ByteArray::getDevicePointer()
 void
 ByteArray::zero()
 {
-	thrust::fill(device_data->begin(), device_data->end(), ByteArrayChunk());
+	zeroByteArray << < (size + 255) / 256, 256 >> > (rawDataPointer, size);
 }
 
 

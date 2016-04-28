@@ -48,6 +48,12 @@ Nova::place(DistancePrimitive& primitive, uint32_t material)
 }
 
 void
+Nova::carve(DistancePrimitive& primitive)
+{
+	editedField.carve(primitive);
+}
+
+void
 Nova::revertEdits()
 {
 	baseField.copyInto(editedField);
@@ -159,4 +165,10 @@ ByteArrayChunk*
 Nova::getMaterialDevicePointer()
 {
 	return editedField.getMaterialDevicePointer();
+}
+
+ByteArrayChunk*
+Nova::getSurfaceDevicePointer()
+{
+	return editedField.getSurfaceDevicePointer();
 }

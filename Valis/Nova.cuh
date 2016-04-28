@@ -40,6 +40,9 @@ public:
 	place(DistancePrimitive& primitive, uint32_t material);
 
 	void
+	carve(DistancePrimitive& primitive);
+
+	void
 	revertEdits();
 
 	void
@@ -92,6 +95,9 @@ public:
 
 	ByteArrayChunk*
 	getMaterialDevicePointer();
+
+	ByteArrayChunk*
+	getSurfaceDevicePointer();
 
 private:
 
