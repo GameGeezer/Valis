@@ -34,7 +34,7 @@ Player::Player(Camera& camera) : camera(&camera), scale(glm::vec3(1, 1, 1))
 	vbo = new VBO(500000, BufferedObjectUsage::DYNAMIC_DRAW);
 	pbo = new PBO(160000);
 
-	testNova = new Nova(*vbo, *pbo, *ibo, 128);
+	testNova = new Nova(*vbo, *pbo, *ibo, 256);
 	testNova->place(sdCube, 3);
 	testNova->finalizeEdits();
 
@@ -98,6 +98,11 @@ Player::update(int delta)
 	{
 		SDCube sdCube(glm::vec3(0.1f, 0.1f, 0.1f), scale, orientation);
 		testNova->carve(sdCube);
+	}
+	else if (brushType == 7)
+	{
+		SDSphere sdSphere(0.1f, scale, orientation);
+		testNova->paint(sdSphere, materialType);
 	}
 
 	if (isRightMousePressed)
@@ -184,6 +189,10 @@ Player::onKeyPress(int keyCode)
 		brushType = 6;
 	if (keyCode == GLFW_KEY_7)
 		brushType = 7;
+	if (keyCode == GLFW_KEY_8)
+		brushType = 8;
+	if (keyCode == GLFW_KEY_9)
+		brushType = 9;
 
 }
 

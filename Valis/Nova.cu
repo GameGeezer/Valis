@@ -48,6 +48,13 @@ Nova::place(DistancePrimitive& primitive, uint32_t material)
 }
 
 void
+Nova::paint(DistancePrimitive& primitive, uint32_t material)
+{
+	editedField.paint(primitive, material);
+}
+
+
+void
 Nova::carve(DistancePrimitive& primitive)
 {
 	editedField.carve(primitive);

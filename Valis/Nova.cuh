@@ -40,6 +40,9 @@ public:
 	place(DistancePrimitive& primitive, uint32_t material);
 
 	void
+	paint(DistancePrimitive& primitive, uint32_t material);
+
+	void
 	carve(DistancePrimitive& primitive);
 
 	void

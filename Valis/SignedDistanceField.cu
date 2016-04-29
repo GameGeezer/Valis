@@ -262,6 +262,50 @@ SignedDistanceField::SignedDistanceField(uint32_t gridResolution) :
 	surfaceGrid.zero();
 }
 
+__device__ __inline__ float
+paintPoint(ByteArrayChunk *materialGrid, ByteArrayChunk *surfaceGrid, float distance, float cellDimension, uint32_t index, uint32_t material)
+{
+	NumericBoolean isOutside = numericGreaterThan_float(distance, 0);
+	NumericBoolean isInside = numericNegate_uint32_t(isOutside);
+
+	uint32_t indexCurrentValue = byteArray_getValueAtIndex(surfaceGrid, index);
+	NumericBoolean insideWholeShape = numericGreaterThan_uint32_t(numericEqual_uint32_t(indexCurrentValue, SDF_INSIDE_SURFACE) + numericEqual_uint32_t(indexCurrentValue, SDF_ON_SURFACE), 0);
+	NumericBoolean notInsideWholeShape = numericNegate_uint32_t(insideWholeShape);
+
+	uint32_t materialCurrentValue = byteArray_getValueAtIndex(materialGrid, index);
+	uint32_t ifPointIsLegalMaterial = materialCurrentValue * notInsideWholeShape + material * insideWholeShape;
+	uint32_t valueToWriteMaterial = materialCurrentValue * isOutside + ifPointIsLegalMaterial *  isInside;
+
+	byteArray_setValueAtIndex(materialGrid, index, valueToWriteMaterial);
+}
+
+__global__ void
+paintSphereDistanceField(ByteArrayChunk *materialGrid, ByteArrayChunk *surfaceGrid, SDSphere *primitive, uint32_t material, uint32_t gridResolution)
+{
+	uint32_t x = blockIdx.x * blockDim.x + threadIdx.x;
+	uint32_t y = blockIdx.y * blockDim.y + threadIdx.y;
+	uint32_t z = blockIdx.z * blockDim.z + threadIdx.z;
+
+	if (x > gridResolution || y > gridResolution || z > gridResolution)
+	{
+		return;
+	}
+
+	uint32_t index = x + y * gridResolution + z * gridResolution * gridResolution;
+
+	float cellDimension = 1.0f / ((float)gridResolution);
+
+	// normalized x, y, and z
+	float normalizeX = ((float)x) * cellDimension;
+	float normalizeY = ((float)y) * cellDimension;
+	float normalizeZ = ((float)z) * cellDimension;
+
+	// How far the cell is from the sdf
+	float distance = sdfDistanceFromSphere(glm::vec4(normalizeX, normalizeY, normalizeZ, 1), primitive->transform, primitive->radius);
+
+	paintPoint(materialGrid, surfaceGrid, distance, cellDimension, index, material);
+}
+
 void
 SignedDistanceField::place(DistancePrimitive& primitive, uint32_t material)
 {
@@ -304,6 +348,29 @@ SignedDistanceField::carve(DistancePrimitive& primitive)
 	{
 		SDCube* devicePrimitive = (SDCube*)primitive.copyToDevice();
 		carveCubeDistanceField << <materialBlockSize, materialThreadSize >> >(materialGrid.getDevicePointer(), surfaceGrid.getDevicePointer(), devicePrimitive, SDF_OUTSIDE_SURFACE, gridResolution);
+		assertCUDA(cudaFree(devicePrimitive));
+	}
+}
+
+void
+SignedDistanceField::paint(DistancePrimitive& primitive, uint32_t material)
+{
+	if (SDSphere* v = dynamic_cast<SDSphere*>(&primitive))
+	{
+		SDSphere* devicePrimitive = (SDSphere*)primitive.copyToDevice();
+		paintSphereDistanceField << <materialBlockSize, materialThreadSize >> >(materialGrid.getDevicePointer(), surfaceGrid.getDevicePointer(), devicePrimitive, material, gridResolution);
+		assertCUDA(cudaFree(devicePrimitive));
+	}
+	else if (SDTorus* v = dynamic_cast<SDTorus*>(&primitive))
+	{
+		SDTorus* devicePrimitive = (SDTorus*)primitive.copyToDevice();
+		placeTorusMaterialDistanceField << <materialBlockSize, materialThreadSize >> >(materialGrid.getDevicePointer(), surfaceGrid.getDevicePointer(), devicePrimitive, material, gridResolution);
+		assertCUDA(cudaFree(devicePrimitive));
+	}
+	else if (SDCube* v = dynamic_cast<SDCube*>(&primitive))
+	{
+		SDCube* devicePrimitive = (SDCube*)primitive.copyToDevice();
+		placeCubeMaterialDistanceField << <materialBlockSize, materialThreadSize >> >(materialGrid.getDevicePointer(), surfaceGrid.getDevicePointer(), devicePrimitive, material, gridResolution);
 		assertCUDA(cudaFree(devicePrimitive));
 	}
 }
